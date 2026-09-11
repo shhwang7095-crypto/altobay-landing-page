@@ -81,16 +81,15 @@ export default function Hero() {
         <div className="relative mx-auto flex justify-center md:justify-end">
           <TiltPhone>
             <PhoneMockup>
-              <div className="relative h-full w-full">
-                <Image
-                  src="/screenshots/dashboard-hero.png"
-                  alt="Altobay.ai booking and service status dashboard"
-                  fill
-                  priority
-                  sizes="240px"
-                  className="object-cover object-top"
-                />
-              </div>
+              <Image
+                src="/screenshots/dashboard-hero.png"
+                alt="Altobay.ai booking and service status dashboard"
+                width={886}
+                height={1342}
+                priority
+                sizes="240px"
+                className="block h-auto w-full"
+              />
             </PhoneMockup>
           </TiltPhone>
         </div>

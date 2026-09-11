@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D1116">
+<title>Engineer — Flow</title>
+<style>
+:root{
+  --paper:#F2F2F7; --card:#FFFFFF;
+  --ink:#111418; --ink2:#5B636D; --ink3:#8E949D;
+  --rule:rgba(60,60,67,.12); --rule2:rgba(60,60,67,.08);
+  --ok:#0F8A5F; --ok-bg:#E6F5EE; --warn:#B4720A; --warn-bg:#FDF2DF;
+  --bad:#C6362A; --bad-bg:#FCEBE9; --link:#0A6CFF; --link-bg:#E8F0FE;
+  --sans:-apple-system,BlinkMacSystemFont,'SF Pro Text','Noto Sans CJK KR',system-ui,sans-serif;
+  --mono:'SF Mono',ui-monospace,Menlo,monospace;
+  --r:16px; --gut:16px;
+  --sat:env(safe-area-inset-top); --sab:env(safe-area-inset-bottom);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar{display:none}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.55;letter-spacing:-.011em}
+button{font-family:inherit;cursor:pointer}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.proto{position:sticky;top:0;z-index:60;background:#0D1116;color:#fff;
+  padding:calc(var(--sat) + 8px) 10px 8px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}
+.proto::-webkit-scrollbar{display:none}
+.proto button{flex:none;border:0;background:rgba(255,255,255,.12);color:#B9C3CE;
+  font-size:11px;font-weight:600;padding:7px 11px;border-radius:999px;white-space:nowrap}
+.proto button[aria-current="true"]{background:#fff;color:#0D1116}
+.proto .lbl{flex:none;font-size:9.5px;letter-spacing:.14em;color:#6D7986;align-self:center;padding:0 6px 0 2px}
+
+header{position:sticky;top:44px;z-index:50;background:rgba(255,255,255,.9);
+  backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--rule);padding:11px 18px}
+.hrow{display:flex;align-items:center;gap:10px}
+.hrow .back{border:0;background:transparent;color:var(--link);font-size:15px;padding:0;margin-left:-2px}
+.hrow h1{flex:1;margin:0;font-size:17px;font-weight:700;letter-spacing:-.02em}
+.hrow .act{border:0;background:transparent;color:var(--link);font-size:15px;padding:0}
+.hsub{margin-top:2px;font-size:12.5px;color:var(--ink3);display:flex;gap:12px;flex-wrap:wrap}
+.hsub b{color:var(--ink2);font-weight:500}
+
+main{padding:0 0 128px}
+.sec{margin-top:22px}
+.sec-h{padding:0 var(--gut) 9px;display:flex;align-items:baseline;gap:10px}
+.sec-h h2{margin:0;font-size:19px;font-weight:700;letter-spacing:-.022em}
+.sec-h .hint{margin-left:auto;font-size:12.5px;color:var(--ink3)}
+.card{background:var(--card);border-radius:var(--r);margin:0 var(--gut);overflow:hidden;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 0 0 .5px rgba(16,24,40,.05)}
+.lede{padding:0 20px 14px;font-size:15px;color:var(--ink2)}
+.lede b{color:var(--ink);font-weight:700}
+.note{margin:0 var(--gut);padding:13px 15px;background:rgba(10,108,255,.06);border-radius:12px;
+  font-size:12.5px;line-height:1.65;color:var(--ink2)}
+.note b{color:var(--ink)}
+
+.row{width:100%;border:0;background:transparent;text-align:left;display:flex;align-items:center;
+  gap:12px;padding:13px 16px;border-bottom:.5px solid var(--rule2)}
+.row:last-child{border-bottom:0}
+.row:active{background:rgba(120,120,128,.10)}
+.row .tx{flex:1;min-width:0}
+.row .tx b{display:block;font-size:15.5px;font-weight:600;letter-spacing:-.014em}
+.row .tx span{display:block;font-size:12.5px;color:var(--ink3);margin-top:1px}
+.row .ch{color:#C4C7CC;font-size:19px}
+.row .num{flex:none;width:32px;height:32px;border-radius:9px;background:rgba(120,120,128,.10);
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+  font-size:13px;font-weight:600;color:var(--ink2)}
+.row .num.done{background:var(--ok-bg);color:var(--ok)}
+.row .num.live{background:var(--link-bg);color:var(--link)}
+.row.on{background:rgba(10,108,255,.05)}
+
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:999px;font-size:11.5px;
+  font-weight:600;padding:4px 10px}
+.chip::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.bad{background:var(--bad-bg);color:var(--bad)}
+.chip.idle{background:rgba(120,120,128,.12);color:var(--ink3)}
+.chip.live{background:var(--link-bg);color:var(--link)}
+.chip.plain::before{display:none}
+
+.prog{margin:0 var(--gut);background:var(--card);border-radius:var(--r);padding:15px 16px;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 0 0 .5px rgba(16,24,40,.05)}
+.prog .t{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.prog .t b{font-size:15.5px;font-weight:600}
+.prog .t span{margin-left:auto;font-family:var(--mono);font-size:13px;color:var(--ink3)}
+.bar{height:7px;background:rgba(120,120,128,.16);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:4px;transition:width .35s cubic-bezier(.32,.72,0,1)}
+.stages{display:flex;gap:6px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.stages::-webkit-scrollbar{display:none}
+.stages button{flex:none;border:0;font-size:11px;font-weight:600;padding:6px 11px;border-radius:999px;
+  background:rgba(120,120,128,.10);color:var(--ink3);white-space:nowrap}
+.stages button.now{background:var(--ink);color:#fff}
+.stages button.fin{background:var(--ok-bg);color:var(--ok)}
+
+.pkg{display:grid;gap:10px;margin:0 var(--gut)}
+.pkg button{background:var(--card);border:0;border-radius:var(--r);padding:15px 16px;text-align:left;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 0 0 .5px rgba(16,24,40,.05)}
+.pkg button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--link),0 4px 14px rgba(10,108,255,.18)}
+.pkg .tx{flex:1}
+.pkg .tx b{display:block;font-size:15.5px;font-weight:600}
+.pkg .tx span{display:block;font-size:12.5px;color:var(--ink3);margin-top:2px}
+.pkg .n{font-family:var(--mono);font-size:13px;color:var(--ink3);flex:none}
+.pkg .tick{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;color:transparent;font-size:12px}
+.pkg button[aria-pressed="true"] .tick{background:var(--link);border-color:var(--link);color:#fff}
+
+.symp{margin:0 var(--gut);background:#0D1116;color:#fff;border-radius:var(--r);padding:16px 18px}
+.symp .k{font-size:11px;font-weight:600;letter-spacing:.12em;color:#8B98A6;margin-bottom:7px}
+.symp .v{font-size:15.5px;line-height:1.6}
+.symp .from{margin-top:9px;font-size:12px;color:#8B98A6}
+
+/* 촬영 */
+.shotwrap{margin:0 var(--gut)}
+.bigshot{background:var(--card);border-radius:var(--r);overflow:hidden;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 0 0 .5px rgba(16,24,40,.05)}
+.bigshot .head{padding:15px 16px;border-bottom:.5px solid var(--rule2)}
+.bigshot .head b{display:block;font-size:17px;font-weight:700;letter-spacing:-.02em}
+.bigshot .head span{display:block;font-size:12.5px;color:var(--ink3);margin-top:2px}
+.frame{aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;
+  font-size:12.5px;color:#8FA5B8;position:relative;border:0;padding:0;width:100%;
+  background:#F0F3F7}
+.frame.on{background-image:linear-gradient(45deg,#E4EBF2 25%,transparent 25%,transparent 75%,#E4EBF2 75%),
+    linear-gradient(45deg,#E4EBF2 25%,transparent 25%,transparent 75%,#E4EBF2 75%);
+  background-size:16px 16px;background-position:0 0,8px 8px}
+.frame .tag{position:absolute;top:9px;left:9px;font-size:9.5px;font-weight:700;letter-spacing:.06em;
+  padding:4px 9px;border-radius:999px;background:var(--ink);color:#fff}
+.frame .tag.af{background:var(--ok)}
+.frame .guide{position:absolute;inset:12%;border:2px dashed rgba(10,108,255,.45);border-radius:10px}
+.cond{padding:14px 16px;font-size:13px;line-height:1.65;color:var(--ink2);border-top:.5px solid var(--rule2)}
+.cond b{color:var(--ink)}
+.refpair{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px 16px}
+.refpair .lbl{font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--ink3);margin-bottom:6px}
+.refpair .mini{aspect-ratio:4/3;border-radius:10px;background:#F0F3F7;position:relative;
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:#8FA5B8;border:0;width:100%}
+.refpair .mini.on{background-image:linear-gradient(45deg,#E4EBF2 25%,transparent 25%,transparent 75%,#E4EBF2 75%),
+    linear-gradient(45deg,#E4EBF2 25%,transparent 25%,transparent 75%,#E4EBF2 75%);
+  background-size:12px 12px;background-position:0 0,6px 6px}
+.refpair .mini.empty{background:#F7F9FB;border:1.5px dashed var(--rule)}
+
+/* 판독 */
+.scan{margin:0 var(--gut);background:var(--card);border-radius:var(--r);overflow:hidden;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 0 0 .5px rgba(16,24,40,.05)}
+.scanrow{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:.5px solid var(--rule2)}
+.scanrow:last-child{border-bottom:0}
+.scanrow .ic{flex:none;width:32px;height:32px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;background:rgba(120,120,128,.10);color:var(--ink3)}
+.scanrow .ic.done{background:var(--ok-bg);color:var(--ok)}
+.scanrow .ic.run{background:var(--link-bg);color:var(--link)}
+.scanrow .tx{flex:1}
+.scanrow .tx b{display:block;font-size:15px;font-weight:600}
+.scanrow .tx span{display:block;font-size:12.5px;color:var(--ink3);margin-top:1px}
+
+/* 확인·수정 */
+.rev{margin:0 var(--gut) 10px;background:var(--card);border-radius:var(--r);overflow:hidden;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 0 0 .5px rgba(16,24,40,.05)}
+.rev .top{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:.5px solid var(--rule2)}
+.rev .top b{flex:1;font-size:15.5px;font-weight:600}
+.rev .body{padding:14px 16px}
+.rev .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.rev .pair .mini{aspect-ratio:4/3;border-radius:9px;position:relative;display:flex;
+  align-items:center;justify-content:center;font-size:10.5px;color:#8FA5B8;
+  background-image:linear-gradient(45deg,#E4EBF2 25%,transparent 25%,transparent 75%,#E4EBF2 75%),
+    linear-gradient(45deg,#E4EBF2 25%,transparent 25%,transparent 75%,#E4EBF2 75%);
+  background-size:12px 12px;background-position:0 0,6px 6px;background-color:#F0F3F7}
+.rev .pair .mini.empty{background:#F7F9FB;background-image:none;border:1.5px dashed var(--rule)}
+.rev .pair .mini .tag{position:absolute;top:6px;left:6px;font-size:8.5px;font-weight:700;
+  padding:3px 7px;border-radius:999px;background:var(--ink);color:#fff}
+.rev .pair .mini .tag.af{background:var(--ok)}
+.rev .read{font-size:13px;color:var(--ink2);line-height:1.6;background:rgba(120,120,128,.07);
+  border-radius:10px;padding:11px 13px;margin-bottom:12px}
+.rev .read b{color:var(--ink)}
+.judge{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.judge button{border:0;border-radius:11px;padding:12px 4px;font-size:12px;font-weight:700;
+  letter-spacing:.02em;background:rgba(120,120,128,.08);color:var(--ink3)}
+.judge button.bad[aria-pressed="true"]{background:var(--bad);color:#fff}
+.judge button.warn[aria-pressed="true"]{background:var(--warn);color:#fff}
+.judge button.ok[aria-pressed="true"]{background:var(--ok);color:#fff}
+.judge button.done[aria-pressed="true"]{background:var(--link);color:#fff}
+.rev textarea{width:100%;border:0;outline:none;background:rgba(120,120,128,.07);border-radius:10px;
+  padding:12px 13px;font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink);
+  resize:vertical;min-height:74px;margin-top:12px}
+.edited{font-size:11px;color:var(--link);margin-top:7px}
+
+.draft{margin:0 var(--gut);background:var(--card);border-radius:var(--r);overflow:hidden;
+  box-shadow:0 1px 2px rgba(16,24,40,.05),0 0 0 .5px rgba(16,24,40,.05)}
+.draft .top{padding:13px 16px;border-bottom:.5px solid var(--rule2);display:flex;align-items:center;gap:9px}
+.draft .top b{flex:1;font-size:13px;font-weight:600;color:var(--ink2)}
+.draft textarea{width:100%;border:0;outline:none;padding:16px;font-family:var(--sans);
+  font-size:15px;line-height:1.68;color:var(--ink);resize:vertical;min-height:170px}
+
+.check{width:100%;border:0;background:transparent;text-align:left;display:flex;gap:12px;
+  padding:13px 16px;border-bottom:.5px solid var(--rule2);align-items:flex-start}
+.check:last-child{border-bottom:0}
+.check:active{background:rgba(120,120,128,.08)}
+.check .box{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--rule);
+  display:flex;align-items:center;justify-content:center;color:transparent;font-size:13px;margin-top:1px}
+.check[aria-pressed="true"] .box{background:var(--link);border-color:var(--link);color:#fff}
+.check .tx{flex:1}
+.check .tx b{display:block;font-size:15px;font-weight:600}
+.check .tx span{display:block;font-size:12.5px;color:var(--ink3);margin-top:2px}
+.check .amt{font-family:var(--mono);font-size:14px;font-weight:600;flex:none}
+
+.cta{position:fixed;left:0;right:0;bottom:0;z-index:55;padding:12px var(--gut) calc(var(--sab) + 14px);
+  background:linear-gradient(180deg,rgba(242,242,247,0),rgba(242,242,247,.95) 34%)}
+.cta button{width:100%;border:0;border-radius:14px;background:var(--link);color:#fff;
+  padding:16px;font-size:16px;font-weight:600;box-shadow:0 6px 18px rgba(10,108,255,.28)}
+.cta button:active{background:#0757CC}
+.cta button[disabled]{background:#C9CED6;box-shadow:none}
+.cta .sub{text-align:center;font-size:12px;color:var(--ink3);margin-top:9px}
+
+.done-hero{margin:0 var(--gut);background:linear-gradient(180deg,#0F8A5F,#0B7350);color:#fff;
+  border-radius:20px;padding:30px 22px;text-align:center;box-shadow:0 10px 26px rgba(15,138,95,.24)}
+.done-hero .ico{font-size:38px;line-height:1}
+.done-hero b{display:block;font-size:21px;font-weight:700;margin-top:12px;letter-spacing:-.02em}
+.done-hero span{display:block;font-size:14px;color:#CDEBDD;margin-top:6px}
+.toast{position:fixed;left:50%;bottom:104px;transform:translateX(-50%) translateY(14px);
+  background:#0D1116;color:#fff;font-size:13.5px;font-weight:500;padding:11px 18px;border-radius:999px;
+  opacity:0;transition:.24s;z-index:70;pointer-events:none;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<nav class="proto" id="proto"></nav>
+<div id="app"></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ═══ 데이터 ═══ */
+var CARS=[
+ {plate:'12GA 3456',model:'Sonata DN8',odo:'54,320 mi',owner:'Seoyeon Kim',tin:'09:00',
+  symptom:'A clunk from the front right when I go over speed bumps. Louder when I go slow.',
+  hint:'Front suspension and tires are already ticked.',pkg:'symptom'},
+ {plate:'47HK 9012',model:'Tucson NX4',odo:'31,180 mi',owner:'Minjun Cho',tin:'09:40',
+  symptom:'The air con smells musty for the first minute after I switch it on.',
+  hint:'The cabin filter is already ticked.',pkg:'oil'},
+ {plate:'03BN 5577',model:'Avante CN7',odo:'72,940 mi',owner:'Hyewon Jang',tin:'08:10',
+  symptom:'Booked in for a full check before the winter.',
+  hint:'A full check covers all 11 items.',pkg:'full'}];
+var CAR=CARS[0];
+
+var STAGE=[
+ {n:1,name:'Around the car',cond:'engine off',eq:['Phone only']},
+ {n:2,name:'Under the hood',cond:'engine cold',eq:['Phone only']},
+ {n:3,name:'In the cabin',cond:'engine on',eq:['Phone only']}];
+
+var ITEM=[
+ {k:'tire', s:1,n:'Tires',       en:'Tire',              loc:'Exterior', shot:'Tread face and sidewall, 1\u20132 shots',
+  read:'wear line, cracks, uneven wear, sidewall damage', cost:[420,60]},
+ {k:'pad',  s:1,n:'Brake pads',  en:'Brake Pads',        loc:'Exterior', shot:'Through the wheel spokes',
+  read:'pad thickness, wear', cost:[70,30]},
+ {k:'light',s:1,n:'Lights',      en:'Lights',            loc:'Exterior', shot:'Two shots \u2014 lights off, then on',
+  read:'lit, yellowing, cracks', cost:[40,20]},
+ {k:'oil',  s:2,n:'Engine oil',  en:'Engine Oil & Filter',loc:'Engine bay',shot:'Dipstick against a clean cloth',
+  read:'colour, clarity, level', cost:[46,24]},
+ {k:'belt', s:2,n:'Drive belt',  en:'Serpentine Belt',   loc:'Belts',    shot:'Top of the engine bay',
+  read:'cracks, wear, slack, contamination', cost:[28,33]},
+ {k:'hose', s:2,n:'Coolant hoses',en:'Coolant Hoses',    loc:'Hoses',    shot:'Same engine bay frame',
+  read:'cracks, swelling, leak marks', cost:[180,90]},
+ {k:'batt', s:2,n:'Battery',     en:'Battery',           loc:'Engine bay',shot:'Terminals and case',
+  read:'terminal corrosion, swelling, leaks', cost:[155,11]},
+ {k:'leak', s:2,n:'Upper oil leak',en:'Upper Oil Leak',  loc:'Engine bay',shot:'Wide, then close on the seep',
+  read:'leak marks and where they are', cost:[25,133]},
+ {k:'filt', s:3,n:'Cabin filter',en:'AC & Air Filter',   loc:'Cabin',    shot:'Filter out of the housing',
+  read:'dirt, discolouring, debris', cost:[13,7]},
+ {k:'wipe', s:3,n:'Wipers',      en:'Wiper Blades',      loc:'Cabin',    shot:'Close on the blade edge',
+  read:'cracks, peeling, deformation', cost:[19,0]},
+ {k:'cel',  s:3,n:'Check engine light',en:'Check Engine Light',loc:'Cabin',shot:'Dash with ignition on',
+  read:'warning lamp state', cost:[0,26]}];
+
+var PKG={
+ symptom:{n:'Symptom-based',d:'from what the owner reported',keys:['tire','pad','belt','hose','batt','leak']},
+ full:{n:'Full check',d:'all eleven items',keys:ITEM.map(function(i){return i.k;})},
+ oil:{n:'Oil service',d:'oil and the basics',keys:['oil','filt','wipe','light','batt']},
+ quick:{n:'Quick look',d:'the four that matter most',keys:['tire','pad','light','oil']}};
+
+/* 판독 결과 시나리오 */
+var READ={
+ tire:{bad:'Tread at the wear line on both fronts. No sidewall damage.',judge:'bad'},
+ pad: {bad:'Pads look under a quarter of a new set.',judge:'bad'},
+ light:{bad:'All lamps lit. Left headlight lens is yellowed.',judge:'warn'},
+ oil: {bad:'Oil is dark and thin. Level is at the low mark.',judge:'warn'},
+ belt:{bad:'Fine cracks along the ribs. Not through yet.',judge:'warn'},
+ hose:{bad:'Upper hose has dried coolant around the clamp.',judge:'warn'},
+ batt:{bad:'White powder on the positive terminal. Case is flat.',judge:'warn'},
+ leak:{bad:'Oil seeping at the valve cover seam. Nothing dripping.',judge:'warn'},
+ filt:{bad:'Filter is packed with dust and leaves.',judge:'bad'},
+ wipe:{bad:'Rubber edge is peeling on the driver side.',judge:'warn'},
+ cel: {bad:'No warning lamp on the dash.',judge:'ok'}};
+
+function blankV(){var v={}; ITEM.forEach(function(i){
+ v[i.k]={pb:false,pa:false,judge:null,read:null,text:null,edited:false};}); return v;}
+
+var S={carIdx:0,cars:[],pkg:'symptom',custom:null,pick:false,stage:1,cur:null,
+ screen:'jobs',v:{},work:{},scan:null,draft:null,dedit:false};
+CARS.forEach(function(c){S.cars.push({pkg:c.pkg,custom:null,pick:false,stage:1,
+ v:blankV(),work:{},scan:null,draft:null,dedit:false});});
+(function(){var c=S.cars[0];
+ S.pkg=c.pkg;S.custom=c.custom;S.pick=c.pick;S.stage=c.stage;S.v=c.v;S.work=c.work;
+ S.scan=c.scan;S.draft=c.draft;CAR=CARS[0];})();
+
+function saveCar(){var c=S.cars[S.carIdx];
+ c.pkg=S.pkg;c.custom=S.custom;c.pick=S.pick;c.stage=S.stage;c.v=S.v;c.work=S.work;
+ c.scan=S.scan;c.draft=S.draft;c.dedit=S.dedit;}
+function loadCar(i){saveCar();S.carIdx=i;CAR=CARS[i];var c=S.cars[i];
+ S.pkg=c.pkg;S.custom=c.custom;S.pick=c.pick;S.stage=c.stage;S.v=c.v;S.work=c.work;
+ S.scan=c.scan;S.draft=c.draft;S.dedit=c.dedit;S.cur=null;}
+function I(k){for(var i=0;i<ITEM.length;i++) if(ITEM[i].k===k) return ITEM[i]; return null;}
+function scopeOf(c){return (c.pkg==='custom'&&c.custom)?c.custom:PKG[c.pkg].keys;}
+function scope(){return scopeOf(S);}
+function inScope(){return ITEM.filter(function(i){return scope().indexOf(i.k)>=0;});}
+function stItems(n){return inScope().filter(function(i){return i.s===n;});}
+function shotB(){return inScope().filter(function(i){return S.v[i.k].pb;}).length;}
+function shotA(){return inScope().filter(function(i){return S.v[i.k].pa;}).length;}
+function worked(){return inScope().filter(function(i){return S.work[i.k];});}
+function progOf(i){var c=(i===S.carIdx)?{pkg:S.pkg,custom:S.custom,v:S.v}:S.cars[i];
+ var ks=scopeOf(c),d=0; ks.forEach(function(k){if(c.v[k]&&c.v[k].pb) d++;});
+ return {d:d,t:ks.length};}
+function toast(t){var e=document.getElementById('toast');e.textContent=t;e.classList.add('on');
+ clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove('on');},1500);}
+
+var SCREENS=[['jobs','Jobs'],['scope','Scope'],['before','Before'],['work','Work'],
+ ['after','After'],['scan','Read'],['review','Review'],['done','Done']];
+var LAB={bad:'NEEDS WORK',warn:'WATCH',ok:'FINE',done:'FIXED'};
+
+function head(t,back,act){
+ return '<header><div class="hrow">'+(back?'<button class="back">&lsaquo; '+back+'</button>':'')
+  +'<h1>'+t+'</h1>'+(act?'<button class="act">'+act+'</button>':'')
+  +'</div><div class="hsub"><span>'+CAR.plate+'</span><span>'+CAR.model+'</span>'
+  +'<span>Driven <b>'+CAR.odo+'</b></span></div></header>';}
+function cta(l,sub,dis){return '<div class="cta"><button data-next="1"'+(dis?' disabled':'')+'>'+l+'</button>'
+ +(sub?'<div class="sub">'+sub+'</div>':'')+'</div>';}
+
+/* ═══ 01 Jobs ═══ */
+function scJobs(){
+ saveCar();
+ var o='<header><div class="hrow"><h1>Today</h1><button class="act">Dohyun Lee</button></div>'
+  +'<div class="hsub"><span>Auto Service</span><span>2026-08-26</span>'
+  +'<span><b>'+CARS.length+'</b> cars</span></div></header><main>';
+ o+='<div class="sec"><div class="sec-h"><h2>In the shop</h2><span class="hint">tap to open</span></div><div class="card">';
+ CARS.forEach(function(c,i){
+  var pr=progOf(i);
+  var cls=pr.d===0?'idle':(pr.d>=pr.t?'live':'live');
+  var lab=pr.d===0?'Waiting':'Shooting';
+  var sub=pr.d===0?('not started \u00b7 '+pr.t+' items'):(pr.d+' / '+pr.t+' shot');
+  o+='<button class="row'+(i===S.carIdx?' on':'')+'" data-car="'+i+'">'
+   +'<span class="num'+(pr.d?' live':'')+'">'+(i+1)+'</span>'
+   +'<span class="tx"><b>'+c.plate+'</b><span>'+c.model+' &middot; in at '+c.tin+' &middot; '+sub+'</span></span>'
+   +'<span class="chip '+cls+' plain">'+lab+'</span><span class="ch">&rsaquo;</span></button>';});
+ o+='</div></div>';
+ o+='<div class="sec"><div class="note">You shoot and you fix. '
+  +'<b>The report writes itself afterwards.</b></div></div>';
+ return o+'</main>';}
+
+/* ═══ 02 Scope ═══ */
+function scScope(){
+ var o=head('Scope','Today')+'<main>';
+ o+='<div class="sec"><div class="symp"><div class="k">WHAT THE OWNER SAID</div>'
+  +'<div class="v">'+CAR.symptom+'</div><div class="from">Submitted in the app</div></div></div>';
+ o+='<div class="sec"><div class="sec-h"><h2>What to check</h2><span class="hint">tap to change</span></div>'
+  +'<div class="note">'+CAR.hint+'</div><div class="pkg" style="margin-top:12px">';
+ ['symptom','full','oil','quick'].forEach(function(k){
+  o+='<button data-pkg="'+k+'" aria-pressed="'+(S.pkg===k)+'"><span class="tick">&#10003;</span>'
+   +'<span class="tx"><b>'+PKG[k].n+'</b><span>'+PKG[k].d+'</span></span>'
+   +'<span class="n">'+PKG[k].keys.length+'</span></button>';});
+ o+='<button data-pick="1" aria-pressed="'+(S.pkg==='custom')+'"><span class="tick">&#10003;</span>'
+  +'<span class="tx"><b>Pick them yourself</b><span>tick what you need</span></span>'
+  +'<span class="n">'+(S.pkg==='custom'?scope().length:'&mdash;')+'</span></button></div></div>';
+ if(S.pick){
+  o+='<div class="sec"><div class="sec-h"><h2>Tick what to shoot</h2>'
+   +'<span class="hint">'+scope().length+' picked</span></div>';
+  STAGE.forEach(function(st){
+   o+='<div class="sec-h" style="padding-top:12px"><h2 style="font-size:14px;color:var(--ink3)">'
+    +st.name+'</h2></div><div class="card">';
+   ITEM.filter(function(i){return i.s===st.n;}).forEach(function(i){
+    o+='<button class="check" data-tick="'+i.k+'" aria-pressed="'+(scope().indexOf(i.k)>=0)+'">'
+     +'<span class="box">&#10003;</span><span class="tx"><b>'+i.n+'</b>'
+     +'<span>'+i.en+' &middot; '+i.loc+'</span></span></button>';});
+   o+='</div>';});
+  o+='</div>';}
+ o+='<div class="sec"><div class="sec-h"><h2>Shot list</h2></div><div class="card">';
+ STAGE.forEach(function(st){var n=stItems(st.n).length;
+  o+='<div class="row"><span class="num">'+st.n+'</span>'
+   +'<span class="tx"><b>'+st.name+'</b><span>'+st.cond+'</span></span>'
+   +(n?'<span class="chip live plain">'+n+' shots</span>':'<span class="chip idle plain">skip</span>')+'</div>';});
+ o+='</div></div>';
+ return o+'</main>'+cta('Start shooting',scope().length+' items');}
+
+/* ═══ 03 Before ═══ */
+function scBefore(){
+ var its=stItems(S.stage);
+ if(!S.cur||scope().indexOf(S.cur)<0||I(S.cur).s!==S.stage){
+  var nx=its.filter(function(i){return !S.v[i.k].pb;})[0]||its[0];
+  S.cur=nx?nx.k:null;}
+ var it=S.cur?I(S.cur):null;
+ var st=STAGE[S.stage-1];
+ var o=head('Before photos','Scope','Pause')+'<main>';
+ o+='<div class="sec"><div class="prog"><div class="t"><b>'+st.name+'</b>'
+  +'<span>'+shotB()+' / '+scope().length+' shot</span></div>'
+  +'<div class="bar"><i style="width:'+Math.round(shotB()/scope().length*100)+'%"></i></div>'
+  +'<div class="stages">';
+ STAGE.forEach(function(x){var q=stItems(x.n),d=q.filter(function(i){return S.v[i.k].pb;}).length;
+  var cls=(x.n===S.stage)?'now':(q.length&&d===q.length?'fin':'');
+  o+='<button data-stage="'+x.n+'" class="'+cls+'">'+x.name
+   +(q.length?(d===q.length?' &#10003;':' '+d+'/'+q.length):' \u2014')+'</button>';});
+ o+='</div></div></div>';
+ if(it){
+  var v=S.v[it.k];
+  o+='<div class="sec shotwrap"><div class="bigshot">'
+   +'<div class="head"><b>'+it.n+'</b><span>'+it.en+' &middot; '+it.loc+'</span></div>'
+   +'<button class="frame '+(v.pb?'on':'')+'" data-shot="'+it.k+'">'
+   +(v.pb?'<span class="tag">BEFORE</span>':'<span class="guide"></span>tap to shoot')+'</button>'
+   +'<div class="cond"><b>'+it.shot+'</b><br>Reads: '+it.read+'</div></div></div>';
+ }
+ o+='<div class="sec"><div class="sec-h"><h2>'+st.name+'</h2>'
+  +'<span class="hint">'+st.cond+'</span></div><div class="card">';
+ its.forEach(function(i,n){var v=S.v[i.k];
+  o+='<button class="row'+(i.k===S.cur?' on':'')+'" data-item="'+i.k+'">'
+   +'<span class="num'+(v.pb?' done':'')+'">'+(v.pb?'&#10003;':(n+1))+'</span>'
+   +'<span class="tx"><b>'+i.n+'</b><span>'+i.shot+'</span></span>'
+   +(v.pb?'<span class="chip ok plain">shot</span>':'<span class="chip idle plain">to do</span>')
+   +'<span class="ch">&rsaquo;</span></button>';});
+ o+='</div></div>';
+ o+='<div class="sec"><div class="note">No judgment here. '
+  +'<b>Just shoot what you see.</b> The reading comes after the work.</div></div>';
+ var left=inScope().filter(function(i){return !S.v[i.k].pb;});
+ var nxs=its.filter(function(i){return !S.v[i.k].pb&&i.k!==S.cur;})[0];
+ return o+'</main>'+cta(
+   left.length?(nxs?'Next \u00b7 '+nxs.n:(S.stage<3?'Go to '+STAGE[S.stage].name:'Start work')):'Start work',
+   left.length?left.length+' left':'all '+scope().length+' shot');}
+
+/* ═══ 04 Work ═══ */
+function scWork(){
+ var o=head('Work','Before')+'<main>';
+ var tot=0,q=0;
+ inScope().forEach(function(i){var c=i.cost[0]+i.cost[1]; if(S.work[i.k]) tot+=c; else q+=c;});
+ o+='<div class="sec"><div class="lede">Tick what you are fixing today. '
+  +'<b>Everything else stays on the report</b> with a quote.</div><div class="card">';
+ inScope().forEach(function(i){
+  o+='<button class="check" data-work="'+i.k+'" aria-pressed="'+(!!S.work[i.k])+'">'
+   +'<span class="box">&#10003;</span><span class="tx"><b>'+i.n+'</b>'
+   +'<span>'+i.loc+' &middot; '+(S.v[i.k].pb?'photo taken':'no photo')+'</span></span>'
+   +'<span class="amt">$'+(i.cost[0]+i.cost[1])+'</span></button>';});
+ o+='</div></div>';
+ var cn=worked().length;
+ o+='<div class="sec"><div class="note">Ticked items need an <b>after photo</b> at the same angle. '
+  +'That pair is what the reading compares.</div></div>';
+ return o+'</main>'+cta(cn?('Done \u00b7 '+cn+' fixed'):'Nothing fixed today',
+   '$'+tot+' today \u00b7 $'+q+' quoted');}
+
+/* ═══ 05 After ═══ */
+function scAfter(){
+ var did=worked();
+ var dn=did.filter(function(i){return S.v[i.k].pa;}).length;
+ var o=head('After photos','Work')+'<main>';
+ o+='<div class="sec"><div class="lede">Same angle as before. <b>'+dn+' of '+did.length+'</b> done.</div></div>';
+ if(!did.length) o+='<div class="sec"><div class="card"><div class="row"><span class="tx">'
+  +'<b>Nothing to shoot</b><span>no work was ticked</span></span></div></div></div>';
+ did.forEach(function(i){var v=S.v[i.k];
+  o+='<div class="sec shotwrap"><div class="bigshot">'
+   +'<div class="head"><b>'+i.n+'</b><span>'+i.shot+'</span></div>'
+   +'<div class="refpair">'
+   +'<div><div class="lbl">BEFORE</div><div class="mini on"></div></div>'
+   +'<div><div class="lbl">AFTER</div>'
+   +'<button class="mini '+(v.pa?'on':'empty')+'" data-after="'+i.k+'">'
+   +(v.pa?'':'tap to shoot')+'</button></div></div></div></div>';});
+ var left=did.length-dn;
+ return o+'</main>'+cta(left?(left+' photo'+(left===1?'':'s')+' left'):'Read the photos',
+   left?'tap a frame to shoot':'', left>0);}
+
+/* ═══ 06 Read ═══ */
+function scScan(){
+ var its=inScope().filter(function(i){return S.v[i.k].pb;});
+ var running=(S.scan!==null&&S.scan<its.length);
+ var fin=(S.scan!==null&&S.scan>=its.length);
+ var o=head('Reading','After')+'<main>';
+ o+='<div class="sec"><div class="lede">'
+  +(S.scan===null?'The photos go to the reader now. Pairs are compared, singles are read as they are.'
+   :(fin?'All read. Check the calls before they go out.':'Reading\u2026'))+'</div>';
+ o+='<div class="scan">';
+ its.forEach(function(i,n){
+  var st = S.scan===null?'wait':(n<S.scan?'done':(n===S.scan?'run':'wait'));
+  var pair=S.v[i.k].pa;
+  o+='<div class="scanrow"><span class="ic '+(st==='done'?'done':(st==='run'?'run':''))+'">'
+   +(st==='done'?'&#10003;':(st==='run'?'&#8635;':(n+1)))+'</span>'
+   +'<span class="tx"><b>'+i.n+'</b><span>'
+   +(pair?'before and after \u00b7 compared':'before only \u00b7 read as is')+'</span></span>'
+   +(st==='done'?'<span class="chip '+(S.v[i.k].judge||'idle')+' plain">'
+      +(LAB[S.v[i.k].judge]||'')+'</span>'
+     :(st==='run'?'<span class="chip live plain">reading</span>'
+       :'<span class="chip idle plain">waiting</span>'))
+   +'</div>';});
+ o+='</div></div>';
+ o+='<div class="sec"><div class="note">A pair means the item was fixed. '
+  +'<b>A single photo means it still needs work</b> \u2014 unless it read clean.</div></div>';
+ if(fin) o+='<div class="sec"><div class="done-hero" style="background:linear-gradient(180deg,#0A6CFF,#0757CC);'
+   +'box-shadow:0 10px 26px rgba(10,108,255,.24)"><div class="ico">&#10003;</div>'
+   +'<b>Report drafted</b><span>'+its.length+' items read</span></div></div>';
+ return o+'</main>'+cta(S.scan===null?'Read the photos':(fin?'Check it over':'Reading\u2026'),
+   S.scan===null?its.length+' items':'', running);}
+
+/* ═══ 07 Review ═══ */
+function buildDraft(){
+ var did=worked(), bad=inScope().filter(function(i){return S.v[i.k].judge==='bad';});
+ var warn=inScope().filter(function(i){return S.v[i.k].judge==='warn';});
+ var p1='Today I '+(did.length?('took care of '+did.map(function(i){return i.n.toLowerCase();}).join(', ')+'. ')
+   :'went over the car. ');
+ p1+= bad.length?('Two things should not wait \u2014 '
+   +bad.map(function(i){return i.n.toLowerCase();}).join(' and ')+'. That affects your safety.')
+   :'Nothing urgent came up.';
+ var p2=warn.length?('The other '+warn.length+' \u2014 '+warn.map(function(i){return i.n.toLowerCase();}).join(', ')
+   +' \u2014 are not urgent, but plan them within 3 months.'):'';
+ return p1+(p2?'\n\n'+p2:'');}
+function scReview(){
+ if(S.draft===null) S.draft=buildDraft();
+ var its=inScope().filter(function(i){return S.v[i.k].pb;});
+ var ed=its.filter(function(i){return S.v[i.k].edited;}).length;
+ var o=head('Review','Reading','Send')+'<main>';
+ o+='<div class="sec"><div class="lede">Change anything that is not right. '
+  +(ed?('<b>'+ed+'</b> changed so far.'):'Nothing changed yet.')+'</div>';
+ o+='<div class="draft"><div class="top"><b>What the customer reads first</b>'
+  +'<span class="chip live plain">draft</span></div>'
+  +'<textarea id="draft">'+S.draft+'</textarea></div></div>';
+ o+='<div class="sec"><div class="sec-h"><h2>Item by item</h2>'
+  +'<span class="hint">'+its.length+'</span></div>';
+ its.forEach(function(i){var v=S.v[i.k];
+  o+='<div class="rev"><div class="top"><b>'+i.n+'</b>'
+   +'<span class="chip '+(v.judge||'idle')+' plain">'+(LAB[v.judge]||'')+'</span></div>'
+   +'<div class="body"><div class="pair">'
+   +'<div class="mini"><span class="tag">BEFORE</span></div>'
+   +(v.pa?'<div class="mini"><span class="tag af">AFTER</span></div>'
+        :'<div class="mini empty">not done</div>')
+   +'</div>'
+   +'<div class="read"><b>Read:</b> '+(v.read||'')+'</div>'
+   +'<div class="judge">'
+   +['bad','warn','ok','done'].map(function(j){
+     return '<button class="'+j+'" data-judge="'+i.k+'|'+j+'" aria-pressed="'+(v.judge===j)+'">'
+      +LAB[j]+'</button>';}).join('')
+   +'</div>'
+   +'<textarea data-text="'+i.k+'">'+(v.text||'')+'</textarea>'
+   +(v.edited?'<div class="edited">edited \u00b7 original kept</div>':'')
+   +'</div></div>';});
+ o+='</div>';
+ o+='<div class="sec"><div class="note">Every number comes from your photos. '
+  +'<b>Nothing goes out until you send it.</b></div></div>';
+ return o+'</main>'+cta('Send the report','to '+CAR.owner);}
+
+/* ═══ 08 Done ═══ */
+function scDone(){
+ var its=inScope().filter(function(i){return S.v[i.k].pb;});
+ var ph=inScope().reduce(function(a,i){return a+(S.v[i.k].pb?1:0)+(S.v[i.k].pa?1:0);},0);
+ var o=head('Sent','Review')+'<main>';
+ o+='<div class="sec"><div class="done-hero"><div class="ico">&#10003;</div><b>Report sent</b>'
+  +'<span>'+its.length+' items \u00b7 '+worked().length+' fixed \u00b7 '+ph+' photos</span></div></div>';
+ o+='<div class="sec"><div class="card">';
+ [['Show on this screen','hand the phone over'],
+  ['Open in the owner app',CAR.owner+' got a notification']].forEach(function(a){
+  o+='<button class="row" data-toast="'+a[0]+'"><span class="tx"><b>'+a[0]+'</b>'
+   +'<span>'+a[1]+'</span></span><span class="ch">&rsaquo;</span></button>';});
+ o+='</div></div>';
+ o+='<div class="sec"><div class="note">The job stays open until the owner opens the report. '
+  +'<b>That moment is the pick-up time.</b></div></div>';
+ return o+'</main>'+cta('Next car','back to today');}
+
+var R={jobs:scJobs,scope:scScope,before:scBefore,work:scWork,after:scAfter,
+       scan:scScan,review:scReview,done:scDone};
+function nav(){var o='<span class="lbl">FLOW</span>';
+ SCREENS.forEach(function(s,i){o+='<button data-s="'+s[0]+'" aria-current="'+(s[0]===S.screen)+'">'
+  +(i+1)+' '+s[1]+'</button>';});
+ document.getElementById('proto').innerHTML=o;}
+function draw(keep){nav();document.getElementById('app').innerHTML=R[S.screen]();
+ if(!keep) window.scrollTo(0,0);}
+
+document.addEventListener('click',function(e){
+ var t;
+ if((t=e.target.closest('[data-s]'))){S.screen=t.getAttribute('data-s');draw();return;}
+ if((t=e.target.closest('[data-car]'))){loadCar(+t.getAttribute('data-car'));
+   S.screen=progOf(S.carIdx).d===0?'scope':'before';draw();return;}
+ if((t=e.target.closest('[data-pkg]'))){S.pkg=t.getAttribute('data-pkg');S.pick=false;
+   S.work={};S.scan=null;S.draft=null;
+   if(!stItems(S.stage).length){for(var z=1;z<=3;z++){if(stItems(z).length){S.stage=z;break;}}}
+   toast(PKG[S.pkg].keys.length+' items');draw(true);return;}
+ if((t=e.target.closest('[data-pick]'))){
+   if(S.pkg!=='custom'){S.custom=scope().slice();S.pkg='custom';}
+   S.pick=true;toast('Pick them yourself');draw(true);return;}
+ if((t=e.target.closest('[data-tick]'))){var tk=t.getAttribute('data-tick');
+   if(S.pkg!=='custom'){S.custom=scope().slice();S.pkg='custom';S.pick=true;}
+   var ix=S.custom.indexOf(tk); if(ix>=0) S.custom.splice(ix,1); else S.custom.push(tk);
+   S.work={};S.scan=null;S.draft=null;draw(true);return;}
+ if((t=e.target.closest('[data-stage]'))){S.stage=+t.getAttribute('data-stage');S.cur=null;draw(true);return;}
+ if((t=e.target.closest('[data-item]'))){S.cur=t.getAttribute('data-item');draw(true);return;}
+ if((t=e.target.closest('[data-shot]'))){var sk=t.getAttribute('data-shot');
+   S.v[sk].pb=!S.v[sk].pb;S.scan=null;toast(S.v[sk].pb?'Shot':'Removed');
+   if(S.v[sk].pb){var nx=stItems(S.stage).filter(function(i){return !S.v[i.k].pb;})[0];
+     if(nx) S.cur=nx.k;}
+   draw(true);return;}
+ if((t=e.target.closest('[data-work]'))){var wk=t.getAttribute('data-work');
+   S.work[wk]=!S.work[wk];if(!S.work[wk]) S.v[wk].pa=false;S.scan=null;S.draft=null;draw(true);return;}
+ if((t=e.target.closest('[data-after]'))){var ak=t.getAttribute('data-after');
+   S.v[ak].pa=!S.v[ak].pa;S.scan=null;toast(S.v[ak].pa?'Shot':'Removed');draw(true);return;}
+ if((t=e.target.closest('[data-judge]'))){var q=t.getAttribute('data-judge').split('|');
+   S.v[q[0]].judge=q[1];S.v[q[0]].edited=true;S.draft=null;draw(true);return;}
+ if((t=e.target.closest('[data-toast]'))){toast(t.getAttribute('data-toast'));return;}
+ if((t=e.target.closest('.back'))){var j=-1;
+   for(var a=0;a<SCREENS.length;a++) if(SCREENS[a][0]===S.screen) j=a;
+   if(j>0){S.screen=SCREENS[j-1][0];draw();} return;}
+ if((t=e.target.closest('[data-next]'))){
+   if(t.disabled) return;
+   if(S.screen==='before'){
+     var its=stItems(S.stage), n2=its.filter(function(i){return !S.v[i.k].pb;})[0];
+     if(n2){S.cur=n2.k;draw();return;}
+     if(S.stage<3){S.stage++;S.cur=null;draw();return;}
+     S.screen='work';draw();return;}
+   if(S.screen==='scan'){
+     var n=inScope().filter(function(i){return S.v[i.k].pb;});
+     if(S.scan===null){S.scan=0;draw();
+       var tick=function(){
+         var it=n[S.scan];
+         if(it){var r=READ[it.k];
+           S.v[it.k].read=r.bad;
+           S.v[it.k].judge = S.v[it.k].pa ? 'done' : r.judge;
+           S.v[it.k].text = S.v[it.k].pa
+             ? ('Replaced today. '+r.bad)
+             : r.bad;}
+         S.scan++; draw(true);
+         if(S.scan<n.length) setTimeout(tick,700);};
+       setTimeout(tick,700); return;}
+     if(S.scan>=n.length){S.screen='review';draw();return;}
+     return;}
+   if(S.screen==='done'){saveCar();S.screen='jobs';S.scan=null;draw();return;}
+   var i2=-1; for(var b2=0;b2<SCREENS.length;b2++) if(SCREENS[b2][0]===S.screen) i2=b2;
+   if(i2<SCREENS.length-1){S.screen=SCREENS[i2+1][0];draw();}
+   return;}
+});
+document.addEventListener('input',function(e){
+ if(e.target.id==='draft'){S.draft=e.target.value;S.dedit=true;return;}
+ var k=e.target.getAttribute&&e.target.getAttribute('data-text');
+ if(k){S.v[k].text=e.target.value;S.v[k].edited=true;}
+});
+draw();
+</script>
+</body>
+</html>
