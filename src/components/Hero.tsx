@@ -51,7 +51,7 @@ export default function Hero() {
             </a>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center gap-3 md:absolute md:right-6 md:top-6 md:mt-0">
             {[
               { label: "App Store" },
               { label: "Google Play" },
