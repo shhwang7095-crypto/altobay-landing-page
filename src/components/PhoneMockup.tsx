@@ -16,10 +16,13 @@ export default function PhoneMockup({
   size?: keyof typeof SIZES;
 }) {
   const { width, height } = SIZES[size];
+  // The interactive demo needs to shrink on narrow viewports instead of
+  // overflowing — the others are already small enough to never hit that.
+  const isFluid = size === "interactive";
   return (
     <div
-      className={`relative shrink-0 rounded-[2.2rem] border-4 border-brand-navy-soft bg-brand-navy p-2 shadow-2xl ring-1 ring-black/10 ${className ?? ""}`}
-      style={{ width }}
+      className={`relative shrink-0 rounded-[2.2rem] border-4 border-brand-navy-soft bg-brand-navy p-2 shadow-2xl ring-1 ring-black/10 ${isFluid ? "w-full" : ""} ${className ?? ""}`}
+      style={isFluid ? { maxWidth: width } : { width }}
     >
       <div className="absolute left-1/2 top-2 h-1.5 w-14 -translate-x-1/2 rounded-full bg-black/40" />
       <div

@@ -220,6 +220,13 @@ main{padding:0 0 128px}
   background:#0D1116;color:#fff;font-size:13.5px;font-weight:500;padding:11px 18px;border-radius:999px;
   opacity:0;transition:.24s;z-index:70;pointer-events:none;white-space:nowrap}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Embedded-in-phone-mockup override: step navigation now lives outside the
+   phone (see InteractiveDemoPhone.tsx), driven via .click() on [data-s], so
+   the in-page "FLOW" bar is hidden and the header reclaims its spot.
+   (Placed last so it wins over the earlier .proto/header rules above.) */
+.proto{display:none!important}
+header{top:0!important}
 </style>
 </head>
 <body>
