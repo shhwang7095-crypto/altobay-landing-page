@@ -1,6 +1,6 @@
 # Altobay.ai 소개 웹페이지 — 작업 인수인계
 
-마지막 업데이트: 2026-09-01
+마지막 업데이트: 2026-09-11
 새 세션에서 이 프로젝트를 이어받을 때 **이 파일을 먼저 전체 읽을 것.**
 
 ---
@@ -141,12 +141,17 @@ Navbar → Hero → ServiceFeatures → Screenshots → About → CTA → Footer
 5. **Footer 약관** — Privacy / Terms 페이지 만들지, 링크만 걸지 결정 필요
 6. **다크모드 로고 색상** — 사용자가 준 다크 배경 로고 원본의 정확한 색상 코드 확인 (현재 `#3a4560`은 내가 임의 조정한 값)
 
-### 배포 (사용자가 "나중에" 요청)
-1. `git init` + 첫 커밋 (현재 git 저장소 아님)
-2. GitHub 저장소 생성 + push — **계정/저장소명/공개여부 확인 필요**
-3. Vercel 프로젝트 연결 → 이후 `git push`만 하면 자동 재배포
-4. `src/app/layout.tsx:11`의 `SITE_URL`을 실제 배포 URL로 교체 (OG 이미지 절대경로에 사용됨)
-5. (선택) `altobay.ai` 도메인 연결
+### 배포 — 진행 상황 (2026-09-11 기준)
+1. ✅ GitHub 저장소 생성 + push 완료 — **public**, `github.com/shhwang7095-crypto/altobay-landing-page`, `gh` CLI로 인증(계정 `shhwang7095-crypto`)해서 진행함
+2. ⏳ Vercel — Import 화면까지 안내했으나(GitHub App 권한 조정 필요했음) **완료 확인 안 됨**. 사용자가 "GCP 연동 호스팅"으로 방향 전환하면서 보류 상태
+3. ✅ **Firebase App Hosting**으로 방향 확정 (사용자가 GCP 계열 호스팅 요청 → Firebase Hosting 선택). 구식 "Hosting + frameworksBackend" 방식은 Next.js 신규 사용 중단됐음을 확인(WebFetch로 공식 문서 검증) → **App Hosting**이 현재 정식 경로. 콘솔에서 GitHub 저장소 연결하는 방식(Vercel과 유사), 로컬 CLI 배포는 필수 아님.
+   - `apphosting.yaml` 추가함 (runConfig만, env/secret 없음 — 필요해지면 `env:` 섹션 추가)
+   - `package.json`에 `"engines": {"node": ">=20"}` 추가
+   - **다음 세션에서 사용자가 안 했으면 확인**: Firebase Console → Hosting & Serverless → App Hosting → Get started → GitHub 연결 → `altobay-landing-page` 저장소 선택 → root directory 지정 → live branch `master` → Deploy. Google/GitHub 계정 인증은 사용자가 직접 콘솔에서 해야 함(Claude가 대신 못 함).
+4. `src/app/layout.tsx:11`의 `SITE_URL`을 실제 배포 URL로 교체 (OG 이미지 절대경로에 사용됨) — **아직 실제 배포 URL 모름, 배포 완료되면 사용자에게 물어볼 것**
+5. (선택) `altobay.ai` 도메인 연결 — App Hosting 콘솔에서 커스텀 도메인 추가 가능
+
+> Vercel 관련 안내(레포 push까지는 공통)는 위 1번에서 이미 끝났고, 2번(Vercel Import)은 사용자가 GCP로 전환하면서 중단됐음. 굳이 Vercel을 되살릴 필요 없음 — 다음 세션에서 사용자가 다시 Vercel을 원하면 그때 Import만 마무리하면 됨(레포는 이미 준비돼 있음).
 
 ## 10. 작업 원칙
 
