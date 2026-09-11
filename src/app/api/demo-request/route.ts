@@ -82,7 +82,10 @@ export async function POST(request: Request) {
     const errBody = await notionRes.json().catch(() => ({}));
     console.error("Notion API error:", errBody);
     return Response.json(
-      { error: "Couldn't submit your request. Please try again or email hello@altobay.ai." },
+      {
+        error: "Couldn't submit your request. Please try again or email hello@altobay.ai.",
+        debug: errBody,
+      },
       { status: 502 }
     );
   }
