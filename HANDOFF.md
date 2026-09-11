@@ -171,7 +171,7 @@ Navbar → Hero → ServiceFeatures → Screenshots → About → CTA → Footer
    | Email | Email |
    | Phone | Phone |
    | Region | Text |
-   | Interested Service | Select — 옵션 3개: `Smart Booking`, `AI-Generated Service Reports`, `Vehicle Cloud Search` (코드의 값과 **철자 정확히 일치**해야 함) |
+   | Interested Service | **Multi-select** (복수 선택 폼) — 옵션 3개: `Smart Booking`, `AI-Generated Service Reports`, `Vehicle Cloud Search` (코드의 값과 **철자 정확히 일치**해야 함) |
    | Message | Text |
 2. [notion.so/my-integrations](https://www.notion.so/my-integrations) → **New integration** 생성 → **Internal Integration Secret** 복사 (`secret_...` 또는 `ntn_...` 형태)
 3. 방금 만든 데이터베이스 우측 상단 **···** → **Connections** → 방금 만든 integration 추가 (이거 안 하면 API가 데이터베이스에 접근 못 함)

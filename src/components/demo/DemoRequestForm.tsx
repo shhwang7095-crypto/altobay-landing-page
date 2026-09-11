@@ -13,14 +13,28 @@ type Status = "idle" | "submitting" | "success" | "error";
 export default function DemoRequestForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [services, setServices] = useState<string[]>([]);
+
+  function toggleService(service: string) {
+    setServices((prev) =>
+      prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service]
+    );
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (services.length === 0) {
+      setStatus("error");
+      setErrorMessage("Select at least one service you're interested in.");
+      return;
+    }
+
     setStatus("submitting");
     setErrorMessage("");
 
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = { ...Object.fromEntries(new FormData(form).entries()), services };
 
     try {
       const res = await fetch("/api/demo-request", {
@@ -36,6 +50,7 @@ export default function DemoRequestForm() {
 
       setStatus("success");
       form.reset();
+      setServices([]);
     } catch (err) {
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
@@ -77,7 +92,8 @@ export default function DemoRequestForm() {
 
       <div className="mt-5">
         <label className="mb-2 block text-sm font-medium text-foreground">
-          Interested service <span className="text-brand-blue">*</span>
+          Interested service <span className="text-brand-blue">*</span>{" "}
+          <span className="font-normal text-muted-foreground">(select all that apply)</span>
         </label>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           {SERVICES.map((service) => (
@@ -86,10 +102,9 @@ export default function DemoRequestForm() {
               className="flex cursor-pointer items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 text-sm transition-colors has-[:checked]:border-brand-blue has-[:checked]:bg-brand-blue/5"
             >
               <input
-                type="radio"
-                name="service"
-                value={service}
-                required
+                type="checkbox"
+                checked={services.includes(service)}
+                onChange={() => toggleService(service)}
                 className="accent-brand-blue"
               />
               {service}

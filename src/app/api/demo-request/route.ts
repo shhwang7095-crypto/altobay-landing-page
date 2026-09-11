@@ -7,7 +7,7 @@ type DemoRequestBody = {
   email?: string;
   phone?: string;
   region?: string;
-  service?: string;
+  services?: string[];
   message?: string;
 };
 
@@ -33,11 +33,11 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const { name, company, role, email, phone, region, service, message } = body;
+  const { name, company, role, email, phone, region, services, message } = body;
 
-  if (!name || !company || !email || !service) {
+  if (!name || !company || !email || !services || services.length === 0) {
     return Response.json(
-      { error: "Name, company, email, and interested service are required." },
+      { error: "Name, company, email, and at least one interested service are required." },
       { status: 400 }
     );
   }
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
         Email: { email },
         Phone: phone ? { phone_number: phone } : { phone_number: null },
         Region: { rich_text: richText(region ?? "") },
-        "Interested Service": { select: { name: service } },
+        "Interested Service": { multi_select: services.map((name) => ({ name })) },
         Message: { rich_text: richText(message ?? "") },
       },
     }),
