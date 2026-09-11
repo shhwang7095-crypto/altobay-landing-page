@@ -24,11 +24,28 @@ function CloudSearchScreen() {
   );
 }
 
-function ScreenshotImage({ src, alt }: { src: string; alt: string }) {
+function ScreenshotImage({
+  src,
+  alt,
+  width,
+  height,
+}: {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}) {
+  // No crop: show the whole screenshot at full width. If it's taller than
+  // the phone frame, PhoneMockup's own overflow-y-auto makes it scrollable.
   return (
-    <div className="relative h-full w-full">
-      <Image src={src} alt={alt} fill sizes="264px" className="object-cover object-top" />
-    </div>
+    <Image
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      sizes="264px"
+      className="block h-auto w-full"
+    />
   );
 }
 
@@ -41,6 +58,8 @@ const SCREENS = [
       <ScreenshotImage
         src="/screenshots/booking-calendar.png"
         alt="Smart Booking calendar and appointment list in the Altobay.ai app"
+        width={886}
+        height={1474}
       />
     ),
   },
@@ -52,6 +71,8 @@ const SCREENS = [
       <ScreenshotImage
         src="/screenshots/service-report-create.png"
         alt="Create Service Report screen in the Altobay.ai app"
+        width={886}
+        height={3344}
       />
     ),
   },
