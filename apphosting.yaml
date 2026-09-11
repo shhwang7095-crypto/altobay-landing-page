@@ -1,0 +1,13 @@
+# Firebase App Hosting configuration.
+# Docs: https://firebase.google.com/docs/app-hosting/configure
+#
+# This is a low-traffic marketing site, so we let it scale to zero
+# (minInstances: 0) to avoid idle cost. No env vars/secrets are needed yet —
+# add them under `env:` here if the CTA/demo form later needs an API key.
+
+runConfig:
+  cpu: 1
+  memoryMiB: 512
+  minInstances: 0
+  maxInstances: 3
+  concurrency: 80

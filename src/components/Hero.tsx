@@ -24,14 +24,16 @@ export default function Hero() {
           </span>
 
           <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Run your repair shop{" "}
-            <span className="text-brand-blue-light">smarter, not harder</span>
+            AI in Your <span className="text-brand-blue-light">Repair Bay</span>
           </h1>
+          <p className="mt-3 text-lg font-semibold text-white/80">
+            Run your repair shop smarter.
+          </p>
 
           <p className="mt-6 max-w-md text-lg text-white/70">
-            Altobay.ai is a smart mobility platform that helps mechanics manage bookings,
-            generate AI-powered service reports, and look up vehicle history — all from one
-            app.
+            Altobay.ai is an AI platform for independent repair shops and customers — helping
+            mechanics manage bookings, generate AI-powered service reports, and look up vehicle
+            history, all from one app.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -49,9 +51,31 @@ export default function Hero() {
             </a>
           </div>
 
-          <p className="mt-4 text-xs text-white/40">
-            [Placeholder — replace with App Store / Google Play badges]
-          </p>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            {[
+              { label: "App Store" },
+              { label: "Google Play" },
+            ].map((store) => (
+              <span
+                key={store.label}
+                className="flex items-center gap-2.5 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-white/70"
+              >
+                <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 shrink-0">
+                  <path
+                    d="M12 2a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4Zm7 20H5a2 2 0 0 1-2-2c0-3.9 4-7 9-7s9 3.1 9 7a2 2 0 0 1-2 2Z"
+                    fill="currentColor"
+                    opacity="0.6"
+                  />
+                </svg>
+                <span className="leading-tight">
+                  <span className="block text-[10px] uppercase tracking-wide text-white/40">
+                    Coming soon on
+                  </span>
+                  <span className="block text-sm font-semibold text-white">{store.label}</span>
+                </span>
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="relative mx-auto flex justify-center md:justify-end">
