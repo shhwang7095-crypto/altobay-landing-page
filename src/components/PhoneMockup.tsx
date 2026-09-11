@@ -10,10 +10,14 @@ export default function PhoneMockup({
   children,
   className,
   size = "default",
+  overlay,
 }: {
   children: ReactNode;
   className?: string;
   size?: keyof typeof SIZES;
+  /** Rendered above the scrollable screen, fixed to the viewport — use for
+   * hover affordances etc. so they don't scroll away with the content. */
+  overlay?: ReactNode;
 }) {
   const { width, height } = SIZES[size];
   // The interactive demo needs to shrink on narrow viewports instead of
@@ -31,6 +35,11 @@ export default function PhoneMockup({
       >
         {children}
       </div>
+      {overlay && (
+        <div className="pointer-events-none absolute inset-2 overflow-hidden rounded-[1.6rem]">
+          {overlay}
+        </div>
+      )}
     </div>
   );
 }

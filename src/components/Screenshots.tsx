@@ -109,15 +109,15 @@ export default function Screenshots() {
             <PhoneMockup
               size={index === 1 ? "large" : "default"}
               className="transition-transform group-hover:-translate-y-1.5 group-hover:shadow-brand-blue/20"
-            >
-              <div className="relative h-full w-full">
-                {screen.node}
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-brand-blue/0 opacity-0 backdrop-blur-[1px] transition-all duration-300 group-hover:bg-brand-blue/40 group-hover:opacity-100">
+              overlay={
+                <div className="flex h-full w-full items-center justify-center bg-brand-blue/0 opacity-0 backdrop-blur-[1px] transition-all duration-300 group-hover:bg-brand-blue/40 group-hover:opacity-100">
                   <span className="translate-y-2 rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy shadow-lg transition-transform duration-300 group-hover:translate-y-0">
                     Want to see the guide?
                   </span>
                 </div>
-              </div>
+              }
+            >
+              {screen.node}
             </PhoneMockup>
             <span className="text-sm font-semibold text-foreground">{screen.label}</span>
             <span
