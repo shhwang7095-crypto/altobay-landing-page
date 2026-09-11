@@ -9,7 +9,7 @@
 
 - **목적**: Altobay.ai(미국 정비소 대상 AI SaaS) 소개 웹페이지 제작
 - **경로**: `C:\Users\chabot\Desktop\app-landing-page`
-- **최종 목표 프로세스**: GitHub 업로드 → Vercel 배포 (**아직 미진행**, 사용자가 "나중에"라고 함)
+- **배포**: GitHub 업로드 → Vercel 배포 ✅ **완료**. 프로덕션 URL: `https://altobay-landing-page1.vercel.app`
 - **언어**: 페이지 콘텐츠는 **전부 영문** (사용자 요구사항)
 
 ## 2. 기술 스택 / 실행
@@ -142,17 +142,15 @@ Navbar → Hero → ServiceFeatures → Screenshots → About → CTA → Footer
 6. **다크모드 로고 색상** — 사용자가 준 다크 배경 로고 원본의 정확한 색상 코드 확인 (현재 `#3a4560`은 내가 임의 조정한 값)
 7. **⏳ Notion 데모 신청 연동 — 사용자가 해야 할 설정 남음.** 아래 11번 섹션 참고
 
-### 배포 — 진행 상황 (2026-09-11 기준)
+### 배포 — 완료 (2026-09-11 기준, Vercel)
 1. ✅ GitHub 저장소 생성 + push 완료 — **public**, `github.com/shhwang7095-crypto/altobay-landing-page`, `gh` CLI로 인증(계정 `shhwang7095-crypto`)해서 진행함
-2. ⏳ Vercel — Import 화면까지 안내했으나(GitHub App 권한 조정 필요했음) **완료 확인 안 됨**. 사용자가 "GCP 연동 호스팅"으로 방향 전환하면서 보류 상태
-3. ✅ **Firebase App Hosting**으로 방향 확정 (사용자가 GCP 계열 호스팅 요청 → Firebase Hosting 선택). 구식 "Hosting + frameworksBackend" 방식은 Next.js 신규 사용 중단됐음을 확인(WebFetch로 공식 문서 검증) → **App Hosting**이 현재 정식 경로. 콘솔에서 GitHub 저장소 연결하는 방식(Vercel과 유사), 로컬 CLI 배포는 필수 아님.
-   - `apphosting.yaml` 추가함 (runConfig만, env/secret 없음 — 필요해지면 `env:` 섹션 추가)
-   - `package.json`에 `"engines": {"node": ">=20"}` 추가
-   - **다음 세션에서 사용자가 안 했으면 확인**: Firebase Console → Hosting & Serverless → App Hosting → Get started → GitHub 연결 → `altobay-landing-page` 저장소 선택 → root directory 지정 → live branch `master` → Deploy. Google/GitHub 계정 인증은 사용자가 직접 콘솔에서 해야 함(Claude가 대신 못 함).
-4. `src/app/layout.tsx:11`의 `SITE_URL`을 실제 배포 URL로 교체 (OG 이미지 절대경로에 사용됨) — **아직 실제 배포 URL 모름, 배포 완료되면 사용자에게 물어볼 것**
-5. (선택) `altobay.ai` 도메인 연결 — App Hosting 콘솔에서 커스텀 도메인 추가 가능
-
-> Vercel 관련 안내(레포 push까지는 공통)는 위 1번에서 이미 끝났고, 2번(Vercel Import)은 사용자가 GCP로 전환하면서 중단됐음. 굳이 Vercel을 되살릴 필요 없음 — 다음 세션에서 사용자가 다시 Vercel을 원하면 그때 Import만 마무리하면 됨(레포는 이미 준비돼 있음).
+2. ⏸️ ~~Firebase App Hosting~~ — 한때 "GCP 연동 호스팅"으로 방향 전환해서 `apphosting.yaml` 추가 + 콘솔 안내까지 진행했었으나, 사용자가 다시 **"vercel에 배포하자 이제"**로 최종 확정하면서 중단됨. `apphosting.yaml`은 Vercel이 무시하므로 레포에 그대로 둬도 무해함 — 굳이 지울 필요 없음.
+3. ✅ **Vercel 배포 완료.** GitHub Import → Framework 자동 감지 → 배포 성공.
+   - **프로덕션 URL**: `https://altobay-landing-page1.vercel.app` (배포 해시 URL `https://altobay-landing-page1-2q9xfmath-global-a891.vercel.app`도 같은 배포를 가리킴 — 커밋마다 해시가 바뀌므로 `SITE_URL`엔 고정 alias만 사용)
+   - 이후 `master`에 push하면 Vercel이 자동으로 재배포함(별도 CLI 배포 불필요).
+   - 환경변수(`NOTION_API_KEY`, `NOTION_DATABASE_ID`)는 Vercel 프로젝트 설정 → Environment Variables에 등록 완료 확인함(중간에 오타 수정 + "이미 존재하는 이름" 오류를 거쳐 최종 저장됨). **아직 실제 프로덕션에서 `/demo` 폼 제출 테스트는 안 해봄 — 다음 확인 필요.**
+4. ✅ `src/app/layout.tsx:11`의 `SITE_URL`을 실제 Vercel URL(`https://altobay-landing-page1.vercel.app`)로 교체 완료 → OG 이미지/공유 미리보기 정상 동작해야 함.
+5. (선택, 미진행) `altobay.ai` 커스텀 도메인 연결 — Vercel 프로젝트 설정 → Domains에서 추가 가능. 구매 전 도메인/결제 관련 논의는 나눴으나 실제 구매는 안 함.
 
 ## 10. `/demo` 데모 신청 폼 → Notion DB 연동 (2026-09-11 추가)
 
@@ -170,14 +168,11 @@ Navbar → Hero → ServiceFeatures → Screenshots → About → CTA → Footer
 
 `app-landing-page/.env.local`에 이미 실제 값이 채워져 있음 (재사용한 토큰 + 위 database ID). `.gitignore`로 커밋 안 됨 — 새 세션에서 로컬 테스트하려면 이 파일이 남아있는지 먼저 확인.
 
-### ⏳ 남은 건 프로덕션(Firebase) 쪽 secret 등록뿐
+### ✅ 프로덕션(Vercel) 환경변수 등록 완료
 
-값을 코드/설정파일에 직접 넣지 말고 Secret Manager에 등록해야 함(저장소가 public이라 절대 평문 커밋 금지):
-```bash
-firebase apphosting:secrets:set NOTION_API_KEY
-firebase apphosting:secrets:set NOTION_DATABASE_ID
-```
-`apphosting.yaml`에는 이미 이 두 secret을 참조하는 `env:` 설정이 들어가 있어서, Secret Manager에 값만 등록하면 다음 배포부터 자동으로 연결됨. **Firebase CLI가 이 머신에 아직 설치·인증 안 되어 있음** — App Hosting 콘솔 연결(9번 섹션) 끝난 뒤 같이 진행하면 됨. 값은 위 "로컬 개발 환경"에서 쓴 `.env.local`과 동일.
+Vercel 프로젝트 → Settings → Environment Variables에 `NOTION_API_KEY`, `NOTION_DATABASE_ID` 등록 완료 확인함. 값은 위 "로컬 개발 환경"에서 쓴 `.env.local`과 동일 (저장소는 public이므로 절대 코드에 평문 커밋 금지, `.env.local`만 사용).
+
+**⏳ 다음 세션에서 확인할 것**: 실제 프로덕션 `/demo` 페이지(`https://altobay-landing-page1.vercel.app/demo`)에서 폼 제출까지 해보고 Notion에 잘 들어가는지 아직 검증 안 됨 (로컬에서는 검증 완료).
 
 ## 11. 작업 원칙
 
