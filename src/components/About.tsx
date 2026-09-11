@@ -11,6 +11,7 @@ const PILLARS = [
     label: "What we replace",
     body: "Scheduling, reporting, and vehicle data — unified in one AI platform, replacing the scattered calls, texts, and paper records that slow independent repair shops down.",
     tint: "bg-brand-blue/10 text-brand-blue",
+    hoverBg: "hover:bg-brand-blue",
     icon: (
       <>
         <path
@@ -35,6 +36,7 @@ const PILLARS = [
     label: "Why shops trust us",
     body: "Piloting with independent repair shops across California, built by a team with backgrounds spanning Big Four accounting, corporate strategy, and enterprise finance.",
     tint: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    hoverBg: "hover:bg-amber-500",
     icon: (
       <>
         <path
@@ -107,25 +109,27 @@ export default function About() {
         {PILLARS.map((pillar) => (
           <div
             key={pillar.label}
-            className="group relative overflow-hidden rounded-3xl border border-border bg-card p-8 transition-all hover:-translate-y-1 hover:shadow-xl"
+            className={`group relative overflow-hidden rounded-3xl border border-border bg-card p-8 transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl ${pillar.hoverBg}`}
           >
             <svg
               viewBox="0 0 24 24"
               fill="none"
-              className="pointer-events-none absolute -right-6 -top-6 h-32 w-32 text-foreground opacity-[0.04] transition-transform duration-300 group-hover:scale-110"
+              className="pointer-events-none absolute -right-6 -top-6 h-32 w-32 text-foreground opacity-[0.04] transition-all duration-300 group-hover:scale-110 group-hover:text-white group-hover:opacity-[0.15]"
             >
               {pillar.icon}
             </svg>
 
             <div
-              className={`relative flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110 ${pillar.tint}`}
+              className={`relative flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110 group-hover:bg-white/20 group-hover:text-white ${pillar.tint}`}
             >
               <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
                 {pillar.icon}
               </svg>
             </div>
-            <h3 className="relative mt-5 text-lg font-bold">{pillar.label}</h3>
-            <p className="relative mt-2 text-sm leading-relaxed text-muted-foreground">
+            <h3 className="relative mt-5 text-lg font-bold transition-colors duration-300 group-hover:text-white">
+              {pillar.label}
+            </h3>
+            <p className="relative mt-2 text-sm leading-relaxed text-muted-foreground transition-colors duration-300 group-hover:text-white/85">
               {pillar.body}
             </p>
           </div>
