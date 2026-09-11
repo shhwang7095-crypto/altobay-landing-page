@@ -15,6 +15,18 @@ function richText(content: string) {
   return content ? [{ text: { content } }] : [];
 }
 
+// The Notion "Interested Service" multi_select option for this one is
+// singular ("...Report"), while the site's copy is plural everywhere else
+// ("...Reports"). Renaming the Notion option via the API didn't stick, so
+// translate here instead of introducing the mismatch into the UI.
+const NOTION_SERVICE_OPTION: Record<string, string> = {
+  "AI-Generated Service Reports": "AI-Generated Service Report",
+};
+
+function toNotionServiceName(service: string) {
+  return NOTION_SERVICE_OPTION[service] ?? service;
+}
+
 export async function POST(request: Request) {
   const apiKey = process.env.NOTION_API_KEY;
   const databaseId = process.env.NOTION_DATABASE_ID;
@@ -58,7 +70,9 @@ export async function POST(request: Request) {
         Email: { email },
         Phone: phone ? { phone_number: phone } : { phone_number: null },
         Region: { rich_text: richText(region ?? "") },
-        "Interested Service": { multi_select: services.map((name) => ({ name })) },
+        "Interested Service": {
+          multi_select: services.map((name) => ({ name: toNotionServiceName(name) })),
+        },
         Message: { rich_text: richText(message ?? "") },
       },
     }),

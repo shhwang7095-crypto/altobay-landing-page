@@ -156,39 +156,28 @@ Navbar → Hero → ServiceFeatures → Screenshots → About → CTA → Footer
 
 ## 10. `/demo` 데모 신청 폼 → Notion DB 연동 (2026-09-11 추가)
 
-`/demo` 페이지(`src/app/demo/page.tsx` + `components/demo/DemoRequestForm.tsx`)에서 이름/업체명/직책/이메일/전화/지역/관심서비스(3개 기능 중 택1)/기타 문의를 입력받아, `src/app/api/demo-request/route.ts`가 Notion API로 지정된 데이터베이스에 새 행을 생성한다.
+`/demo` 페이지(`src/app/demo/page.tsx` + `components/demo/DemoRequestForm.tsx`)에서 이름/업체명/직책/이메일/전화/지역/관심서비스(**복수 선택 가능**, 3개 기능 중)/기타 문의를 입력받아, `src/app/api/demo-request/route.ts`가 Notion API로 지정된 데이터베이스에 새 행을 생성한다.
 
-**코드는 완성돼 있고, 아직 Notion 쪽 설정이 안 되어 있어서 지금은 제출하면 "Demo requests aren't wired up yet" 메시지만 뜬다** (500 대신 502/503로 안전하게 처리됨, 크래시 안 함).
+### ✅ 로컬에서 끝까지 동작 확인 완료 (2026-09-11)
 
-### 사용자가 해야 할 일 (Claude가 대신 못 함 — 본인 Notion 계정 필요)
+기존에 `meeting-to-notion` 프로젝트(`Desktop\meeting-to-notion\.env.local`)에서 쓰던 **workspace-wide Notion integration 토큰을 그대로 재사용**했다 (사용자가 이미 만들어둔 걸 확인 후 재사용 — 새 integration 안 만듦). 사용자가 직접 만든 데이터베이스: `https://app.notion.com/p/chabot/altobay-ai-demo-inquire-3d8d744fb7ca80558194e1ddcf8db443` (페이지 안에 인라인 DB, 실제 database ID는 `3d8d744f-b7ca-8080-921b-c6b668a95060`).
 
-1. Notion에서 신청 내역을 받을 **데이터베이스**를 만들고, 아래와 동일한 이름·타입으로 속성(컬럼)을 추가:
-   | 속성 이름 | 타입 |
-   |---|---|
-   | Name | Title (기본 제목 속성) |
-   | Company | Text |
-   | Role | Text |
-   | Email | Email |
-   | Phone | Phone |
-   | Region | Text |
-   | Interested Service | **Multi-select** (복수 선택 폼) — 옵션 3개: `Smart Booking`, `AI-Generated Service Reports`, `Vehicle Cloud Search` (코드의 값과 **철자 정확히 일치**해야 함) |
-   | Message | Text |
-2. [notion.so/my-integrations](https://www.notion.so/my-integrations) → **New integration** 생성 → **Internal Integration Secret** 복사 (`secret_...` 또는 `ntn_...` 형태)
-3. 방금 만든 데이터베이스 우측 상단 **···** → **Connections** → 방금 만든 integration 추가 (이거 안 하면 API가 데이터베이스에 접근 못 함)
-4. 데이터베이스 페이지 URL에서 32자리 **Database ID** 복사 (`notion.so/워크스페이스명/여기가ID?v=...` 형태)
-5. 아래 둘을 Claude에게 전달 (또는 직접 설정):
-   - Integration Secret
-   - Database ID
+테스트 제출 → Notion에 실제 row 생성 확인 → 테스트 row는 archive 처리해서 정리함.
 
-### 받은 뒤 처리 방법
+**주의할 점 하나**: Notion DB의 "Interested Service" multi-select 옵션 중 하나가 `AI-Generated Service Report`(단수)로 만들어져 있는데, 사이트 문구는 전부 `AI-Generated Service Reports`(복수)다. Notion API로 옵션 이름 rename을 시도했는데 **계속 반영이 안 됨**(API가 200을 반환해도 실제로는 안 바뀜, 원인 불명 — 재현되면 다시 시도해볼 것). 그래서 코드 레벨에서 우회함: `route.ts`의 `NOTION_SERVICE_OPTION` 매핑이 전송 직전에 `"...Reports"` → `"...Report"`로 변환한다. UI 문구는 그대로 복수형 유지. **Notion 쪽에서 저 옵션 이름을 나중에 고치게 되면 이 매핑도 지우거나 맞춰서 고칠 것.**
 
-- **로컬 테스트**: `.env.local` 파일 생성(`.env.example` 참고) 후 `NOTION_API_KEY=`, `NOTION_DATABASE_ID=` 채워넣기 — 이 파일은 `.gitignore`에 걸려 있어 커밋 안 됨
-- **프로덕션(Firebase App Hosting)**: 값을 코드/설정파일에 직접 넣지 말고 Secret Manager에 등록 (저장소가 public이라 절대 평문으로 커밋하면 안 됨):
-  ```bash
-  firebase apphosting:secrets:set NOTION_API_KEY
-  firebase apphosting:secrets:set NOTION_DATABASE_ID
-  ```
-  `apphosting.yaml`에는 이미 이 두 secret을 참조하는 `env:` 설정이 들어가 있어서, Secret Manager에 값만 등록하면 다음 배포부터 자동으로 연결됨.
+### 로컬 개발 환경
+
+`app-landing-page/.env.local`에 이미 실제 값이 채워져 있음 (재사용한 토큰 + 위 database ID). `.gitignore`로 커밋 안 됨 — 새 세션에서 로컬 테스트하려면 이 파일이 남아있는지 먼저 확인.
+
+### ⏳ 남은 건 프로덕션(Firebase) 쪽 secret 등록뿐
+
+값을 코드/설정파일에 직접 넣지 말고 Secret Manager에 등록해야 함(저장소가 public이라 절대 평문 커밋 금지):
+```bash
+firebase apphosting:secrets:set NOTION_API_KEY
+firebase apphosting:secrets:set NOTION_DATABASE_ID
+```
+`apphosting.yaml`에는 이미 이 두 secret을 참조하는 `env:` 설정이 들어가 있어서, Secret Manager에 값만 등록하면 다음 배포부터 자동으로 연결됨. **Firebase CLI가 이 머신에 아직 설치·인증 안 되어 있음** — App Hosting 콘솔 연결(9번 섹션) 끝난 뒤 같이 진행하면 됨. 값은 위 "로컬 개발 환경"에서 쓴 `.env.local`과 동일.
 
 ## 11. 작업 원칙
 
