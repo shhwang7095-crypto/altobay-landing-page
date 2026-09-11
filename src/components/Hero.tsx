@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import PhoneMockup from "./PhoneMockup";
 import TiltPhone from "./TiltPhone";
 
@@ -37,12 +38,12 @@ export default function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href="#cta"
+            <Link
+              href="/demo"
               className="rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-blue/30 transition-opacity hover:opacity-90"
             >
               Request a Demo
-            </a>
+            </Link>
             <a
               href="#how-it-works"
               className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"

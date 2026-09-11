@@ -134,12 +134,13 @@ Navbar → Hero → ServiceFeatures → Screenshots → About → CTA → Footer
 ## 9. 남은 작업 (다음 세션에서 할 일)
 
 ### 콘텐츠 대기 중 (사용자 입력 필요)
-1. **CTA 섹션** — 데모 신청 링크(폼/이메일), 앱스토어·플레이스토어 링크. 현재 `components/CTA.tsx`와 `Hero.tsx:53`에 placeholder 문구 있음
+1. ✅ **CTA 섹션** — "Request a Demo"는 전부 `/demo` 폼 페이지로 연결됨(2026-09-11 완료). 앱스토어·플레이스토어 링크는 여전히 "Coming soon" placeholder — 실제 링크 생기면 `Hero.tsx`, `CTA.tsx`의 "Download the App"/App Store/Google Play `href="#"` 교체
 2. **Vehicle Cloud Search** — 앱 구현 후 스크린샷 + 가이드 작성
 3. **AI Service Report 2~4단계** — 스크린샷 받으면 교체
 4. **회사 소개 통계 실제 수치** — 현재는 IR 기준(5+/6/MVP)
 5. **Footer 약관** — Privacy / Terms 페이지 만들지, 링크만 걸지 결정 필요
 6. **다크모드 로고 색상** — 사용자가 준 다크 배경 로고 원본의 정확한 색상 코드 확인 (현재 `#3a4560`은 내가 임의 조정한 값)
+7. **⏳ Notion 데모 신청 연동 — 사용자가 해야 할 설정 남음.** 아래 11번 섹션 참고
 
 ### 배포 — 진행 상황 (2026-09-11 기준)
 1. ✅ GitHub 저장소 생성 + push 완료 — **public**, `github.com/shhwang7095-crypto/altobay-landing-page`, `gh` CLI로 인증(계정 `shhwang7095-crypto`)해서 진행함
@@ -153,7 +154,43 @@ Navbar → Hero → ServiceFeatures → Screenshots → About → CTA → Footer
 
 > Vercel 관련 안내(레포 push까지는 공통)는 위 1번에서 이미 끝났고, 2번(Vercel Import)은 사용자가 GCP로 전환하면서 중단됐음. 굳이 Vercel을 되살릴 필요 없음 — 다음 세션에서 사용자가 다시 Vercel을 원하면 그때 Import만 마무리하면 됨(레포는 이미 준비돼 있음).
 
-## 10. 작업 원칙
+## 10. `/demo` 데모 신청 폼 → Notion DB 연동 (2026-09-11 추가)
+
+`/demo` 페이지(`src/app/demo/page.tsx` + `components/demo/DemoRequestForm.tsx`)에서 이름/업체명/직책/이메일/전화/지역/관심서비스(3개 기능 중 택1)/기타 문의를 입력받아, `src/app/api/demo-request/route.ts`가 Notion API로 지정된 데이터베이스에 새 행을 생성한다.
+
+**코드는 완성돼 있고, 아직 Notion 쪽 설정이 안 되어 있어서 지금은 제출하면 "Demo requests aren't wired up yet" 메시지만 뜬다** (500 대신 502/503로 안전하게 처리됨, 크래시 안 함).
+
+### 사용자가 해야 할 일 (Claude가 대신 못 함 — 본인 Notion 계정 필요)
+
+1. Notion에서 신청 내역을 받을 **데이터베이스**를 만들고, 아래와 동일한 이름·타입으로 속성(컬럼)을 추가:
+   | 속성 이름 | 타입 |
+   |---|---|
+   | Name | Title (기본 제목 속성) |
+   | Company | Text |
+   | Role | Text |
+   | Email | Email |
+   | Phone | Phone |
+   | Region | Text |
+   | Interested Service | Select — 옵션 3개: `Smart Booking`, `AI-Generated Service Reports`, `Vehicle Cloud Search` (코드의 값과 **철자 정확히 일치**해야 함) |
+   | Message | Text |
+2. [notion.so/my-integrations](https://www.notion.so/my-integrations) → **New integration** 생성 → **Internal Integration Secret** 복사 (`secret_...` 또는 `ntn_...` 형태)
+3. 방금 만든 데이터베이스 우측 상단 **···** → **Connections** → 방금 만든 integration 추가 (이거 안 하면 API가 데이터베이스에 접근 못 함)
+4. 데이터베이스 페이지 URL에서 32자리 **Database ID** 복사 (`notion.so/워크스페이스명/여기가ID?v=...` 형태)
+5. 아래 둘을 Claude에게 전달 (또는 직접 설정):
+   - Integration Secret
+   - Database ID
+
+### 받은 뒤 처리 방법
+
+- **로컬 테스트**: `.env.local` 파일 생성(`.env.example` 참고) 후 `NOTION_API_KEY=`, `NOTION_DATABASE_ID=` 채워넣기 — 이 파일은 `.gitignore`에 걸려 있어 커밋 안 됨
+- **프로덕션(Firebase App Hosting)**: 값을 코드/설정파일에 직접 넣지 말고 Secret Manager에 등록 (저장소가 public이라 절대 평문으로 커밋하면 안 됨):
+  ```bash
+  firebase apphosting:secrets:set NOTION_API_KEY
+  firebase apphosting:secrets:set NOTION_DATABASE_ID
+  ```
+  `apphosting.yaml`에는 이미 이 두 secret을 참조하는 `env:` 설정이 들어가 있어서, Secret Manager에 값만 등록하면 다음 배포부터 자동으로 연결됨.
+
+## 11. 작업 원칙
 
 - **요청 범위 밖은 건드리지 말 것.** 사용자가 지시하지 않은 색상·모션·레이아웃을 임의로 바꾸지 않는다.
 - **로고는 실측값**이다. "더 예쁘게" 같은 이유로 좌표/색상을 바꾸지 않는다.

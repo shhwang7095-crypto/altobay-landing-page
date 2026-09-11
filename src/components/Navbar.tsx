@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Logo from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -47,13 +48,13 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
-          <a
-            href="#cta"
+          <Link
+            href="/demo"
             className="inline-flex whitespace-nowrap rounded-full bg-brand-blue px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 sm:px-4 sm:py-2 sm:text-sm"
           >
             <span className="sm:hidden">Demo</span>
             <span className="hidden sm:inline">Request a Demo</span>
-          </a>
+          </Link>
         </div>
       </nav>
     </header>

@@ -2,8 +2,7 @@
 # Docs: https://firebase.google.com/docs/app-hosting/configure
 #
 # This is a low-traffic marketing site, so we let it scale to zero
-# (minInstances: 0) to avoid idle cost. No env vars/secrets are needed yet —
-# add them under `env:` here if the CTA/demo form later needs an API key.
+# (minInstances: 0) to avoid idle cost.
 
 runConfig:
   cpu: 1
@@ -11,3 +10,21 @@ runConfig:
   minInstances: 0
   maxInstances: 3
   concurrency: 80
+
+# The /demo form (src/app/api/demo-request/route.ts) writes submissions into
+# a Notion database. Values are NOT stored here — `secret:` references a
+# Google Cloud Secret Manager secret of the same name, created via:
+#   firebase apphosting:secrets:set NOTION_API_KEY
+#   firebase apphosting:secrets:set NOTION_DATABASE_ID
+# See HANDOFF.md for the full one-time setup (Notion integration + DB
+# schema). Until these secrets exist, the form fails gracefully with a
+# "not wired up yet" message instead of crashing.
+env:
+  - variable: NOTION_API_KEY
+    secret: NOTION_API_KEY
+    availability:
+      - RUNTIME
+  - variable: NOTION_DATABASE_ID
+    secret: NOTION_DATABASE_ID
+    availability:
+      - RUNTIME
