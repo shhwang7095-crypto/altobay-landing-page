@@ -110,9 +110,13 @@ export default function Screenshots() {
               size={index === 1 ? "large" : "default"}
               className="transition-transform group-hover:-translate-y-1.5 group-hover:shadow-brand-blue/20"
               overlay={
-                <div className="flex h-full w-full items-center justify-center bg-brand-blue/0 opacity-0 backdrop-blur-[1px] transition-all duration-300 group-hover:bg-brand-blue/40 group-hover:opacity-100">
+                <div
+                  className={`flex h-full w-full items-center justify-center opacity-0 backdrop-blur-[1px] transition-all duration-300 group-hover:opacity-100 ${
+                    screen.ready ? "bg-brand-blue/0 group-hover:bg-brand-blue/40" : "bg-slate-500/0 group-hover:bg-slate-500/50"
+                  }`}
+                >
                   <span className="translate-y-2 rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy shadow-lg transition-transform duration-300 group-hover:translate-y-0">
-                    Want to see the guide?
+                    {screen.ready ? "Want to see the guide?" : "Coming soon"}
                   </span>
                 </div>
               }
