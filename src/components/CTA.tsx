@@ -19,7 +19,7 @@ export default function CTA() {
             href="https://altobay.ai/"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            className="rounded-full border border-amber-400/50 bg-amber-500/10 px-6 py-3 text-sm font-semibold text-amber-300 transition-colors hover:border-amber-400/70 hover:bg-amber-500/20"
           >
             Click to visit site
           </a>
