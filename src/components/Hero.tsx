@@ -32,7 +32,7 @@ export default function Hero() {
           </p>
 
           <p className="mt-6 max-w-md text-lg text-white/70">
-            Altobay.ai is an AI platform for independent repair shops and customers — helping
+            Altobay.ai is an AI platform for repair shops/service centers and customers — helping
             mechanics manage bookings, generate AI-powered service reports, and look up vehicle
             history, all from one app.
           </p>
