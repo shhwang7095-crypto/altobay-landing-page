@@ -12,7 +12,7 @@ const STEPS = [
   {
     slug: "scope",
     label: "Scope",
-    description: "Pick what to check — the reported symptom, a full inspection, or your own list.",
+    description: "Pick what to check: the reported symptom, a full inspection, or your own list.",
   },
   {
     slug: "before",
@@ -22,7 +22,7 @@ const STEPS = [
   {
     slug: "work",
     label: "Work",
-    description: "Tick off what you're fixing today — everything else stays quoted on the report.",
+    description: "Tick off what you're fixing today, everything else stays quoted on the report.",
   },
   {
     slug: "after",
@@ -125,7 +125,7 @@ export default function InteractiveDemoPhone() {
         <iframe
           ref={iframeRef}
           src="/interactive/ai-service-report-demo.html"
-          title="Altobay.ai service report — interactive demo"
+          title="Altobay.ai service report interactive demo"
           className="h-full w-full border-0"
         />
       </PhoneMockup>

@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 const SITE_URL = "https://altobay-landing-page1.vercel.app";
-const SITE_TITLE = "Altobay.ai — Smart Mobility Platform for Auto Repair Shops";
+const SITE_TITLE = "Altobay.ai | Smart Mobility Platform for Auto Repair Shops";
 const SITE_DESCRIPTION =
   "Altobay.ai helps U.S. auto repair shops manage bookings, generate AI-powered service reports, and search vehicle history in seconds.";
 

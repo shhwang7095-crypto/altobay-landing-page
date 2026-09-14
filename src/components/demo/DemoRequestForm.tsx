@@ -73,7 +73,7 @@ export default function DemoRequestForm() {
         </div>
         <h2 className="mt-5 text-xl font-bold">Request received</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Thanks for your interest in Altobay.ai — we&apos;ll be in touch shortly.
+          Thanks for your interest in Altobay.ai. We&apos;ll be in touch shortly.
         </p>
       </div>
     );

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Altobay.ai — Smart Mobility Platform for Auto Repair Shops";
+export const alt = "Altobay.ai | Smart Mobility Platform for Auto Repair Shops";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

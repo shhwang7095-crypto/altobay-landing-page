@@ -3,7 +3,7 @@ const FEATURES = [
     tag: "01",
     title: "Smart Booking",
     description:
-      "Consolidate every booking, photo upload, and symptom report into one screen — no more juggling calls, texts, and standalone tools.",
+      "Consolidate every booking, photo upload, and symptom report into one screen, no more juggling calls, texts, and standalone tools.",
     tint: "bg-brand-blue/10 text-brand-blue",
     icon: (
       <>
@@ -24,7 +24,7 @@ const FEATURES = [
     tag: "02",
     title: "AI-Generated Service Reports",
     description:
-      "A mechanic jots a quick note, and Altobay's AI turns it into a clean, professional explanation of the work and cost — building customer trust and cutting down repeat calls.",
+      "A mechanic jots a quick note, and Altobay's AI turns it into a clean, professional explanation of the work and cost, building customer trust and cutting down repeat calls.",
     tint: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
     icon: (
       <>
@@ -47,7 +47,7 @@ const FEATURES = [
     tag: "03",
     title: "Vehicle Cloud Search",
     description:
-      "Every vehicle's repair history is captured as structured data, so your shop can search and analyze it instantly — not dig through paper files.",
+      "Every vehicle's repair history is captured as structured data, so your shop can search and analyze it instantly instead of digging through paper files.",
     tint: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
     icon: (
       <>
@@ -79,7 +79,7 @@ export default function ServiceFeatures() {
           Everything your shop needs, in one app
         </h2>
         <p className="mt-4 text-muted-foreground">
-          Scheduling, reporting, and vehicle data — unified in one AI platform built for U.S.
+          Scheduling, reporting, and vehicle data, unified in one AI platform built for U.S.
           independent repair shops.
         </p>
       </div>

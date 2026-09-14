@@ -3,7 +3,7 @@ import GuideShell from "@/components/guide/GuideShell";
 import ComingSoon from "@/components/guide/ComingSoon";
 
 export const metadata: Metadata = {
-  title: "Vehicle Cloud Search — Altobay.ai Guide",
+  title: "Vehicle Cloud Search | Altobay.ai Guide",
   description: "Step-by-step guide for the Altobay.ai Vehicle Cloud Search feature.",
 };
 

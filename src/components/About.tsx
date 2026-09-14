@@ -9,7 +9,7 @@ const FACTS = [
 const PILLARS = [
   {
     label: "What we replace",
-    body: "Scheduling, reporting, and vehicle data — unified in one AI platform, replacing the scattered calls, texts, and paper records that slow independent repair shops down.",
+    body: "Scheduling, reporting, and vehicle data, unified in one AI platform, replacing the scattered calls, texts, and paper records that slow independent repair shops down.",
     tint: "bg-brand-blue/10 text-brand-blue",
     hoverBg: "hover:bg-brand-blue",
     icon: (
@@ -100,7 +100,7 @@ export default function About() {
           </p>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
             Altobay&apos;s AI focuses on automating intake and improving the quality of customer
-            explanations — never replacing a mechanic&apos;s judgment.
+            explanations, never replacing a mechanic&apos;s judgment.
           </p>
         </div>
       </div>

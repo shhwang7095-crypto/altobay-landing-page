@@ -3,7 +3,7 @@ import GuideShell from "@/components/guide/GuideShell";
 import DemoRequestForm from "@/components/demo/DemoRequestForm";
 
 export const metadata: Metadata = {
-  title: "Request a Demo — Altobay.ai",
+  title: "Request a Demo | Altobay.ai",
   description: "Tell us about your shop and we'll be in touch to set up a demo of Altobay.ai.",
 };
 
@@ -12,7 +12,7 @@ export default function DemoPage() {
     <GuideShell
       eyebrow="Get Started"
       title="Request a Demo"
-      intro="Tell us a bit about your shop and what you're interested in — we'll follow up shortly."
+      intro="Tell us a bit about your shop and what you're interested in, and we'll follow up shortly."
     >
       <DemoRequestForm />
     </GuideShell>
