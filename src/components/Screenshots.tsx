@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import PhoneMockup from "./PhoneMockup";
+import PromoVideo from "./PromoVideo";
 
 function CloudSearchScreen() {
   return (
@@ -87,7 +88,11 @@ const SCREENS = [
 export default function Screenshots() {
   return (
     <section id="how-it-works" className="overflow-hidden py-24">
-      <div className="mx-auto max-w-6xl px-6 text-center">
+      <div className="px-6">
+        <PromoVideo />
+      </div>
+
+      <div className="mx-auto mt-12 max-w-6xl px-6 text-center">
         <span className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
           Inside the App
         </span>
