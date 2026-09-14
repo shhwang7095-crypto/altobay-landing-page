@@ -84,19 +84,11 @@ export default function Hero() {
             href="https://altobay.ai/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group block"
+            className="group relative block"
             aria-label="Visit the Altobay.ai web app"
           >
             <TiltPhone>
-              <PhoneMockup
-                overlay={
-                  <div className="pointer-events-none flex h-full w-full items-end justify-end p-3">
-                    <span className="translate-y-1 rounded-full bg-brand-navy/90 px-3 py-1.5 text-[11px] font-semibold text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                      Click to visit site
-                    </span>
-                  </div>
-                }
-              >
+              <PhoneMockup>
                 <Image
                   src="/screenshots/dashboard-hero.png"
                   alt="Altobay.ai booking and service status dashboard"
@@ -108,6 +100,9 @@ export default function Hero() {
                 />
               </PhoneMockup>
             </TiltPhone>
+            <span className="pointer-events-none absolute bottom-16 left-full ml-4 -translate-x-2 whitespace-nowrap rounded-full bg-brand-navy/90 px-3 py-1.5 text-[11px] font-semibold text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+              Click to visit site
+            </span>
           </a>
         </div>
       </div>
