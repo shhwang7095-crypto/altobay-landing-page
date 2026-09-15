@@ -90,10 +90,10 @@ export default function Hero() {
             <TiltPhone>
               <PhoneMockup>
                 <Image
-                  src="/screenshots/dashboard-hero.png"
+                  src="/screenshots/mockup-hero-dashboard.png"
                   alt="Altobay.ai booking and service status dashboard"
-                  width={886}
-                  height={1342}
+                  width={205}
+                  height={432}
                   priority
                   sizes="240px"
                   className="block h-auto w-full"

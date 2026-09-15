@@ -3,28 +3,6 @@ import Link from "next/link";
 import PhoneMockup from "./PhoneMockup";
 import PromoVideo from "./PromoVideo";
 
-function CloudSearchScreen() {
-  return (
-    <div className="flex h-full flex-col bg-white text-brand-navy">
-      <div className="border-b border-border px-4 py-3 text-sm font-bold">Vehicle Cloud Search</div>
-      <div className="px-4 py-3">
-        <div className="rounded-lg border border-border px-3 py-2 text-[11px] text-muted-foreground">
-          Search plate, VIN, or owner...
-        </div>
-      </div>
-      <div className="flex-1 space-y-2 px-4 py-2 text-[11px]">
-        <div className="rounded-lg bg-brand-blue/5 p-3">
-          <p className="font-semibold">2019 Honda Civic</p>
-          <p className="mt-1 text-muted-foreground">6 service records found</p>
-        </div>
-        <div className="rounded-lg border border-border p-3 text-muted-foreground">
-          Last visit: Oil change, brake inspection
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ScreenshotImage({
   src,
   alt,
@@ -57,10 +35,10 @@ const SCREENS = [
     ready: true,
     node: (
       <ScreenshotImage
-        src="/screenshots/booking-calendar.png"
+        src="/screenshots/mockup-smart-booking.png"
         alt="Smart Booking calendar and appointment list in the Altobay.ai app"
-        width={886}
-        height={1474}
+        width={205}
+        height={432}
       />
     ),
   },
@@ -70,10 +48,10 @@ const SCREENS = [
     ready: true,
     node: (
       <ScreenshotImage
-        src="/screenshots/service-report-create.png"
-        alt="Create Service Report screen in the Altobay.ai app"
-        width={886}
-        height={3344}
+        src="/screenshots/mockup-service-report.png"
+        alt="Edit Service Report screen in the Altobay.ai app"
+        width={205}
+        height={432}
       />
     ),
   },
@@ -81,7 +59,14 @@ const SCREENS = [
     slug: "vehicle-cloud-search",
     label: "Vehicle Cloud Search",
     ready: false,
-    node: <CloudSearchScreen />,
+    node: (
+      <ScreenshotImage
+        src="/screenshots/mockup-vehicle-search.png"
+        alt="Vehicle Cloud Search results list in the Altobay.ai app"
+        width={205}
+        height={432}
+      />
+    ),
   },
 ];
 
