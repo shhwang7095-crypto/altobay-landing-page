@@ -255,11 +255,11 @@
 
 <script>
 var HISTORY = [
-  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Aug 18, 2026", owner: "chabot", service: "Brake Repair and Inspection", status: "Not started", accent: "#ef4444" },
-  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Sep 04, 2025", owner: "chabot", service: "Fluid Levels Check & Replacement", status: "Repairing", accent: "#4a8dfa" },
-  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Dec 31, 2024", owner: "chabot", service: "Battery Health Test & Replacement", status: "Completed", accent: "#10b981" },
-  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Oct 10, 2021", owner: "chabot", service: "Tire Rotation & Wheel Alignment", status: "Completed", accent: "#10b981" },
-  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "May 31, 2020", owner: "chabot", service: "Engine Oil & Filter Change", status: "Completed", accent: "#10b981" }
+  { model: "BMW X5 M sports", date: "Aug 18, 2026", owner: "chabot", service: "Brake Repair and Inspection", status: "Not started", accent: "#ef4444" },
+  { model: "BMW X5 M sports", date: "Sep 04, 2025", owner: "chabot", service: "Fluid Levels Check & Replacement", status: "Repairing", accent: "#4a8dfa" },
+  { model: "BMW X5 M sports", date: "Dec 31, 2024", owner: "chabot", service: "Battery Health Test & Replacement", status: "Completed", accent: "#10b981" },
+  { model: "BMW X5 M sports", date: "Oct 10, 2021", owner: "chabot", service: "Tire Rotation & Wheel Alignment", status: "Completed", accent: "#10b981" },
+  { model: "BMW X5 M sports", date: "May 31, 2020", owner: "chabot", service: "Engine Oil & Filter Change", status: "Completed", accent: "#10b981" }
 ];
 
 var input = document.getElementById("searchInput");
@@ -280,7 +280,14 @@ function wrenchSvg() {
   return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a4 4 0 0 0-5.4 4.8L4 16.4V20h3.6l5.3-5.3a4 4 0 0 0 4.8-5.4l-2.6 2.6-2-2 2.6-2.6Z" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/></svg>';
 }
 
-function renderResults() {
+function escapeHtml(s) {
+  var div = document.createElement("div");
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+function renderResults(query) {
+  var plateLabel = escapeHtml(query);
   resultsEl.innerHTML =
     '<div class="results-meta">Search complete <b>&middot; ' + HISTORY.length + ' results</b></div>' +
     HISTORY.map(function (h) {
@@ -288,7 +295,7 @@ function renderResults() {
         '<div class="card" style="--accent:' + h.accent + '">' +
           '<div style="flex:1">' +
             '<div class="card-top">' +
-              '<span class="card-plate">' + h.plate + '</span>' +
+              '<span class="card-plate">' + plateLabel + '</span>' +
               '<span class="badge">' + h.status + '</span>' +
             '</div>' +
             '<div class="card-meta">' +
@@ -319,10 +326,8 @@ function playStack() {
 function runSearch() {
   var q = input.value.trim();
   if (!q) return;
-  if (!shown) {
-    renderResults();
-    shown = true;
-  }
+  renderResults(q);
+  shown = true;
   emptyState.classList.add("hidden");
   hintRow.style.opacity = "0";
   playStack();
