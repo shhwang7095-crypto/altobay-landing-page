@@ -58,7 +58,7 @@ const SCREENS = [
   {
     slug: "vehicle-cloud-search",
     label: "Vehicle Cloud Search",
-    ready: false,
+    ready: true,
     node: (
       <ScreenshotImage
         src="/screenshots/mockup-vehicle-search.png"
