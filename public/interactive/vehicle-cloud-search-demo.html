@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vehicle Cloud Search demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  body { padding-bottom: 24px; }
+  ::-webkit-scrollbar { display: none; }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 20px 14px;
+  }
+  .icon-btn { color: #1f2430; flex-shrink: 0; }
+  .logo-wrap { display: flex; align-items: center; gap: 6px; }
+  .logo-text { font-size: 18px; font-weight: 800; color: #14181f; letter-spacing: -0.02em; }
+  .logo-badge {
+    background: #4a8dfa;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 5px;
+    padding: 2px 6px;
+  }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+  .bell-wrap { position: relative; }
+  .bell-dot {
+    position: absolute; top: -1px; right: -1px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #ef4444; border: 1.5px solid #fff;
+  }
+
+  .search-row { padding: 4px 16px 0; }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    border-radius: 12px;
+    padding: 11px 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-bar.focused {
+    border-color: #4a8dfa;
+    box-shadow: 0 0 0 3px rgba(74,141,250,0.12);
+  }
+  .search-bar svg { flex-shrink: 0; }
+  .search-input {
+    border: 0;
+    outline: 0;
+    flex: 1;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1f2430;
+    background: transparent;
+  }
+  .search-input::placeholder { color: #94a3b8; }
+  .clear-btn {
+    flex-shrink: 0;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #64748b;
+    border: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .clear-btn.show { display: flex; }
+
+  .hint-row {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 20px 0;
+    transition: opacity 0.2s;
+  }
+  .hint-text { font-size: 11px; color: #94a3b8; }
+
+  .empty-state {
+    margin-top: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .empty-state.hidden {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(-8px);
+  }
+  .empty-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: #eef4ff;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .empty-title { font-size: 15px; font-weight: 700; color: #1f2430; }
+  .empty-body { margin-top: 6px; font-size: 12px; line-height: 1.5; color: #94a3b8; }
+
+  .results {
+    padding: 14px 16px 0;
+  }
+  .results-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 2px 10px;
+    font-size: 12px;
+    color: #64748b;
+  }
+  .results-meta b { color: #1f2430; }
+
+  .card {
+    display: flex;
+    gap: 10px;
+    border: 1px solid #eef1f6;
+    border-left: 3px solid var(--accent, #94a3b8);
+    border-radius: 12px;
+    background: #fff;
+    padding: 12px 13px;
+    margin-bottom: 9px;
+    box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  .card.in {
+    animation: dropIn 0.42s cubic-bezier(.2,.8,.25,1) forwards;
+  }
+  @keyframes dropIn {
+    0% { opacity: 0; transform: translateY(-14px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-plate { font-size: 13px; font-weight: 700; color: #1f2430; }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent, #94a3b8) 14%, white);
+    color: var(--accent, #64748b);
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+    font-size: 11px;
+    color: #64748b;
+  }
+  .dot { width: 2px; height: 2px; border-radius: 50%; background: #cbd5e1; }
+  .card-service {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+
+  <div class="header">
+    <svg class="icon-btn" width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="logo-wrap">
+      <svg width="20" height="20" viewBox="0 0 433 434" fill="none">
+        <path d="M65.6 310.5 A184.5 184.5 0 1 1 379.4 310.5" stroke="#1f2430" stroke-width="18" stroke-linecap="round"/>
+        <path d="M106.4 329.8 A136.5 136.5 0 1 1 338.6 329.8" stroke="#75A7F9" stroke-width="10" stroke-linecap="round"/>
+        <line x1="222.5" y1="396.5" x2="336" y2="250" stroke="#3B82F6" stroke-width="11" stroke-linecap="round"/>
+        <circle cx="222.5" cy="396.5" r="17.5" fill="#1f2430"/>
+        <circle cx="222.5" cy="396.5" r="9" fill="#3B82F6"/>
+      </svg>
+      <span class="logo-text">Altobay</span>
+      <span class="logo-badge">.ai</span>
+    </div>
+    <div class="header-right">
+      <svg class="icon-btn" width="19" height="19" viewBox="0 0 24 24" fill="none">
+        <path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z" stroke="currentColor" stroke-width="2"/>
+        <path d="M4 20.5c1.4-3.6 4.6-5.5 8-5.5s6.6 1.9 8 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="bell-wrap">
+        <svg class="icon-btn" width="19" height="19" viewBox="0 0 24 24" fill="none">
+          <path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 14 6 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M10 19a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="bell-dot"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-row">
+    <div class="search-bar" id="bar">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="7" stroke="#4a8dfa" stroke-width="2.2"/>
+        <path d="M20 20l-3.5-3.5" stroke="#4a8dfa" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <input
+        id="searchInput"
+        class="search-input"
+        type="text"
+        placeholder="Search plate, VIN, or owner..."
+        autocomplete="off"
+      />
+      <button class="clear-btn" id="clearBtn" type="button" aria-label="Clear">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="hint-row" id="hintRow">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="#94a3b8" stroke-width="2"/>
+      <path d="M12 8v5M12 16h.01" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <span class="hint-text">Type anything and press Enter to see it in action</span>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="7" stroke="#4a8dfa" stroke-width="2"/>
+        <path d="M20 20l-3.5-3.5" stroke="#4a8dfa" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <p class="empty-title">Find any vehicle in seconds</p>
+    <p class="empty-body">Type a VIN or plate number above to pull up its full service history.</p>
+  </div>
+
+  <div class="results" id="results"></div>
+
+<script>
+var HISTORY = [
+  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Aug 18, 2026", owner: "chabot", service: "Brake Repair and Inspection", status: "Not started", accent: "#ef4444" },
+  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Sep 04, 2025", owner: "chabot", service: "Fluid Levels Check & Replacement", status: "Repairing", accent: "#4a8dfa" },
+  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Dec 31, 2024", owner: "chabot", service: "Battery Health Test & Replacement", status: "Completed", accent: "#10b981" },
+  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "Oct 10, 2021", owner: "chabot", service: "Tire Rotation & Wheel Alignment", status: "Completed", accent: "#10b981" },
+  { plate: "1 CHB 234", model: "BMW X5 M sports", date: "May 31, 2020", owner: "chabot", service: "Engine Oil & Filter Change", status: "Completed", accent: "#10b981" }
+];
+
+var input = document.getElementById("searchInput");
+var bar = document.getElementById("bar");
+var clearBtn = document.getElementById("clearBtn");
+var emptyState = document.getElementById("emptyState");
+var hintRow = document.getElementById("hintRow");
+var resultsEl = document.getElementById("results");
+var shown = false;
+
+function carSvg() {
+  return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M4 16l1.2-4.5A2 2 0 0 1 7.1 10h9.8a2 2 0 0 1 1.9 1.5L20 16" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="16" width="18" height="4" rx="1.5" stroke="#94a3b8" stroke-width="1.8"/><circle cx="7" cy="20" r="1.3" fill="#94a3b8"/><circle cx="17" cy="20" r="1.3" fill="#94a3b8"/></svg>';
+}
+function calSvg() {
+  return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2.5" stroke="#94a3b8" stroke-width="1.8"/><path d="M3 9.5h18" stroke="#94a3b8" stroke-width="1.8"/><path d="M8 3v4M16 3v4" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/></svg>';
+}
+function wrenchSvg() {
+  return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M14.7 6.3a4 4 0 0 0-5.4 4.8L4 16.4V20h3.6l5.3-5.3a4 4 0 0 0 4.8-5.4l-2.6 2.6-2-2 2.6-2.6Z" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+}
+
+function renderResults() {
+  resultsEl.innerHTML =
+    '<div class="results-meta">Search complete <b>&middot; ' + HISTORY.length + ' results</b></div>' +
+    HISTORY.map(function (h) {
+      return (
+        '<div class="card" style="--accent:' + h.accent + '">' +
+          '<div style="flex:1">' +
+            '<div class="card-top">' +
+              '<span class="card-plate">' + h.plate + '</span>' +
+              '<span class="badge">' + h.status + '</span>' +
+            '</div>' +
+            '<div class="card-meta">' +
+              carSvg() + '<span>' + h.model + '</span>' +
+              '<span class="dot"></span>' +
+              calSvg() + '<span>' + h.date + '</span>' +
+              '<span class="dot"></span>' +
+              '<span>' + h.owner + '</span>' +
+            '</div>' +
+            '<div class="card-service">' + wrenchSvg() + '<span>' + h.service + '</span></div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join("");
+}
+
+function playStack() {
+  var cards = resultsEl.querySelectorAll(".card");
+  cards.forEach(function (card, i) {
+    card.classList.remove("in");
+    // eslint-disable-next-line no-unused-expressions
+    void card.offsetWidth; // restart animation
+    card.style.animationDelay = (i * 90) + "ms";
+    card.classList.add("in");
+  });
+}
+
+function runSearch() {
+  var q = input.value.trim();
+  if (!q) return;
+  if (!shown) {
+    renderResults();
+    shown = true;
+  }
+  emptyState.classList.add("hidden");
+  hintRow.style.opacity = "0";
+  playStack();
+}
+
+input.addEventListener("focus", function () { bar.classList.add("focused"); });
+input.addEventListener("blur", function () { bar.classList.remove("focused"); });
+input.addEventListener("input", function () {
+  clearBtn.classList.toggle("show", input.value.length > 0);
+});
+input.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") runSearch();
+});
+clearBtn.addEventListener("click", function () {
+  input.value = "";
+  clearBtn.classList.remove("show");
+  input.focus();
+});
+</script>
+</body>
+</html>
