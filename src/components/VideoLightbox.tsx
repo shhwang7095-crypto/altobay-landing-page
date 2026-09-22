@@ -27,7 +27,12 @@ export default function VideoLightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm"
+      // h-dvh (with h-screen as a same-value fallback) is set explicitly
+      // because inset-0's auto height alone doesn't stretch this fixed flex
+      // container to the full viewport once it has a video child sized by
+      // max-height/aspect-ratio - it shrinks to the child's content height
+      // instead, leaving a strip of the real page exposed at the bottom.
+      className="fixed inset-0 z-50 flex h-dvh items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm"
       onClick={() => setOpen(false)}
     >
       <button
