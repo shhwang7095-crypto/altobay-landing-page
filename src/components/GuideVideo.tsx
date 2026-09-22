@@ -15,7 +15,7 @@ export default function GuideVideo({
         preload="metadata"
         poster={poster}
         aria-label={label}
-        className="block aspect-[9/16] w-full object-cover"
+        className="block aspect-[9/16] w-full bg-black object-contain"
       >
         <source src={src} type="video/mp4" />
       </video>
