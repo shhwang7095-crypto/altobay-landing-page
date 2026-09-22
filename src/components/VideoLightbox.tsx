@@ -58,7 +58,7 @@ export default function VideoLightbox({
         // control bar has its own room instead of sitting on top of the
         // baked-in caption text near the bottom of the footage.
         className="my-auto max-h-[75vh] w-auto max-w-full rounded-2xl bg-black object-contain object-top shadow-2xl"
-        style={{ aspectRatio: "1080 / 2180" }}
+        style={{ aspectRatio: "1080 / 2420" }}
       >
         <source src={src} type="video/mp4" />
       </video>
