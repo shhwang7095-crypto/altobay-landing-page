@@ -27,7 +27,7 @@ export default function VideoLightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/80 p-6 backdrop-blur-sm"
       onClick={() => setOpen(false)}
     >
       <button
@@ -53,7 +53,7 @@ export default function VideoLightbox({
         poster={poster}
         aria-label={label}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[85vh] w-auto max-w-full rounded-2xl shadow-2xl"
+        className="my-auto max-h-[75vh] w-auto max-w-full rounded-2xl shadow-2xl"
       >
         <source src={src} type="video/mp4" />
       </video>
