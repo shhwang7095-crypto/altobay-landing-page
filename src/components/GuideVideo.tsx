@@ -44,9 +44,9 @@ export default function GuideVideo({
 
       <div
         className="origin-bottom transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-        style={{ transform: awake ? "rotate(0deg) scale(1)" : "rotate(82deg) scale(0.42)" }}
+        style={{ transform: awake ? "rotate(0deg) scale(1)" : "rotate(82deg) scale(0.38)" }}
       >
-        <div className="relative w-[200px] overflow-hidden rounded-[2.2rem] border-4 border-brand-navy-soft bg-brand-navy p-2 shadow-2xl">
+        <div className="relative w-[300px] max-w-[80vw] overflow-hidden rounded-[2.2rem] border-4 border-brand-navy-soft bg-brand-navy p-2 shadow-2xl">
           <div className="absolute left-1/2 top-3.5 z-10 h-1.5 w-14 -translate-x-1/2 rounded-full bg-black/40" />
           <div className="relative aspect-[9/16] w-full overflow-hidden rounded-[1.6rem] bg-black">
             <video

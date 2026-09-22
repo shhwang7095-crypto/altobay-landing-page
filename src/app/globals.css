@@ -64,3 +64,14 @@ body {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Hide the page's own scrollbar on mobile widths, matching native app feel. */
+@media (max-width: 640px) {
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
+}
