@@ -57,7 +57,7 @@ const SCREENS = [
   {
     slug: "vehicle-cloud-search",
     label: "Vehicle Cloud Search",
-    size: "default" as const,
+    size: "video" as const,
     hoverLink: true,
     node: (
       <ScreenshotImage

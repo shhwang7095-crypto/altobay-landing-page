@@ -85,8 +85,8 @@ export default function DemoRequestForm() {
         <Field label="Name" name="name" required />
         <Field label="Company name" name="company" required />
         <Field label="Position / Role" name="role" />
-        <Field label="Email" name="email" type="email" required />
-        <Field label="Phone" name="phone" type="tel" />
+        <Field label="Email" name="email" type="email" required placeholder="Enter your work email" />
+        <Field label="Phone" name="phone" type="tel" placeholder="Enter your business address" />
         <Field label="Region" name="region" placeholder="e.g. Los Angeles, CA" />
       </div>
 
