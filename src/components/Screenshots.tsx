@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import PhoneMockup from "./PhoneMockup";
+import PhoneVideo from "./PhoneVideo";
 import PromoVideo from "./PromoVideo";
 
 function ScreenshotImage({
@@ -32,33 +33,32 @@ const SCREENS = [
   {
     slug: "smart-booking",
     label: "Smart Booking",
-    ready: true,
+    size: "video" as const,
     node: (
-      <ScreenshotImage
-        src="/screenshots/mockup-smart-booking.png"
-        alt="Smart Booking calendar and appointment list in the Altobay.ai app"
-        width={205}
-        height={432}
+      <PhoneVideo
+        src="/videos/smart-booking-demo.mp4"
+        poster="/videos/smart-booking-demo-poster.jpg"
+        label="Smart Booking demo video"
       />
     ),
   },
   {
     slug: "ai-service-reports",
     label: "AI-Generated Service Reports",
-    ready: true,
+    size: "video" as const,
     node: (
-      <ScreenshotImage
-        src="/screenshots/mockup-service-report.png"
-        alt="Edit Service Report screen in the Altobay.ai app"
-        width={205}
-        height={432}
+      <PhoneVideo
+        src="/videos/ai-report-flow-demo.mp4"
+        poster="/videos/ai-report-flow-demo-poster.jpg"
+        label="AI-Generated Service Reports demo video"
       />
     ),
   },
   {
     slug: "vehicle-cloud-search",
     label: "Vehicle Cloud Search",
-    ready: true,
+    size: "default" as const,
+    hoverLink: true,
     node: (
       <ScreenshotImage
         src="/screenshots/mockup-vehicle-search.png"
@@ -85,44 +85,47 @@ export default function Screenshots() {
           A closer look at Altobay.ai
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-          Tap a screen for a step-by-step guide to that feature.
+          Watch it in action, or tap a screen for a step-by-step guide to that feature.
         </p>
       </div>
 
       <div className="mt-16 flex flex-wrap items-end justify-center gap-8 px-6">
-        {SCREENS.map((screen, index) => (
-          <Link
-            key={screen.slug}
-            href={`/guide/${screen.slug}`}
-            className="group flex flex-col items-center gap-4"
-          >
-            <PhoneMockup
-              size={index === 1 ? "large" : "default"}
-              className="transition-transform group-hover:-translate-y-1.5 group-hover:shadow-brand-blue/20"
-              overlay={
-                <div
-                  className={`flex h-full w-full items-center justify-center opacity-0 backdrop-blur-[1px] transition-all duration-300 group-hover:opacity-100 ${
-                    screen.ready ? "bg-brand-blue/0 group-hover:bg-brand-blue/40" : "bg-slate-500/0 group-hover:bg-slate-500/50"
-                  }`}
-                >
-                  <span className="translate-y-2 rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy shadow-lg transition-transform duration-300 group-hover:translate-y-0">
-                    {screen.ready ? "Want to see the guide?" : "Coming soon"}
-                  </span>
-                </div>
-              }
+        {SCREENS.map((screen) =>
+          screen.hoverLink ? (
+            <Link
+              key={screen.slug}
+              href={`/guide/${screen.slug}`}
+              className="group flex flex-col items-center gap-4"
             >
-              {screen.node}
-            </PhoneMockup>
-            <span className="text-sm font-semibold text-foreground">{screen.label}</span>
-            <span
-              className={`-mt-3 text-xs font-medium ${
-                screen.ready ? "text-brand-blue" : "text-muted-foreground"
-              }`}
-            >
-              {screen.ready ? "View guide →" : "Guide coming soon"}
-            </span>
-          </Link>
-        ))}
+              <PhoneMockup
+                size={screen.size}
+                className="transition-transform group-hover:-translate-y-1.5 group-hover:shadow-brand-blue/20"
+                overlay={
+                  <div className="flex h-full w-full items-center justify-center bg-brand-blue/0 opacity-0 backdrop-blur-[1px] transition-all duration-300 group-hover:bg-brand-blue/40 group-hover:opacity-100">
+                    <span className="translate-y-2 rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy shadow-lg transition-transform duration-300 group-hover:translate-y-0">
+                      Want to see the guide?
+                    </span>
+                  </div>
+                }
+              >
+                {screen.node}
+              </PhoneMockup>
+              <span className="text-sm font-semibold text-foreground">{screen.label}</span>
+              <span className="-mt-3 text-xs font-medium text-brand-blue">View guide →</span>
+            </Link>
+          ) : (
+            <div key={screen.slug} className="flex flex-col items-center gap-4">
+              <PhoneMockup size={screen.size}>{screen.node}</PhoneMockup>
+              <span className="text-sm font-semibold text-foreground">{screen.label}</span>
+              <Link
+                href={`/guide/${screen.slug}`}
+                className="-mt-3 text-xs font-medium text-brand-blue hover:underline"
+              >
+                View guide →
+              </Link>
+            </div>
+          )
+        )}
       </div>
     </section>
   );

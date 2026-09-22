@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 const SIZES = {
   default: { width: 240, height: 420 },
   large: { width: 264, height: 462 },
+  video: { width: 300, height: 533 },
   interactive: { width: 380, height: 760 },
 };
 
