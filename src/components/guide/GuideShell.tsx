@@ -7,23 +7,28 @@ export default function GuideShell({
   eyebrow,
   title,
   intro,
+  replayButton,
   children,
 }: {
   eyebrow: string;
   title: string;
   intro: string;
+  replayButton?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <>
       <Navbar />
       <main className="mx-auto max-w-3xl px-6 py-16">
-        <Link
-          href="/#how-it-works"
-          className="text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-          ← Back to Altobay.ai
-        </Link>
+        <div className="flex items-center justify-between gap-4">
+          <Link
+            href="/#how-it-works"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground"
+          >
+            ← Back to Altobay.ai
+          </Link>
+          {replayButton}
+        </div>
 
         <span className="mt-8 block text-xs font-semibold uppercase tracking-widest text-brand-blue">
           {eyebrow}

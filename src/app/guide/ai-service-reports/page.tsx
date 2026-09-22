@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import GuideShell from "@/components/guide/GuideShell";
 import InteractiveDemoPhone from "@/components/guide/InteractiveDemoPhone";
-import VideoLightbox from "@/components/VideoLightbox";
+import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
 
 export const metadata: Metadata = {
   title: "AI-Generated Service Reports | Altobay.ai Guide",
@@ -15,13 +15,14 @@ export default function AiServiceReportsGuide() {
       eyebrow="Feature Guide"
       title="AI-Generated Service Reports"
       intro="Watch how it works, then try it yourself below."
+      replayButton={
+        <GuideVideoReplay
+          src="/videos/ai-report-flow-demo.mp4"
+          poster="/videos/ai-report-flow-demo-poster.jpg"
+          label="AI-Generated Service Reports walkthrough video"
+        />
+      }
     >
-      <VideoLightbox
-        src="/videos/ai-report-flow-demo.mp4"
-        poster="/videos/ai-report-flow-demo-poster.jpg"
-        label="AI-Generated Service Reports walkthrough video"
-      />
-
       <div>
         <InteractiveDemoPhone />
       </div>

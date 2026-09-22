@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import GuideShell from "@/components/guide/GuideShell";
 import GuideStep from "@/components/guide/GuideStep";
-import VideoLightbox from "@/components/VideoLightbox";
+import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
 
 export const metadata: Metadata = {
   title: "Smart Booking | Altobay.ai Guide",
@@ -15,13 +15,14 @@ export default function SmartBookingGuide() {
       eyebrow="Feature Guide"
       title="Smart Booking"
       intro="Track every appointment and service request from one screen, no more juggling calls, texts, and paper notes."
+      replayButton={
+        <GuideVideoReplay
+          src="/videos/smart-booking-demo.mp4"
+          poster="/videos/smart-booking-demo-poster.jpg"
+          label="Smart Booking walkthrough video"
+        />
+      }
     >
-      <VideoLightbox
-        src="/videos/smart-booking-demo.mp4"
-        poster="/videos/smart-booking-demo-poster.jpg"
-        label="Smart Booking walkthrough video"
-      />
-
       <GuideStep
         number={1}
         title="Get notified when a booking comes in"
