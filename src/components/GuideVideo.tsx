@@ -6,7 +6,7 @@ export default function GuideVideo({
   src,
   poster,
   label,
-  tutorialLabel = "See Altobay video tutorial",
+  tutorialLabel = 'Click to see "Altobay Video Tutorial"',
 }: {
   src: string;
   poster: string;
