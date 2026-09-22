@@ -18,7 +18,8 @@ export default function SurveyQR() {
           </span>
           <h3 className="mt-2 text-xl font-bold">Got 2 minutes for a quick survey?</h3>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Scan the code to tell us what your shop actually needs, it shapes what we build next.
+            Scan the code to tell us what you have about the vehicle, it shapes what we build
+            next.
           </p>
         </div>
       </div>
