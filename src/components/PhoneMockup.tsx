@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 const SIZES = {
   default: { width: 240, height: 420 },
   large: { width: 264, height: 462 },
-  video: { width: 300, height: 533 },
   interactive: { width: 380, height: 760 },
 };
 
@@ -31,7 +30,7 @@ export default function PhoneMockup({
     >
       <div className="absolute left-1/2 top-2 h-1.5 w-14 -translate-x-1/2 rounded-full bg-black/40" />
       <div
-        className="no-scrollbar overflow-y-auto overflow-x-hidden rounded-[1.6rem] bg-white shadow-[inset_0_0_0_1px_rgba(0,0,0,0.12)]"
+        className="no-scrollbar overflow-y-auto overflow-x-hidden rounded-[1.6rem] bg-white"
         style={{ height }}
       >
         {children}
