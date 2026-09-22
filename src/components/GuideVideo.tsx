@@ -23,15 +23,15 @@ export default function GuideVideo({
   }
 
   return (
-    <div className="flex w-full flex-col items-center overflow-x-hidden py-4">
+    <div className="mx-auto w-full max-w-[300px] overflow-hidden py-4">
       <div
-        className={`mb-3 flex flex-col items-center gap-1 transition-opacity duration-300 ${
+        className={`flex flex-col items-center gap-0.5 transition-opacity duration-300 ${
           awake ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
         aria-hidden={awake}
       >
         <span className="text-sm font-semibold text-foreground">{tutorialLabel}</span>
-        <svg className="h-9 w-6 animate-bounce text-brand-blue" viewBox="0 0 24 40" fill="none">
+        <svg className="h-6 w-6 animate-bounce text-brand-blue" viewBox="0 0 24 40" fill="none">
           <path
             d="M12 2v28M12 30l-7.5-7.5M12 30l7.5-7.5"
             stroke="currentColor"
@@ -43,10 +43,10 @@ export default function GuideVideo({
       </div>
 
       <div
-        className="origin-bottom transition-transform duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-        style={{ transform: awake ? "rotate(0deg) scale(1)" : "rotate(82deg) scale(0.38)" }}
+        className="origin-bottom transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+        style={{ transform: awake ? "rotate(0deg) translateY(0)" : "rotate(-8deg) translateY(6px)" }}
       >
-        <div className="relative w-[300px] max-w-[80vw] overflow-hidden rounded-[2.2rem] border-4 border-brand-navy-soft bg-brand-navy p-2 shadow-2xl">
+        <div className="relative mx-auto w-[260px] max-w-full overflow-hidden rounded-[2.2rem] border-4 border-brand-navy-soft bg-brand-navy p-2 shadow-2xl">
           <div className="absolute left-1/2 top-3.5 z-10 h-1.5 w-14 -translate-x-1/2 rounded-full bg-black/40" />
           <div className="relative aspect-[9/16] w-full overflow-hidden rounded-[1.6rem] bg-black">
             <video

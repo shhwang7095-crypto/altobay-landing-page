@@ -65,11 +65,19 @@ body {
   display: none;
 }
 
-/* Hide the page's own scrollbar everywhere, matching native app feel. */
+/* Blend the page's own scrollbar into the background instead of a bare
+   OS-default bar — some browsers (Windows Chrome) keep rendering a
+   scrollbar even with display:none on certain layouts, so match its
+   color to the page background as a reliable fallback. */
 html {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-color: var(--background) var(--background);
 }
 html::-webkit-scrollbar {
-  display: none;
+  width: 10px;
+}
+html::-webkit-scrollbar-track {
+  background: var(--background);
+}
+html::-webkit-scrollbar-thumb {
+  background: var(--background);
 }
