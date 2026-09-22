@@ -53,7 +53,12 @@ export default function VideoLightbox({
         poster={poster}
         aria-label={label}
         onClick={(e) => e.stopPropagation()}
-        className="my-auto max-h-[75vh] w-auto max-w-full rounded-2xl shadow-2xl"
+        // Reserve a bit of empty space below the picture (box taller than the
+        // source's own ratio, content pinned to the top) so the native
+        // control bar has its own room instead of sitting on top of the
+        // baked-in caption text near the bottom of the footage.
+        className="my-auto max-h-[75vh] w-auto max-w-full rounded-2xl bg-black object-contain object-top shadow-2xl"
+        style={{ aspectRatio: "1080 / 2180" }}
       >
         <source src={src} type="video/mp4" />
       </video>
