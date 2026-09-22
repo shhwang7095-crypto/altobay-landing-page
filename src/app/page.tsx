@@ -4,6 +4,7 @@ import ServiceFeatures from "@/components/ServiceFeatures";
 import Screenshots from "@/components/Screenshots";
 import About from "@/components/About";
 import CTA from "@/components/CTA";
+import SurveyQR from "@/components/SurveyQR";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
         <Screenshots />
         <About />
         <CTA />
+        <SurveyQR />
       </main>
       <Footer />
     </>
