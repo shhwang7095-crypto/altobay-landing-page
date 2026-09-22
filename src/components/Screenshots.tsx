@@ -29,6 +29,35 @@ function ScreenshotImage({
   );
 }
 
+// Matches the black top/bottom bars the video phones get from object-contain
+// letterboxing, so a static screenshot reads the same way inside the frame.
+function LetterboxedScreenshot({
+  src,
+  alt,
+  width,
+  height,
+}: {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}) {
+  return (
+    <div className="relative h-full w-full bg-black">
+      <div className="absolute inset-x-0 top-[21px] bottom-[21px] overflow-hidden">
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          sizes="276px"
+          className="block h-full w-full object-cover object-top"
+        />
+      </div>
+    </div>
+  );
+}
+
 const SCREENS = [
   {
     slug: "smart-booking",
@@ -60,7 +89,7 @@ const SCREENS = [
     size: "video" as const,
     hoverLink: true,
     node: (
-      <ScreenshotImage
+      <LetterboxedScreenshot
         src="/screenshots/mockup-vehicle-search.png"
         alt="Vehicle Cloud Search results list in the Altobay.ai app"
         width={205}
