@@ -19,7 +19,7 @@ export default function SurveyQR() {
         </a>
         <div>
           <span className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-            Help Us Build It Right
+            ← Click to help us build it right
           </span>
           <h3 className="mt-2 text-xl font-bold">Got 2 minutes for a quick survey?</h3>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">

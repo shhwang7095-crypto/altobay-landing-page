@@ -4,31 +4,6 @@ import PhoneMockup from "./PhoneMockup";
 import PhoneVideo from "./PhoneVideo";
 import PromoVideo from "./PromoVideo";
 
-function ScreenshotImage({
-  src,
-  alt,
-  width,
-  height,
-}: {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-}) {
-  // No crop: show the whole screenshot at full width. If it's taller than
-  // the phone frame, PhoneMockup's own overflow-y-auto makes it scrollable.
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      sizes="264px"
-      className="block h-auto w-full"
-    />
-  );
-}
-
 // Matches the black top/bottom bars the video phones get from object-contain
 // letterboxing, so a static screenshot reads the same way inside the frame.
 function LetterboxedScreenshot({
