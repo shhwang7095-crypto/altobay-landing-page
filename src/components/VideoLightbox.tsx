@@ -1,27 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function VideoLightbox({
   src,
   poster,
   label,
+  open,
+  onClose,
 }: {
   src: string;
   poster: string;
   label: string;
+  open: boolean;
+  onClose: () => void;
 }) {
-  const [open, setOpen] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") onClose();
     }
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -33,11 +36,11 @@ export default function VideoLightbox({
       // max-height/aspect-ratio - it shrinks to the child's content height
       // instead, leaving a strip of the real page exposed at the bottom.
       className="fixed inset-0 z-50 flex h-dvh items-center justify-center overflow-y-auto bg-black/80 p-4 backdrop-blur-sm"
-      onClick={() => setOpen(false)}
+      onClick={onClose}
     >
       <button
         type="button"
-        onClick={() => setOpen(false)}
+        onClick={onClose}
         aria-label="Close video"
         className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
       >

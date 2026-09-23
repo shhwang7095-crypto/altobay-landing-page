@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import GuideShell from "@/components/guide/GuideShell";
 import InteractiveDemoPhone from "@/components/guide/InteractiveDemoPhone";
 import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
@@ -16,11 +17,13 @@ export default function AiServiceReportsGuide() {
       title="AI-Generated Service Reports"
       intro="Watch how it works, then try it yourself below."
       replayButton={
-        <GuideVideoReplay
-          src="/videos/ai-report-flow-demo.mp4"
-          poster="/videos/ai-report-flow-demo-poster.jpg"
-          label="AI-Generated Service Reports walkthrough video"
-        />
+        <Suspense fallback={null}>
+          <GuideVideoReplay
+            src="/videos/ai-report-flow-demo.mp4"
+            poster="/videos/ai-report-flow-demo-poster.jpg"
+            label="AI-Generated Service Reports walkthrough video"
+          />
+        </Suspense>
       }
     >
       <div>

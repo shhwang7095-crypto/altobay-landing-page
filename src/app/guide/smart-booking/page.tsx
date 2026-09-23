@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import GuideShell from "@/components/guide/GuideShell";
 import GuideStep from "@/components/guide/GuideStep";
 import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
@@ -16,11 +17,13 @@ export default function SmartBookingGuide() {
       title="Smart Booking"
       intro="Track every appointment and service request from one screen, no more juggling calls, texts, and paper notes."
       replayButton={
-        <GuideVideoReplay
-          src="/videos/smart-booking-demo.mp4"
-          poster="/videos/smart-booking-demo-poster.jpg"
-          label="Smart Booking walkthrough video"
-        />
+        <Suspense fallback={null}>
+          <GuideVideoReplay
+            src="/videos/smart-booking-demo.mp4"
+            poster="/videos/smart-booking-demo-poster.jpg"
+            label="Smart Booking walkthrough video"
+          />
+        </Suspense>
       }
     >
       <GuideStep
