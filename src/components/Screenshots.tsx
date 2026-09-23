@@ -61,7 +61,7 @@ const SCREENS = [
     slug: "vehicle-cloud-search",
     label: "Vehicle Cloud Search",
     ready: true,
-    hasVideo: false,
+    hasVideo: true,
     node: (
       <ScreenshotImage
         src="/screenshots/mockup-vehicle-search.png"
