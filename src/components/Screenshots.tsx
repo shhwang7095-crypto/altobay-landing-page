@@ -101,16 +101,16 @@ export default function Screenshots() {
                 className="transition-transform group-hover:-translate-y-1.5 group-hover:shadow-brand-blue/20"
                 overlay={
                   <div className="flex h-full w-full items-center justify-center bg-brand-blue/0 opacity-0 backdrop-blur-[1px] transition-all duration-300 group-hover:bg-brand-blue/40 group-hover:opacity-100">
-                    <div className="flex translate-y-2 flex-col items-center gap-2 transition-transform duration-300 group-hover:translate-y-0">
+                    <div className="flex flex-col items-center gap-2">
                       <Link
                         href={`/guide/${screen.slug}`}
-                        className="pointer-events-auto rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy shadow-lg"
+                        className="pointer-events-auto translate-y-2 rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
                       >
                         Want to see the guide?
                       </Link>
                       <Link
                         href={`/guide/${screen.slug}?video=open`}
-                        className="pointer-events-auto rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy shadow-lg"
+                        className="pointer-events-auto translate-y-2 rounded-full bg-brand-blue px-4 py-2 text-center text-xs font-semibold text-white opacity-0 shadow-lg transition-all delay-100 duration-300 group-hover:translate-y-0 group-hover:opacity-100"
                       >
                         Click to see tutorial video
                       </Link>
