@@ -33,7 +33,10 @@ export async function POST(request: Request) {
 
   if (!apiKey || !databaseId) {
     return Response.json(
-      { error: "Demo requests aren't wired up yet. Please email hello@altobay.ai instead." },
+      {
+        error: "Demo requests aren't wired up yet. Please email hello@altobay.ai instead.",
+        code: "not_configured",
+      },
       { status: 503 }
     );
   }
@@ -42,14 +45,17 @@ export async function POST(request: Request) {
   try {
     body = await request.json();
   } catch {
-    return Response.json({ error: "Invalid request." }, { status: 400 });
+    return Response.json({ error: "Invalid request.", code: "invalid" }, { status: 400 });
   }
 
   const { name, company, role, email, phone, region, services, message } = body;
 
   if (!name || !company || !email || !services || services.length === 0) {
     return Response.json(
-      { error: "Name, company, email, and at least one interested service are required." },
+      {
+        error: "Name, company, email, and at least one interested service are required.",
+        code: "missing",
+      },
       { status: 400 }
     );
   }
@@ -82,7 +88,10 @@ export async function POST(request: Request) {
     const errBody = await notionRes.json().catch(() => ({}));
     console.error("Notion API error:", errBody);
     return Response.json(
-      { error: "Couldn't submit your request. Please try again or email hello@altobay.ai." },
+      {
+        error: "Couldn't submit your request. Please try again or email hello@altobay.ai.",
+        code: "submit_failed",
+      },
       { status: 502 }
     );
   }

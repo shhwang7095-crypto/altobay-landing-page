@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import PhoneMockup from "./PhoneMockup";
 import PromoVideo from "./PromoVideo";
+import { getDictionary } from "@/i18n/server";
+import type { Dictionary } from "@/i18n/dictionaries/en";
 
 function ScreenshotImage({
   src,
@@ -28,52 +30,35 @@ function ScreenshotImage({
   );
 }
 
-const SCREENS = [
+const SCREENS: {
+  slug: keyof Dictionary["showcase"]["screens"];
+  src: string;
+  ready: boolean;
+  hasVideo: boolean;
+}[] = [
   {
     slug: "smart-booking",
-    label: "Smart Booking",
+    src: "/screenshots/mockup-smart-booking.png",
     ready: true,
     hasVideo: true,
-    node: (
-      <ScreenshotImage
-        src="/screenshots/mockup-smart-booking.png"
-        alt="Smart Booking calendar and appointment list in the Altobay.ai app"
-        width={205}
-        height={432}
-      />
-    ),
   },
   {
     slug: "ai-service-reports",
-    label: "AI-Generated Service Reports",
+    src: "/screenshots/mockup-service-report.png",
     ready: true,
     hasVideo: true,
-    node: (
-      <ScreenshotImage
-        src="/screenshots/mockup-service-report.png"
-        alt="Edit Service Report screen in the Altobay.ai app"
-        width={205}
-        height={432}
-      />
-    ),
   },
   {
     slug: "vehicle-cloud-search",
-    label: "Vehicle Cloud Search",
+    src: "/screenshots/mockup-vehicle-search.png",
     ready: true,
     hasVideo: true,
-    node: (
-      <ScreenshotImage
-        src="/screenshots/mockup-vehicle-search.png"
-        alt="Vehicle Cloud Search results list in the Altobay.ai app"
-        width={205}
-        height={432}
-      />
-    ),
   },
 ];
 
-export default function Screenshots() {
+export default async function Screenshots() {
+  const { showcase } = await getDictionary();
+
   return (
     <section id="how-it-works" className="overflow-hidden py-24">
       <div className="px-6">
@@ -82,19 +67,20 @@ export default function Screenshots() {
 
       <div className="mx-auto mt-12 max-w-6xl px-6 text-center">
         <span className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-          Inside the App
+          {showcase.eyebrow}
         </span>
         <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-          A closer look at Altobay.ai
+          {showcase.title}
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-          Tap a screen for a step-by-step guide to that feature.
-        </p>
+        <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">{showcase.subtitle}</p>
       </div>
 
       <div className="mt-16 flex flex-wrap items-end justify-center gap-8 px-6">
-        {SCREENS.map((screen, index) =>
-          screen.hasVideo ? (
+        {SCREENS.map((screen, index) => {
+          const { label, alt } = showcase.screens[screen.slug];
+          const node = <ScreenshotImage src={screen.src} alt={alt} width={205} height={432} />;
+
+          return screen.hasVideo ? (
             <div key={screen.slug} className="group flex flex-col items-center gap-4">
               <PhoneMockup
                 size={index === 1 ? "large" : "default"}
@@ -106,26 +92,26 @@ export default function Screenshots() {
                         href={`/guide/${screen.slug}`}
                         className="pointer-events-auto translate-y-2 rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy opacity-0 shadow-lg transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
                       >
-                        Want to see the guide?
+                        {showcase.wantGuide}
                       </Link>
                       <Link
                         href={`/guide/${screen.slug}?video=open`}
                         className="pointer-events-auto translate-y-2 rounded-full bg-brand-blue px-4 py-2 text-center text-xs font-semibold text-white opacity-0 shadow-lg transition-all delay-100 duration-300 group-hover:translate-y-0 group-hover:opacity-100"
                       >
-                        Click to see tutorial video
+                        {showcase.watchVideo}
                       </Link>
                     </div>
                   </div>
                 }
               >
-                {screen.node}
+                {node}
               </PhoneMockup>
-              <span className="text-sm font-semibold text-foreground">{screen.label}</span>
+              <span className="text-sm font-semibold text-foreground">{label}</span>
               <Link
                 href={`/guide/${screen.slug}`}
                 className="-mt-3 text-xs font-medium text-brand-blue hover:underline"
               >
-                View guide →
+                {showcase.viewGuide}
               </Link>
             </div>
           ) : (
@@ -144,24 +130,24 @@ export default function Screenshots() {
                     }`}
                   >
                     <span className="translate-y-2 rounded-full bg-white px-4 py-2 text-center text-xs font-semibold text-brand-navy shadow-lg transition-transform duration-300 group-hover:translate-y-0">
-                      {screen.ready ? "Want to see the guide?" : "Coming soon"}
+                      {screen.ready ? showcase.wantGuide : showcase.comingSoon}
                     </span>
                   </div>
                 }
               >
-                {screen.node}
+                {node}
               </PhoneMockup>
-              <span className="text-sm font-semibold text-foreground">{screen.label}</span>
+              <span className="text-sm font-semibold text-foreground">{label}</span>
               <span
                 className={`-mt-3 text-xs font-medium ${
                   screen.ready ? "text-brand-blue" : "text-muted-foreground"
                 }`}
               >
-                {screen.ready ? "View guide →" : "Guide coming soon"}
+                {screen.ready ? showcase.viewGuide : showcase.guideComingSoon}
               </span>
             </Link>
-          )
-        )}
+          );
+        })}
       </div>
     </section>
   );

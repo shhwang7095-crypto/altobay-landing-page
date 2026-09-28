@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LanguageProvider } from "@/i18n/LanguageProvider";
+import { getDictionary, getLocale, pickClientDictionary } from "@/i18n/server";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,12 +33,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const locale = await getLocale();
+  const dictionary = pickClientDictionary(await getDictionary());
+
   return (
-    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+    <html lang={locale} className={`${inter.variable} antialiased`} suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          {children}
+          <LanguageProvider locale={locale} dictionary={dictionary}>
+            {children}
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

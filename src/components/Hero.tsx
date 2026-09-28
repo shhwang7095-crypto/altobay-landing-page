@@ -2,8 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import PhoneMockup from "./PhoneMockup";
 import TiltPhone from "./TiltPhone";
+import { getDictionary } from "@/i18n/server";
 
-export default function Hero() {
+export default async function Hero() {
+  const { hero, common } = await getDictionary();
+
   return (
     <section
       id="top"
@@ -21,20 +24,20 @@ export default function Hero() {
       <div className="relative mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 px-6 pb-24 pt-20 md:grid-cols-2 md:pt-28">
         <div>
           <span className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-brand-blue-light">
-            Built for U.S. auto repair shops
+            {hero.badge}
           </span>
 
           <h1 className="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            AI in Your <span className="text-brand-blue-light">Repair Bay</span>
+            {hero.titleA}
+            <span className="text-brand-blue-light">{hero.titleB}</span>
+            {hero.titleC}
           </h1>
           <p className="mt-3 text-lg font-semibold text-white/80">
-            Run your repair shop smarter.
+            {hero.tagline}
           </p>
 
           <p className="mt-6 max-w-md text-lg text-white/70">
-            Altobay.ai is an AI platform for repair shops/service centers and customers, helping
-            mechanics manage bookings, generate AI-powered service reports, and look up vehicle
-            history, all from one app.
+            {hero.body}
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
@@ -42,13 +45,13 @@ export default function Hero() {
               href="/demo"
               className="rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-blue/30 transition-opacity hover:opacity-90"
             >
-              Request a Demo
+              {common.requestDemo}
             </Link>
             <a
               href="#how-it-works"
               className="rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
             >
-              See how it works
+              {hero.seeHow}
             </a>
           </div>
 
@@ -70,7 +73,7 @@ export default function Hero() {
                 </svg>
                 <span className="leading-tight">
                   <span className="block text-[10px] uppercase tracking-wide text-white/40">
-                    Coming soon on
+                    {hero.comingSoonOn}
                   </span>
                   <span className="block text-sm font-semibold text-white">{store.label}</span>
                 </span>
@@ -85,13 +88,13 @@ export default function Hero() {
             target="_blank"
             rel="noopener noreferrer"
             className="group relative block"
-            aria-label="Visit the Altobay.ai web app"
+            aria-label={hero.visitAria}
           >
             <TiltPhone>
               <PhoneMockup>
                 <Image
                   src="/screenshots/mockup-hero-dashboard.png"
-                  alt="Altobay.ai booking and service status dashboard"
+                  alt={hero.mockAlt}
                   width={205}
                   height={432}
                   priority
@@ -101,7 +104,7 @@ export default function Hero() {
               </PhoneMockup>
             </TiltPhone>
             <span className="pointer-events-none absolute bottom-16 left-full ml-4 -translate-x-2 whitespace-nowrap rounded-full bg-brand-navy/90 px-3 py-1.5 text-[11px] font-semibold text-white opacity-0 shadow-lg transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-              Click to visit site
+              {common.visitSite}
             </span>
           </a>
         </div>

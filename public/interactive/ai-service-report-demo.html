@@ -234,67 +234,305 @@ header{top:0!important}
 <div id="app"></div>
 <div class="toast" id="toast"></div>
 <script>
+/* ═══ i18n: language comes from the host page (?lang=en|ko|es) ═══
+   Every user-facing string goes through tr()/fmt(). English is the source
+   text (the key); DICT holds the ko/es translations of those exact strings.
+   {0}, {1} ... are filled in by fmt(). */
+var LANG=(new URLSearchParams(location.search).get('lang')||'en').toLowerCase();
+if(LANG!=='ko'&&LANG!=='es') LANG='en';
+document.documentElement.lang=LANG;
+var DICT={
+ko:{
+ 'A clunk from the front right when I go over speed bumps. Louder when I go slow.':'과속방지턱을 넘을 때 오른쪽 앞에서 덜컹 소리가 납니다. 천천히 갈수록 더 크게 들려요.',
+ 'Front suspension and tires are already ticked.':'앞 서스펜션과 타이어는 이미 체크되어 있습니다.',
+ 'The air con smells musty for the first minute after I switch it on.':'에어컨을 켜면 처음 1분 동안 퀴퀴한 냄새가 납니다.',
+ 'The cabin filter is already ticked.':'실내 에어필터는 이미 체크되어 있습니다.',
+ 'Booked in for a full check before the winter.':'겨울이 오기 전에 전체 점검을 예약했습니다.',
+ 'A full check covers all 11 items.':'전체 점검은 11개 항목을 모두 포함합니다.',
+ 'Driven':'주행거리',
+ 'Around the car':'차량 외부','Under the hood':'엔진룸','In the cabin':'실내',
+ 'engine off':'시동 끔','engine cold':'엔진 냉각 상태','engine on':'시동 켬',
+ 'Tires':'타이어','Brake pads':'브레이크 패드','Lights':'조명','Engine oil':'엔진 오일','Drive belt':'구동 벨트',
+ 'Coolant hoses':'냉각수 호스','Battery':'배터리','Upper oil leak':'상부 오일 누유','Cabin filter':'실내 에어필터',
+ 'Wipers':'와이퍼','Check engine light':'엔진 경고등',
+ 'Exterior':'외관','Engine bay':'엔진룸','Belts':'벨트','Hoses':'호스','Cabin':'실내',
+ 'Tread face and sidewall, 1–2 shots':'트레드 면과 사이드월, 1~2컷',
+ 'Through the wheel spokes':'휠 스포크 사이로',
+ 'Two shots — lights off, then on':'2컷 — 소등 후 점등',
+ 'Dipstick against a clean cloth':'깨끗한 천에 대고 딥스틱 촬영',
+ 'Top of the engine bay':'엔진룸 상단',
+ 'Same engine bay frame':'같은 엔진룸 구도',
+ 'Terminals and case':'단자와 케이스',
+ 'Wide, then close on the seep':'넓게, 그다음 누유 부위 근접',
+ 'Filter out of the housing':'하우징에서 꺼낸 필터',
+ 'Close on the blade edge':'블레이드 끝 근접',
+ 'Dash with ignition on':'시동을 켠 계기판',
+ 'wear line, cracks, uneven wear, sidewall damage':'마모선, 균열, 편마모, 사이드월 손상',
+ 'pad thickness, wear':'패드 두께, 마모',
+ 'lit, yellowing, cracks':'점등 여부, 황변, 균열',
+ 'colour, clarity, level':'색상, 투명도, 유량',
+ 'cracks, wear, slack, contamination':'균열, 마모, 처짐, 오염',
+ 'cracks, swelling, leak marks':'균열, 부풀음, 누출 흔적',
+ 'terminal corrosion, swelling, leaks':'단자 부식, 부풀음, 누액',
+ 'leak marks and where they are':'누유 흔적과 위치',
+ 'dirt, discolouring, debris':'오염, 변색, 이물질',
+ 'cracks, peeling, deformation':'균열, 벗겨짐, 변형',
+ 'warning lamp state':'경고등 상태',
+ 'Symptom-based':'증상 기반','from what the owner reported':'고객이 접수한 내용 기준',
+ 'Full check':'전체 점검','all eleven items':'11개 항목 전체',
+ 'Oil service':'오일 점검','oil and the basics':'오일과 기본 항목',
+ 'Quick look':'간단 점검','the four that matter most':'가장 중요한 4가지',
+ 'Tread at the wear line on both fronts. No sidewall damage.':'앞 타이어 둘 다 트레드가 마모선에 도달했습니다. 사이드월 손상은 없습니다.',
+ 'Pads look under a quarter of a new set.':'패드가 새 제품의 4분의 1도 남지 않은 것으로 보입니다.',
+ 'All lamps lit. Left headlight lens is yellowed.':'모든 램프가 점등됩니다. 왼쪽 헤드라이트 렌즈가 황변되었습니다.',
+ 'Oil is dark and thin. Level is at the low mark.':'오일이 어둡고 묽습니다. 유량이 하한선에 있습니다.',
+ 'Fine cracks along the ribs. Not through yet.':'리브를 따라 미세한 균열이 있습니다. 아직 관통하지는 않았습니다.',
+ 'Upper hose has dried coolant around the clamp.':'상부 호스 클램프 주변에 냉각수가 말라붙어 있습니다.',
+ 'White powder on the positive terminal. Case is flat.':'양극 단자에 흰 가루가 있습니다. 케이스는 평평합니다.',
+ 'Oil seeping at the valve cover seam. Nothing dripping.':'밸브 커버 이음부에서 오일이 배어 나옵니다. 떨어지는 것은 없습니다.',
+ 'Filter is packed with dust and leaves.':'필터가 먼지와 낙엽으로 가득 차 있습니다.',
+ 'Rubber edge is peeling on the driver side.':'운전석 쪽 고무 날이 벗겨지고 있습니다.',
+ 'No warning lamp on the dash.':'계기판에 경고등이 없습니다.',
+ 'NEEDS WORK':'정비 필요','WATCH':'주의','FINE':'양호','FIXED':'수리 완료',
+ 'Today':'오늘','Scope':'범위','Before':'작업 전','Work':'수리','After':'작업 후','Reading':'판독 중','Review':'검토','Sent':'발송 완료',
+ 'Before photos':'작업 전 사진','After photos':'작업 후 사진','Pause':'일시정지','Send':'발송',
+ 'Auto Service':'자동차 정비',
+ '<b>{0}</b> cars':'<b>{0}</b>대',
+ 'In the shop':'입고 차량','tap to open':'탭하여 열기',
+ 'Waiting':'대기 중','Shooting':'촬영 중',
+ 'not started · {0} items':'시작 전 · {0}개 항목',
+ '{0} / {1} shot':'{0} / {1} 촬영',
+ '{0} &middot; in at {1} &middot; {2}':'{0} &middot; {1} 입고 &middot; {2}',
+ 'You shoot and you fix. <b>The report writes itself afterwards.</b>':'촬영하고 수리만 하세요. <b>보고서는 나중에 자동으로 작성됩니다.</b>',
+ 'WHAT THE OWNER SAID':'고객이 말한 내용','Submitted in the app':'앱에서 접수됨',
+ 'What to check':'점검 항목','tap to change':'탭하여 변경',
+ 'Pick them yourself':'직접 고르기','tick what you need':'필요한 항목 체크',
+ 'Tick what to shoot':'촬영할 항목 선택','{0} picked':'{0}개 선택',
+ 'Shot list':'촬영 목록','{0} shots':'{0}컷','skip':'건너뜀',
+ 'Start shooting':'촬영 시작','{0} items':'{0}개 항목',
+ 'BEFORE':'작업 전','AFTER':'작업 후','tap to shoot':'탭하여 촬영','Reads:':'판독 대상:',
+ 'shot':'촬영됨','to do':'할 일',
+ 'No judgment here. <b>Just shoot what you see.</b> The reading comes after the work.':'여기서는 판단하지 않습니다. <b>눈에 보이는 대로 촬영만 하세요.</b> 판독은 작업이 끝난 뒤에 이뤄집니다.',
+ 'Next · {0}':'다음 · {0}','Go to {0}':'{0}(으)로 이동','Start work':'작업 시작',
+ '{0} left':'{0}개 남음','all {0} shot':'{0}개 모두 촬영 완료',
+ 'Tick what you are fixing today. <b>Everything else stays on the report</b> with a quote.':'오늘 수리할 항목을 체크하세요. <b>나머지는 보고서에 남고</b> 견적이 함께 표시됩니다.',
+ 'photo taken':'사진 있음','no photo':'사진 없음',
+ 'Ticked items need an <b>after photo</b> at the same angle. That pair is what the reading compares.':'체크한 항목에는 같은 각도의 <b>작업 후 사진</b>이 필요합니다. 이 사진 쌍을 기준으로 판독이 이뤄집니다.',
+ 'Done · {0} fixed':'완료 · {0}개 수리','Nothing fixed today':'오늘 수리한 항목 없음',
+ '${0} today · ${1} quoted':'오늘 ${0} · 견적 ${1}',
+ 'Same angle as before. <b>{0} of {1}</b> done.':'이전과 같은 각도로. <b>{1}개 중 {0}개</b> 완료.',
+ 'Nothing to shoot':'촬영할 항목 없음','no work was ticked':'체크된 작업이 없습니다',
+ '{0} photo left':'사진 {0}장 남음','{0} photos left':'사진 {0}장 남음',
+ 'Read the photos':'사진 판독하기','tap a frame to shoot':'프레임을 탭하여 촬영',
+ 'The photos go to the reader now. Pairs are compared, singles are read as they are.':'이제 사진이 판독기로 전달됩니다. 쌍은 비교하고, 한 장짜리는 그대로 읽습니다.',
+ 'All read. Check the calls before they go out.':'판독이 모두 끝났습니다. 발송 전에 판정을 확인하세요.',
+ 'Reading…':'판독 중…',
+ 'before and after · compared':'작업 전후 · 비교함','before only · read as is':'작업 전 사진만 · 그대로 판독',
+ 'reading':'판독 중','waiting':'대기 중',
+ 'A pair means the item was fixed. <b>A single photo means it still needs work</b> — unless it read clean.':'사진이 한 쌍이면 수리가 끝난 항목입니다. <b>사진이 한 장이면 아직 작업이 필요한 항목</b>입니다. 단, 판독 결과가 깨끗하면 예외입니다.',
+ 'Report drafted':'보고서 초안 완성','{0} items read':'{0}개 항목 판독','Check it over':'검토하기',
+ ' and ':', ',
+ 'Today I took care of {0}. ':'오늘 {0} 작업을 진행했습니다. ',
+ 'Today I went over the car. ':'오늘 차량을 전체적으로 살펴보았습니다. ',
+ 'Two things should not wait — {0}. That affects your safety.':'미뤄서는 안 되는 항목이 두 가지 있습니다 — {0}. 안전과 직결됩니다.',
+ 'Nothing urgent came up.':'긴급한 사항은 없었습니다.',
+ 'The other {0} — {1} — are not urgent, but plan them within 3 months.':'나머지 {0}개 항목({1})은 급하지 않지만 3개월 이내에 계획해 두시기 바랍니다.',
+ 'Change anything that is not right.':'맞지 않는 부분은 무엇이든 수정하세요.',
+ '<b>{0}</b> changed so far.':'<b>{0}</b>건 수정됨.','Nothing changed yet.':'아직 수정한 내용이 없습니다.',
+ 'What the customer reads first':'고객이 가장 먼저 읽는 내용','draft':'초안',
+ 'Item by item':'항목별','not done':'미완료','Read:':'판독:',
+ 'edited · original kept':'수정됨 · 원본 보관',
+ 'Every number comes from your photos. <b>Nothing goes out until you send it.</b>':'모든 수치는 촬영한 사진에서 나옵니다. <b>발송하기 전에는 아무것도 나가지 않습니다.</b>',
+ 'Send the report':'보고서 보내기','to {0}':'{0}님에게',
+ 'Report sent':'보고서 발송 완료',
+ '{0} items · {1} fixed · {2} photos':'{0}개 항목 · {1}개 수리 · 사진 {2}장',
+ 'Show on this screen':'이 화면에서 보여주기','hand the phone over':'휴대폰을 건네주세요',
+ 'Open in the owner app':'고객 앱에서 열기','{0} got a notification':'{0}님에게 알림이 전송되었습니다',
+ 'The job stays open until the owner opens the report. <b>That moment is the pick-up time.</b>':'고객이 보고서를 열기 전까지 작업은 열린 상태로 유지됩니다. <b>그 순간이 곧 픽업 시간입니다.</b>',
+ 'Next car':'다음 차량','back to today':'오늘 목록으로 돌아가기',
+ 'Shot':'촬영됨','Removed':'삭제됨','Replaced today.':'오늘 교체했습니다.'
+},
+es:{
+ 'A clunk from the front right when I go over speed bumps. Louder when I go slow.':'Se escucha un golpe seco en la parte delantera derecha al pasar topes. Es más fuerte cuando voy despacio.',
+ 'Front suspension and tires are already ticked.':'La suspensión delantera y las llantas ya están marcadas.',
+ 'The air con smells musty for the first minute after I switch it on.':'El aire acondicionado huele a humedad el primer minuto después de encenderlo.',
+ 'The cabin filter is already ticked.':'El filtro de cabina ya está marcado.',
+ 'Booked in for a full check before the winter.':'Reservado para una revisión completa antes del invierno.',
+ 'A full check covers all 11 items.':'Una revisión completa abarca los 11 elementos.',
+ 'Driven':'Recorrido',
+ 'Around the car':'Alrededor del auto','Under the hood':'Bajo el cofre','In the cabin':'En la cabina',
+ 'engine off':'motor apagado','engine cold':'motor frío','engine on':'motor encendido',
+ 'Tires':'Llantas','Brake pads':'Pastillas','Lights':'Luces','Engine oil':'Aceite','Drive belt':'Correa',
+ 'Coolant hoses':'Mangueras','Battery':'Batería','Upper oil leak':'Fuga de aceite','Cabin filter':'Filtro de cabina',
+ 'Wipers':'Limpiaparabrisas','Check engine light':'Testigo del motor',
+ 'Tire':'Neumático','Brake Pads':'Pastillas de freno','Engine Oil & Filter':'Aceite y filtro de motor',
+ 'Serpentine Belt':'Correa serpentina','Coolant Hoses':'Mangueras del refrigerante','Upper Oil Leak':'Fuga de aceite superior',
+ 'AC & Air Filter':'Filtro de aire y A/C','Wiper Blades':'Plumas limpiaparabrisas','Check Engine Light':'Luz de check engine',
+ 'Exterior':'Exterior','Engine bay':'Compartimento del motor','Belts':'Correas','Hoses':'Mangueras','Cabin':'Cabina',
+ 'Tread face and sidewall, 1–2 shots':'Banda de rodadura y costado, 1–2 fotos',
+ 'Through the wheel spokes':'A través de los rayos del rin',
+ 'Two shots — lights off, then on':'Dos fotos: luces apagadas y luego encendidas',
+ 'Dipstick against a clean cloth':'Varilla contra un paño limpio',
+ 'Top of the engine bay':'Parte superior del compartimento del motor',
+ 'Same engine bay frame':'Mismo encuadre del compartimento del motor',
+ 'Terminals and case':'Terminales y carcasa',
+ 'Wide, then close on the seep':'Amplia y luego un acercamiento a la fuga',
+ 'Filter out of the housing':'Filtro fuera de su alojamiento',
+ 'Close on the blade edge':'Acercamiento al borde de la escobilla',
+ 'Dash with ignition on':'Tablero con el encendido puesto',
+ 'wear line, cracks, uneven wear, sidewall damage':'indicador de desgaste, grietas, desgaste irregular, daño en el costado',
+ 'pad thickness, wear':'grosor y desgaste de la pastilla',
+ 'lit, yellowing, cracks':'encendido, amarillamiento, grietas',
+ 'colour, clarity, level':'color, claridad, nivel',
+ 'cracks, wear, slack, contamination':'grietas, desgaste, holgura, contaminación',
+ 'cracks, swelling, leak marks':'grietas, hinchazón, marcas de fuga',
+ 'terminal corrosion, swelling, leaks':'corrosión de terminales, hinchazón, fugas',
+ 'leak marks and where they are':'marcas de fuga y dónde están',
+ 'dirt, discolouring, debris':'suciedad, decoloración, residuos',
+ 'cracks, peeling, deformation':'grietas, desprendimiento, deformación',
+ 'warning lamp state':'estado de la luz de advertencia',
+ 'Symptom-based':'Según el síntoma','from what the owner reported':'según lo que reportó el dueño',
+ 'Full check':'Revisión completa','all eleven items':'los once elementos',
+ 'Oil service':'Servicio de aceite','oil and the basics':'aceite y lo básico',
+ 'Quick look':'Vistazo rápido','the four that matter most':'los cuatro más importantes',
+ 'Tread at the wear line on both fronts. No sidewall damage.':'La banda de rodadura llegó al indicador de desgaste en ambas delanteras. Sin daño en el costado.',
+ 'Pads look under a quarter of a new set.':'Las pastillas parecen tener menos de una cuarta parte de un juego nuevo.',
+ 'All lamps lit. Left headlight lens is yellowed.':'Todas las luces encienden. La lente del faro izquierdo está amarillenta.',
+ 'Oil is dark and thin. Level is at the low mark.':'El aceite está oscuro y delgado. El nivel está en la marca baja.',
+ 'Fine cracks along the ribs. Not through yet.':'Grietas finas a lo largo de las nervaduras. Todavía no lo atraviesan.',
+ 'Upper hose has dried coolant around the clamp.':'La manguera superior tiene refrigerante seco alrededor de la abrazadera.',
+ 'White powder on the positive terminal. Case is flat.':'Polvo blanco en el terminal positivo. La carcasa está plana.',
+ 'Oil seeping at the valve cover seam. Nothing dripping.':'Aceite filtrándose en la unión de la tapa de válvulas. No gotea.',
+ 'Filter is packed with dust and leaves.':'El filtro está lleno de polvo y hojas.',
+ 'Rubber edge is peeling on the driver side.':'El borde de goma se está desprendiendo del lado del conductor.',
+ 'No warning lamp on the dash.':'No hay luz de advertencia en el tablero.',
+ 'NEEDS WORK':'REQUIERE TRABAJO','WATCH':'VIGILAR','FINE':'BIEN','FIXED':'REPARADO',
+ 'Today':'Hoy','Scope':'Alcance','Before':'Antes','Work':'Trabajo','After':'Después','Reading':'Lectura','Review':'Revisión','Sent':'Enviado',
+ 'Before photos':'Fotos del antes','After photos':'Fotos del después','Pause':'Pausa','Send':'Enviar',
+ 'Auto Service':'Servicio automotriz',
+ '<b>{0}</b> cars':'<b>{0}</b> autos',
+ 'In the shop':'En el taller','tap to open':'toca para abrir',
+ 'Waiting':'En espera','Shooting':'Fotografiando',
+ 'not started · {0} items':'sin iniciar · {0} elemento{0?|s}',
+ '{0} / {1} shot':'{0} / {1} foto{1?|s}',
+ '{0} &middot; in at {1} &middot; {2}':'{0} &middot; llegó a las {1} &middot; {2}',
+ 'You shoot and you fix. <b>The report writes itself afterwards.</b>':'Tú fotografías y reparas. <b>El informe se redacta solo después.</b>',
+ 'WHAT THE OWNER SAID':'LO QUE DIJO EL DUEÑO','Submitted in the app':'Enviado desde la app',
+ 'What to check':'Qué revisar','tap to change':'toca para cambiar',
+ 'Pick them yourself':'Elígelos tú','tick what you need':'marca lo que necesites',
+ 'Tick what to shoot':'Marca qué fotografiar','{0} picked':'{0} elegido{0?|s}',
+ 'Shot list':'Lista de fotos','{0} shots':'{0} foto{0?|s}','skip':'omitir',
+ 'Start shooting':'Empezar a fotografiar','{0} items':'{0} elemento{0?|s}',
+ 'BEFORE':'ANTES','AFTER':'DESPUÉS','tap to shoot':'toca para fotografiar','Reads:':'Se evalúa:',
+ 'shot':'listo','to do':'pendiente',
+ 'No judgment here. <b>Just shoot what you see.</b> The reading comes after the work.':'Aquí no se juzga. <b>Solo fotografía lo que ves.</b> La lectura viene después del trabajo.',
+ 'Next · {0}':'Siguiente · {0}','Go to {0}':'Ir a {0}','Start work':'Empezar el trabajo',
+ '{0} left':'{0?queda|quedan} {0}','all {0} shot':'todas las fotos listas ({0})',
+ 'Tick what you are fixing today. <b>Everything else stays on the report</b> with a quote.':'Marca lo que vas a reparar hoy. <b>Todo lo demás queda en el informe</b> con una cotización.',
+ 'photo taken':'foto tomada','no photo':'sin foto',
+ 'Ticked items need an <b>after photo</b> at the same angle. That pair is what the reading compares.':'Los elementos marcados necesitan una <b>foto del después</b> desde el mismo ángulo. Ese par es lo que compara la lectura.',
+ 'Done · {0} fixed':'Listo · {0} reparado{0?|s}','Nothing fixed today':'Nada reparado hoy',
+ '${0} today · ${1} quoted':'hoy ${0} · cotizado ${1}',
+ 'Same angle as before. <b>{0} of {1}</b> done.':'Mismo ángulo que antes. <b>{0} de {1}</b> listas.',
+ 'Nothing to shoot':'Nada que fotografiar','no work was ticked':'no se marcó ningún trabajo',
+ '{0} photo left':'falta {0} foto','{0} photos left':'faltan {0} fotos',
+ 'Read the photos':'Leer las fotos','tap a frame to shoot':'toca un cuadro para fotografiar',
+ 'The photos go to the reader now. Pairs are compared, singles are read as they are.':'Las fotos van ahora al lector. Los pares se comparan y las individuales se leen tal cual.',
+ 'All read. Check the calls before they go out.':'Todo leído. Revisa los dictámenes antes de enviarlos.',
+ 'Reading…':'Leyendo…',
+ 'before and after · compared':'antes y después · comparadas','before only · read as is':'solo antes · leída tal cual',
+ 'reading':'leyendo','waiting':'en espera',
+ 'A pair means the item was fixed. <b>A single photo means it still needs work</b> — unless it read clean.':'Un par significa que el elemento se reparó. <b>Una sola foto significa que aún requiere trabajo</b> — salvo que la lectura salga limpia.',
+ 'Report drafted':'Informe redactado','{0} items read':'{0} elemento{0?|s} leído{0?|s}','Check it over':'Revisarlo',
+ ' and ':' y ',
+ 'Today I took care of {0}. ':'Hoy me encargué de {0}. ',
+ 'Today I went over the car. ':'Hoy revisé el auto. ',
+ 'Two things should not wait — {0}. That affects your safety.':'Dos cosas no deberían esperar — {0}. Afectan tu seguridad.',
+ 'Nothing urgent came up.':'No surgió nada urgente.',
+ 'The other {0} — {1} — are not urgent, but plan them within 3 months.':'Los otros {0} — {1} — no son urgentes, pero conviene planearlos en un plazo de 3 meses.',
+ 'Change anything that is not right.':'Cambia lo que no esté bien.',
+ '<b>{0}</b> changed so far.':'<b>{0}</b> cambio{0?|s} hasta ahora.','Nothing changed yet.':'Aún no hay cambios.',
+ 'What the customer reads first':'Lo primero que lee el cliente','draft':'borrador',
+ 'Item by item':'Elemento por elemento','not done':'sin hacer','Read:':'Lectura:',
+ 'edited · original kept':'editado · se conserva el original',
+ 'Every number comes from your photos. <b>Nothing goes out until you send it.</b>':'Cada dato sale de tus fotos. <b>Nada se envía hasta que tú lo envíes.</b>',
+ 'Send the report':'Enviar el informe','to {0}':'a {0}',
+ 'Report sent':'Informe enviado',
+ '{0} items · {1} fixed · {2} photos':'{0} elemento{0?|s} · {1} reparado{1?|s} · {2} foto{2?|s}',
+ 'Show on this screen':'Mostrar en esta pantalla','hand the phone over':'entrega el teléfono',
+ 'Open in the owner app':'Abrir en la app del dueño','{0} got a notification':'{0} recibió una notificación',
+ 'The job stays open until the owner opens the report. <b>That moment is the pick-up time.</b>':'El trabajo sigue abierto hasta que el dueño abre el informe. <b>Ese momento es la hora de entrega.</b>',
+ 'Next car':'Siguiente auto','back to today':'volver a hoy',
+ 'Shot':'Listo','Removed':'Quitada','Replaced today.':'Reemplazado hoy.'
+}};
+function tr(s){var d=DICT[LANG];return (d&&Object.prototype.hasOwnProperty.call(d,s))?d[s]:s;}
+function fmt(s){var a=arguments;return tr(s)
+ .replace(/\{(\d+)\?([^|}]*)\|([^}]*)\}/g,function(m,i,one,other){return +a[+i+1]===1?one:other;})
+ .replace(/\{(\d+)\}/g,function(m,i){return a[+i+1];});}
+/* Formal part names ("Tire", "Brake Pads"...) stay English in Korean, like the app. */
+function trF(s){return LANG==='ko'?s:tr(s);}
+
 /* ═══ 데이터 ═══ */
 var CARS=[
  {plate:'12GA 3456',model:'Elantra',odo:'54,320 mi',owner:'Seoyeon Kim',tin:'09:00',
-  symptom:'A clunk from the front right when I go over speed bumps. Louder when I go slow.',
-  hint:'Front suspension and tires are already ticked.',pkg:'symptom'},
+  symptom:tr('A clunk from the front right when I go over speed bumps. Louder when I go slow.'),
+  hint:tr('Front suspension and tires are already ticked.'),pkg:'symptom'},
  {plate:'47HK 9012',model:'BMW 530i',odo:'31,180 mi',owner:'Minjun Cho',tin:'09:40',
-  symptom:'The air con smells musty for the first minute after I switch it on.',
-  hint:'The cabin filter is already ticked.',pkg:'oil'},
+  symptom:tr('The air con smells musty for the first minute after I switch it on.'),
+  hint:tr('The cabin filter is already ticked.'),pkg:'oil'},
  {plate:'03BN 5577',model:'Honda Civic',odo:'72,940 mi',owner:'Hyewon Jang',tin:'08:10',
-  symptom:'Booked in for a full check before the winter.',
-  hint:'A full check covers all 11 items.',pkg:'full'}];
+  symptom:tr('Booked in for a full check before the winter.'),
+  hint:tr('A full check covers all 11 items.'),pkg:'full'}];
 var CAR=CARS[0];
 
 var STAGE=[
- {n:1,name:'Around the car',cond:'engine off',eq:['Phone only']},
- {n:2,name:'Under the hood',cond:'engine cold',eq:['Phone only']},
- {n:3,name:'In the cabin',cond:'engine on',eq:['Phone only']}];
+ {n:1,name:tr('Around the car'),cond:tr('engine off'),eq:['Phone only']},
+ {n:2,name:tr('Under the hood'),cond:tr('engine cold'),eq:['Phone only']},
+ {n:3,name:tr('In the cabin'),cond:tr('engine on'),eq:['Phone only']}];
 
 var ITEM=[
- {k:'tire', s:1,n:'Tires',       en:'Tire',              loc:'Exterior', shot:'Tread face and sidewall, 1\u20132 shots',
-  read:'wear line, cracks, uneven wear, sidewall damage', cost:[420,60]},
- {k:'pad',  s:1,n:'Brake pads',  en:'Brake Pads',        loc:'Exterior', shot:'Through the wheel spokes',
-  read:'pad thickness, wear', cost:[70,30]},
- {k:'light',s:1,n:'Lights',      en:'Lights',            loc:'Exterior', shot:'Two shots \u2014 lights off, then on',
-  read:'lit, yellowing, cracks', cost:[40,20]},
- {k:'oil',  s:2,n:'Engine oil',  en:'Engine Oil & Filter',loc:'Engine bay',shot:'Dipstick against a clean cloth',
-  read:'colour, clarity, level', cost:[46,24]},
- {k:'belt', s:2,n:'Drive belt',  en:'Serpentine Belt',   loc:'Belts',    shot:'Top of the engine bay',
-  read:'cracks, wear, slack, contamination', cost:[28,33]},
- {k:'hose', s:2,n:'Coolant hoses',en:'Coolant Hoses',    loc:'Hoses',    shot:'Same engine bay frame',
-  read:'cracks, swelling, leak marks', cost:[180,90]},
- {k:'batt', s:2,n:'Battery',     en:'Battery',           loc:'Engine bay',shot:'Terminals and case',
-  read:'terminal corrosion, swelling, leaks', cost:[155,11]},
- {k:'leak', s:2,n:'Upper oil leak',en:'Upper Oil Leak',  loc:'Engine bay',shot:'Wide, then close on the seep',
-  read:'leak marks and where they are', cost:[25,133]},
- {k:'filt', s:3,n:'Cabin filter',en:'AC & Air Filter',   loc:'Cabin',    shot:'Filter out of the housing',
-  read:'dirt, discolouring, debris', cost:[13,7]},
- {k:'wipe', s:3,n:'Wipers',      en:'Wiper Blades',      loc:'Cabin',    shot:'Close on the blade edge',
-  read:'cracks, peeling, deformation', cost:[19,0]},
- {k:'cel',  s:3,n:'Check engine light',en:'Check Engine Light',loc:'Cabin',shot:'Dash with ignition on',
-  read:'warning lamp state', cost:[0,26]}];
+ {k:'tire', s:1,n:tr('Tires'),       en:trF('Tire'),              loc:tr('Exterior'), shot:tr('Tread face and sidewall, 1–2 shots'),
+  read:tr('wear line, cracks, uneven wear, sidewall damage'), cost:[420,60]},
+ {k:'pad',  s:1,n:tr('Brake pads'),  en:trF('Brake Pads'),        loc:tr('Exterior'), shot:tr('Through the wheel spokes'),
+  read:tr('pad thickness, wear'), cost:[70,30]},
+ {k:'light',s:1,n:tr('Lights'),      en:trF('Lights'),            loc:tr('Exterior'), shot:tr('Two shots — lights off, then on'),
+  read:tr('lit, yellowing, cracks'), cost:[40,20]},
+ {k:'oil',  s:2,n:tr('Engine oil'),  en:trF('Engine Oil & Filter'),loc:tr('Engine bay'),shot:tr('Dipstick against a clean cloth'),
+  read:tr('colour, clarity, level'), cost:[46,24]},
+ {k:'belt', s:2,n:tr('Drive belt'),  en:trF('Serpentine Belt'),   loc:tr('Belts'),    shot:tr('Top of the engine bay'),
+  read:tr('cracks, wear, slack, contamination'), cost:[28,33]},
+ {k:'hose', s:2,n:tr('Coolant hoses'),en:trF('Coolant Hoses'),    loc:tr('Hoses'),    shot:tr('Same engine bay frame'),
+  read:tr('cracks, swelling, leak marks'), cost:[180,90]},
+ {k:'batt', s:2,n:tr('Battery'),     en:trF('Battery'),           loc:tr('Engine bay'),shot:tr('Terminals and case'),
+  read:tr('terminal corrosion, swelling, leaks'), cost:[155,11]},
+ {k:'leak', s:2,n:tr('Upper oil leak'),en:trF('Upper Oil Leak'),  loc:tr('Engine bay'),shot:tr('Wide, then close on the seep'),
+  read:tr('leak marks and where they are'), cost:[25,133]},
+ {k:'filt', s:3,n:tr('Cabin filter'),en:trF('AC & Air Filter'),   loc:tr('Cabin'),    shot:tr('Filter out of the housing'),
+  read:tr('dirt, discolouring, debris'), cost:[13,7]},
+ {k:'wipe', s:3,n:tr('Wipers'),      en:trF('Wiper Blades'),      loc:tr('Cabin'),    shot:tr('Close on the blade edge'),
+  read:tr('cracks, peeling, deformation'), cost:[19,0]},
+ {k:'cel',  s:3,n:tr('Check engine light'),en:trF('Check Engine Light'),loc:tr('Cabin'),shot:tr('Dash with ignition on'),
+  read:tr('warning lamp state'), cost:[0,26]}];
 
 var PKG={
- symptom:{n:'Symptom-based',d:'from what the owner reported',keys:['tire','pad','belt','hose','batt','leak']},
- full:{n:'Full check',d:'all eleven items',keys:ITEM.map(function(i){return i.k;})},
- oil:{n:'Oil service',d:'oil and the basics',keys:['oil','filt','wipe','light','batt']},
- quick:{n:'Quick look',d:'the four that matter most',keys:['tire','pad','light','oil']}};
+ symptom:{n:tr('Symptom-based'),d:tr('from what the owner reported'),keys:['tire','pad','belt','hose','batt','leak']},
+ full:{n:tr('Full check'),d:tr('all eleven items'),keys:ITEM.map(function(i){return i.k;})},
+ oil:{n:tr('Oil service'),d:tr('oil and the basics'),keys:['oil','filt','wipe','light','batt']},
+ quick:{n:tr('Quick look'),d:tr('the four that matter most'),keys:['tire','pad','light','oil']}};
 
 /* 판독 결과 시나리오 */
 var READ={
- tire:{bad:'Tread at the wear line on both fronts. No sidewall damage.',judge:'bad'},
- pad: {bad:'Pads look under a quarter of a new set.',judge:'bad'},
- light:{bad:'All lamps lit. Left headlight lens is yellowed.',judge:'warn'},
- oil: {bad:'Oil is dark and thin. Level is at the low mark.',judge:'warn'},
- belt:{bad:'Fine cracks along the ribs. Not through yet.',judge:'warn'},
- hose:{bad:'Upper hose has dried coolant around the clamp.',judge:'warn'},
- batt:{bad:'White powder on the positive terminal. Case is flat.',judge:'warn'},
- leak:{bad:'Oil seeping at the valve cover seam. Nothing dripping.',judge:'warn'},
- filt:{bad:'Filter is packed with dust and leaves.',judge:'bad'},
- wipe:{bad:'Rubber edge is peeling on the driver side.',judge:'warn'},
- cel: {bad:'No warning lamp on the dash.',judge:'ok'}};
+ tire:{bad:tr('Tread at the wear line on both fronts. No sidewall damage.'),judge:'bad'},
+ pad: {bad:tr('Pads look under a quarter of a new set.'),judge:'bad'},
+ light:{bad:tr('All lamps lit. Left headlight lens is yellowed.'),judge:'warn'},
+ oil: {bad:tr('Oil is dark and thin. Level is at the low mark.'),judge:'warn'},
+ belt:{bad:tr('Fine cracks along the ribs. Not through yet.'),judge:'warn'},
+ hose:{bad:tr('Upper hose has dried coolant around the clamp.'),judge:'warn'},
+ batt:{bad:tr('White powder on the positive terminal. Case is flat.'),judge:'warn'},
+ leak:{bad:tr('Oil seeping at the valve cover seam. Nothing dripping.'),judge:'warn'},
+ filt:{bad:tr('Filter is packed with dust and leaves.'),judge:'bad'},
+ wipe:{bad:tr('Rubber edge is peeling on the driver side.'),judge:'warn'},
+ cel: {bad:tr('No warning lamp on the dash.'),judge:'ok'}};
 
 function blankV(){var v={}; ITEM.forEach(function(i){
  v[i.k]={pb:false,pa:false,judge:null,read:null,text:null,edited:false};}); return v;}
@@ -329,54 +567,53 @@ function toast(t){var e=document.getElementById('toast');e.textContent=t;e.class
 
 var SCREENS=[['jobs','Jobs'],['scope','Scope'],['before','Before'],['work','Work'],
  ['after','After'],['scan','Read'],['review','Review'],['done','Done']];
-var LAB={bad:'NEEDS WORK',warn:'WATCH',ok:'FINE',done:'FIXED'};
+var LAB={bad:tr('NEEDS WORK'),warn:tr('WATCH'),ok:tr('FINE'),done:tr('FIXED')};
 
 function head(t,back,act){
  return '<header><div class="hrow">'+(back?'<button class="back">&lsaquo; '+back+'</button>':'')
   +'<h1>'+t+'</h1>'+(act?'<button class="act">'+act+'</button>':'')
   +'</div><div class="hsub"><span>'+CAR.plate+'</span><span>'+CAR.model+'</span>'
-  +'<span>Driven <b>'+CAR.odo+'</b></span></div></header>';}
+  +'<span>'+tr('Driven')+' <b>'+CAR.odo+'</b></span></div></header>';}
 function cta(l,sub,dis){return '<div class="cta"><button data-next="1"'+(dis?' disabled':'')+'>'+l+'</button>'
  +(sub?'<div class="sub">'+sub+'</div>':'')+'</div>';}
 
 /* ═══ 01 Jobs ═══ */
 function scJobs(){
  saveCar();
- var o='<header><div class="hrow"><h1>Today</h1><button class="act">Marcus Alvarez</button></div>'
-  +'<div class="hsub"><span>Auto Service</span><span>2026-08-26</span>'
-  +'<span><b>'+CARS.length+'</b> cars</span></div></header><main>';
- o+='<div class="sec"><div class="sec-h"><h2>In the shop</h2><span class="hint">tap to open</span></div><div class="card">';
+ var o='<header><div class="hrow"><h1>'+tr('Today')+'</h1><button class="act">Marcus Alvarez</button></div>'
+  +'<div class="hsub"><span>'+tr('Auto Service')+'</span><span>2026-08-26</span>'
+  +'<span>'+fmt('<b>{0}</b> cars',CARS.length)+'</span></div></header><main>';
+ o+='<div class="sec"><div class="sec-h"><h2>'+tr('In the shop')+'</h2><span class="hint">'+tr('tap to open')+'</span></div><div class="card">';
  CARS.forEach(function(c,i){
   var pr=progOf(i);
   var cls=pr.d===0?'idle':(pr.d>=pr.t?'live':'live');
-  var lab=pr.d===0?'Waiting':'Shooting';
-  var sub=pr.d===0?('not started \u00b7 '+pr.t+' items'):(pr.d+' / '+pr.t+' shot');
+  var lab=pr.d===0?tr('Waiting'):tr('Shooting');
+  var sub=pr.d===0?fmt('not started · {0} items',pr.t):fmt('{0} / {1} shot',pr.d,pr.t);
   o+='<button class="row'+(i===S.carIdx?' on':'')+'" data-car="'+i+'">'
    +'<span class="num'+(pr.d?' live':'')+'">'+(i+1)+'</span>'
-   +'<span class="tx"><b>'+c.plate+'</b><span>'+c.model+' &middot; in at '+c.tin+' &middot; '+sub+'</span></span>'
+   +'<span class="tx"><b>'+c.plate+'</b><span>'+fmt('{0} &middot; in at {1} &middot; {2}',c.model,c.tin,sub)+'</span></span>'
    +'<span class="chip '+cls+' plain">'+lab+'</span><span class="ch">&rsaquo;</span></button>';});
  o+='</div></div>';
- o+='<div class="sec"><div class="note">You shoot and you fix. '
-  +'<b>The report writes itself afterwards.</b></div></div>';
+ o+='<div class="sec"><div class="note">'+tr('You shoot and you fix. <b>The report writes itself afterwards.</b>')+'</div></div>';
  return o+'</main>';}
 
 /* ═══ 02 Scope ═══ */
 function scScope(){
- var o=head('Scope','Today')+'<main>';
- o+='<div class="sec"><div class="symp"><div class="k">WHAT THE OWNER SAID</div>'
-  +'<div class="v">'+CAR.symptom+'</div><div class="from">Submitted in the app</div></div></div>';
- o+='<div class="sec"><div class="sec-h"><h2>What to check</h2><span class="hint">tap to change</span></div>'
+ var o=head(tr('Scope'),tr('Today'))+'<main>';
+ o+='<div class="sec"><div class="symp"><div class="k">'+tr('WHAT THE OWNER SAID')+'</div>'
+  +'<div class="v">'+CAR.symptom+'</div><div class="from">'+tr('Submitted in the app')+'</div></div></div>';
+ o+='<div class="sec"><div class="sec-h"><h2>'+tr('What to check')+'</h2><span class="hint">'+tr('tap to change')+'</span></div>'
   +'<div class="note">'+CAR.hint+'</div><div class="pkg" style="margin-top:12px">';
  ['symptom','full','oil','quick'].forEach(function(k){
   o+='<button data-pkg="'+k+'" aria-pressed="'+(S.pkg===k)+'"><span class="tick">&#10003;</span>'
    +'<span class="tx"><b>'+PKG[k].n+'</b><span>'+PKG[k].d+'</span></span>'
    +'<span class="n">'+PKG[k].keys.length+'</span></button>';});
  o+='<button data-pick="1" aria-pressed="'+(S.pkg==='custom')+'"><span class="tick">&#10003;</span>'
-  +'<span class="tx"><b>Pick them yourself</b><span>tick what you need</span></span>'
+  +'<span class="tx"><b>'+tr('Pick them yourself')+'</b><span>'+tr('tick what you need')+'</span></span>'
   +'<span class="n">'+(S.pkg==='custom'?scope().length:'&mdash;')+'</span></button></div></div>';
  if(S.pick){
-  o+='<div class="sec"><div class="sec-h"><h2>Tick what to shoot</h2>'
-   +'<span class="hint">'+scope().length+' picked</span></div>';
+  o+='<div class="sec"><div class="sec-h"><h2>'+tr('Tick what to shoot')+'</h2>'
+   +'<span class="hint">'+fmt('{0} picked',scope().length)+'</span></div>';
   STAGE.forEach(function(st){
    o+='<div class="sec-h" style="padding-top:12px"><h2 style="font-size:14px;color:var(--ink3)">'
     +st.name+'</h2></div><div class="card">';
@@ -386,13 +623,13 @@ function scScope(){
      +'<span>'+i.en+' &middot; '+i.loc+'</span></span></button>';});
    o+='</div>';});
   o+='</div>';}
- o+='<div class="sec"><div class="sec-h"><h2>Shot list</h2></div><div class="card">';
+ o+='<div class="sec"><div class="sec-h"><h2>'+tr('Shot list')+'</h2></div><div class="card">';
  STAGE.forEach(function(st){var n=stItems(st.n).length;
   o+='<div class="row"><span class="num">'+st.n+'</span>'
    +'<span class="tx"><b>'+st.name+'</b><span>'+st.cond+'</span></span>'
-   +(n?'<span class="chip live plain">'+n+' shots</span>':'<span class="chip idle plain">skip</span>')+'</div>';});
+   +(n?'<span class="chip live plain">'+fmt('{0} shots',n)+'</span>':'<span class="chip idle plain">'+tr('skip')+'</span>')+'</div>';});
  o+='</div></div>';
- return o+'</main>'+cta('Start shooting',scope().length+' items');}
+ return o+'</main>'+cta(tr('Start shooting'),fmt('{0} items',scope().length));}
 
 /* ═══ 03 Before ═══ */
 function scBefore(){
@@ -402,23 +639,23 @@ function scBefore(){
   S.cur=nx?nx.k:null;}
  var it=S.cur?I(S.cur):null;
  var st=STAGE[S.stage-1];
- var o=head('Before photos','Scope','Pause')+'<main>';
+ var o=head(tr('Before photos'),tr('Scope'),tr('Pause'))+'<main>';
  o+='<div class="sec"><div class="prog"><div class="t"><b>'+st.name+'</b>'
-  +'<span>'+shotB()+' / '+scope().length+' shot</span></div>'
+  +'<span>'+fmt('{0} / {1} shot',shotB(),scope().length)+'</span></div>'
   +'<div class="bar"><i style="width:'+Math.round(shotB()/scope().length*100)+'%"></i></div>'
   +'<div class="stages">';
  STAGE.forEach(function(x){var q=stItems(x.n),d=q.filter(function(i){return S.v[i.k].pb;}).length;
   var cls=(x.n===S.stage)?'now':(q.length&&d===q.length?'fin':'');
   o+='<button data-stage="'+x.n+'" class="'+cls+'">'+x.name
-   +(q.length?(d===q.length?' &#10003;':' '+d+'/'+q.length):' \u2014')+'</button>';});
+   +(q.length?(d===q.length?' &#10003;':' '+d+'/'+q.length):' —')+'</button>';});
  o+='</div></div></div>';
  if(it){
   var v=S.v[it.k];
   o+='<div class="sec shotwrap"><div class="bigshot">'
    +'<div class="head"><b>'+it.n+'</b><span>'+it.en+' &middot; '+it.loc+'</span></div>'
    +'<button class="frame '+(v.pb?'on':'')+'" data-shot="'+it.k+'">'
-   +(v.pb?'<span class="tag">BEFORE</span>':'<span class="guide"></span>tap to shoot')+'</button>'
-   +'<div class="cond"><b>'+it.shot+'</b><br>Reads: '+it.read+'</div></div></div>';
+   +(v.pb?'<span class="tag">'+tr('BEFORE')+'</span>':'<span class="guide"></span>'+tr('tap to shoot'))+'</button>'
+   +'<div class="cond"><b>'+it.shot+'</b><br>'+tr('Reads:')+' '+it.read+'</div></div></div>';
  }
  o+='<div class="sec"><div class="sec-h"><h2>'+st.name+'</h2>'
   +'<span class="hint">'+st.cond+'</span></div><div class="card">';
@@ -426,65 +663,64 @@ function scBefore(){
   o+='<button class="row'+(i.k===S.cur?' on':'')+'" data-item="'+i.k+'">'
    +'<span class="num'+(v.pb?' done':'')+'">'+(v.pb?'&#10003;':(n+1))+'</span>'
    +'<span class="tx"><b>'+i.n+'</b><span>'+i.shot+'</span></span>'
-   +(v.pb?'<span class="chip ok plain">shot</span>':'<span class="chip idle plain">to do</span>')
+   +(v.pb?'<span class="chip ok plain">'+tr('shot')+'</span>':'<span class="chip idle plain">'+tr('to do')+'</span>')
    +'<span class="ch">&rsaquo;</span></button>';});
  o+='</div></div>';
- o+='<div class="sec"><div class="note">No judgment here. '
-  +'<b>Just shoot what you see.</b> The reading comes after the work.</div></div>';
+ o+='<div class="sec"><div class="note">'+tr('No judgment here. <b>Just shoot what you see.</b> The reading comes after the work.')+'</div></div>';
  var left=inScope().filter(function(i){return !S.v[i.k].pb;});
  var nxs=its.filter(function(i){return !S.v[i.k].pb&&i.k!==S.cur;})[0];
  return o+'</main>'+cta(
-   left.length?(nxs?'Next \u00b7 '+nxs.n:(S.stage<3?'Go to '+STAGE[S.stage].name:'Start work')):'Start work',
-   left.length?left.length+' left':'all '+scope().length+' shot');}
+   left.length?(nxs?fmt('Next · {0}',nxs.n):(S.stage<3?fmt('Go to {0}',STAGE[S.stage].name):tr('Start work'))):tr('Start work'),
+   left.length?fmt('{0} left',left.length):fmt('all {0} shot',scope().length));}
 
 /* ═══ 04 Work ═══ */
 function scWork(){
- var o=head('Work','Before')+'<main>';
+ var o=head(tr('Work'),tr('Before'))+'<main>';
  var tot=0,q=0;
  inScope().forEach(function(i){var c=i.cost[0]+i.cost[1]; if(S.work[i.k]) tot+=c; else q+=c;});
- o+='<div class="sec"><div class="lede">Tick what you are fixing today. '
-  +'<b>Everything else stays on the report</b> with a quote.</div><div class="card">';
+ o+='<div class="sec"><div class="lede">'
+  +tr('Tick what you are fixing today. <b>Everything else stays on the report</b> with a quote.')+'</div><div class="card">';
  inScope().forEach(function(i){
   o+='<button class="check" data-work="'+i.k+'" aria-pressed="'+(!!S.work[i.k])+'">'
    +'<span class="box">&#10003;</span><span class="tx"><b>'+i.n+'</b>'
-   +'<span>'+i.loc+' &middot; '+(S.v[i.k].pb?'photo taken':'no photo')+'</span></span>'
+   +'<span>'+i.loc+' &middot; '+(S.v[i.k].pb?tr('photo taken'):tr('no photo'))+'</span></span>'
    +'<span class="amt">$'+(i.cost[0]+i.cost[1])+'</span></button>';});
  o+='</div></div>';
  var cn=worked().length;
- o+='<div class="sec"><div class="note">Ticked items need an <b>after photo</b> at the same angle. '
-  +'That pair is what the reading compares.</div></div>';
- return o+'</main>'+cta(cn?('Done \u00b7 '+cn+' fixed'):'Nothing fixed today',
-   '$'+tot+' today \u00b7 $'+q+' quoted');}
+ o+='<div class="sec"><div class="note">'
+  +tr('Ticked items need an <b>after photo</b> at the same angle. That pair is what the reading compares.')+'</div></div>';
+ return o+'</main>'+cta(cn?fmt('Done · {0} fixed',cn):tr('Nothing fixed today'),
+   fmt('${0} today · ${1} quoted',tot,q));}
 
 /* ═══ 05 After ═══ */
 function scAfter(){
  var did=worked();
  var dn=did.filter(function(i){return S.v[i.k].pa;}).length;
- var o=head('After photos','Work')+'<main>';
- o+='<div class="sec"><div class="lede">Same angle as before. <b>'+dn+' of '+did.length+'</b> done.</div></div>';
+ var o=head(tr('After photos'),tr('Work'))+'<main>';
+ o+='<div class="sec"><div class="lede">'+fmt('Same angle as before. <b>{0} of {1}</b> done.',dn,did.length)+'</div></div>';
  if(!did.length) o+='<div class="sec"><div class="card"><div class="row"><span class="tx">'
-  +'<b>Nothing to shoot</b><span>no work was ticked</span></span></div></div></div>';
+  +'<b>'+tr('Nothing to shoot')+'</b><span>'+tr('no work was ticked')+'</span></span></div></div></div>';
  did.forEach(function(i){var v=S.v[i.k];
   o+='<div class="sec shotwrap"><div class="bigshot">'
    +'<div class="head"><b>'+i.n+'</b><span>'+i.shot+'</span></div>'
    +'<div class="refpair">'
-   +'<div><div class="lbl">BEFORE</div><div class="mini on"></div></div>'
-   +'<div><div class="lbl">AFTER</div>'
+   +'<div><div class="lbl">'+tr('BEFORE')+'</div><div class="mini on"></div></div>'
+   +'<div><div class="lbl">'+tr('AFTER')+'</div>'
    +'<button class="mini '+(v.pa?'on':'empty')+'" data-after="'+i.k+'">'
-   +(v.pa?'':'tap to shoot')+'</button></div></div></div></div>';});
+   +(v.pa?'':tr('tap to shoot'))+'</button></div></div></div></div>';});
  var left=did.length-dn;
- return o+'</main>'+cta(left?(left+' photo'+(left===1?'':'s')+' left'):'Read the photos',
-   left?'tap a frame to shoot':'', left>0);}
+ return o+'</main>'+cta(left?fmt(left===1?'{0} photo left':'{0} photos left',left):tr('Read the photos'),
+   left?tr('tap a frame to shoot'):'', left>0);}
 
 /* ═══ 06 Read ═══ */
 function scScan(){
  var its=inScope().filter(function(i){return S.v[i.k].pb;});
  var running=(S.scan!==null&&S.scan<its.length);
  var fin=(S.scan!==null&&S.scan>=its.length);
- var o=head('Reading','After')+'<main>';
+ var o=head(tr('Reading'),tr('After'))+'<main>';
  o+='<div class="sec"><div class="lede">'
-  +(S.scan===null?'The photos go to the reader now. Pairs are compared, singles are read as they are.'
-   :(fin?'All read. Check the calls before they go out.':'Reading\u2026'))+'</div>';
+  +(S.scan===null?tr('The photos go to the reader now. Pairs are compared, singles are read as they are.')
+   :(fin?tr('All read. Check the calls before they go out.'):tr('Reading…')))+'</div>';
  o+='<div class="scan">';
  its.forEach(function(i,n){
   var st = S.scan===null?'wait':(n<S.scan?'done':(n===S.scan?'run':'wait'));
@@ -492,83 +728,80 @@ function scScan(){
   o+='<div class="scanrow"><span class="ic '+(st==='done'?'done':(st==='run'?'run':''))+'">'
    +(st==='done'?'&#10003;':(st==='run'?'&#8635;':(n+1)))+'</span>'
    +'<span class="tx"><b>'+i.n+'</b><span>'
-   +(pair?'before and after \u00b7 compared':'before only \u00b7 read as is')+'</span></span>'
+   +(pair?tr('before and after · compared'):tr('before only · read as is'))+'</span></span>'
    +(st==='done'?'<span class="chip '+(S.v[i.k].judge||'idle')+' plain">'
       +(LAB[S.v[i.k].judge]||'')+'</span>'
-     :(st==='run'?'<span class="chip live plain">reading</span>'
-       :'<span class="chip idle plain">waiting</span>'))
+     :(st==='run'?'<span class="chip live plain">'+tr('reading')+'</span>'
+       :'<span class="chip idle plain">'+tr('waiting')+'</span>'))
    +'</div>';});
  o+='</div></div>';
- o+='<div class="sec"><div class="note">A pair means the item was fixed. '
-  +'<b>A single photo means it still needs work</b> \u2014 unless it read clean.</div></div>';
+ o+='<div class="sec"><div class="note">'
+  +tr('A pair means the item was fixed. <b>A single photo means it still needs work</b> — unless it read clean.')+'</div></div>';
  if(fin) o+='<div class="sec"><div class="done-hero" style="background:linear-gradient(180deg,#0A6CFF,#0757CC);'
    +'box-shadow:0 10px 26px rgba(10,108,255,.24)"><div class="ico">&#10003;</div>'
-   +'<b>Report drafted</b><span>'+its.length+' items read</span></div></div>';
- return o+'</main>'+cta(S.scan===null?'Read the photos':(fin?'Check it over':'Reading\u2026'),
-   S.scan===null?its.length+' items':'', running);}
+   +'<b>'+tr('Report drafted')+'</b><span>'+fmt('{0} items read',its.length)+'</span></div></div>';
+ return o+'</main>'+cta(S.scan===null?tr('Read the photos'):(fin?tr('Check it over'):tr('Reading…')),
+   S.scan===null?fmt('{0} items',its.length):'', running);}
 
 /* ═══ 07 Review ═══ */
 function buildDraft(){
  var did=worked(), bad=inScope().filter(function(i){return S.v[i.k].judge==='bad';});
  var warn=inScope().filter(function(i){return S.v[i.k].judge==='warn';});
- var p1='Today I '+(did.length?('took care of '+did.map(function(i){return i.n.toLowerCase();}).join(', ')+'. ')
-   :'went over the car. ');
- p1+= bad.length?('Two things should not wait \u2014 '
-   +bad.map(function(i){return i.n.toLowerCase();}).join(' and ')+'. That affects your safety.')
-   :'Nothing urgent came up.';
- var p2=warn.length?('The other '+warn.length+' \u2014 '+warn.map(function(i){return i.n.toLowerCase();}).join(', ')
-   +' \u2014 are not urgent, but plan them within 3 months.'):'';
+ var names=function(l,sep){return l.map(function(i){return i.n.toLowerCase();}).join(sep);};
+ var p1=did.length?fmt('Today I took care of {0}. ',names(did,', ')):tr('Today I went over the car. ');
+ p1+= bad.length?fmt('Two things should not wait — {0}. That affects your safety.',names(bad,tr(' and '))):tr('Nothing urgent came up.');
+ var p2=warn.length?fmt('The other {0} — {1} — are not urgent, but plan them within 3 months.',warn.length,names(warn,', ')):'';
  return p1+(p2?'\n\n'+p2:'');}
 function scReview(){
  if(S.draft===null) S.draft=buildDraft();
  var its=inScope().filter(function(i){return S.v[i.k].pb;});
  var ed=its.filter(function(i){return S.v[i.k].edited;}).length;
- var o=head('Review','Reading','Send')+'<main>';
- o+='<div class="sec"><div class="lede">Change anything that is not right. '
-  +(ed?('<b>'+ed+'</b> changed so far.'):'Nothing changed yet.')+'</div>';
- o+='<div class="draft"><div class="top"><b>What the customer reads first</b>'
-  +'<span class="chip live plain">draft</span></div>'
+ var o=head(tr('Review'),tr('Reading'),tr('Send'))+'<main>';
+ o+='<div class="sec"><div class="lede">'+tr('Change anything that is not right.')+' '
+  +(ed?fmt('<b>{0}</b> changed so far.',ed):tr('Nothing changed yet.'))+'</div>';
+ o+='<div class="draft"><div class="top"><b>'+tr('What the customer reads first')+'</b>'
+  +'<span class="chip live plain">'+tr('draft')+'</span></div>'
   +'<textarea id="draft">'+S.draft+'</textarea></div></div>';
- o+='<div class="sec"><div class="sec-h"><h2>Item by item</h2>'
+ o+='<div class="sec"><div class="sec-h"><h2>'+tr('Item by item')+'</h2>'
   +'<span class="hint">'+its.length+'</span></div>';
  its.forEach(function(i){var v=S.v[i.k];
   o+='<div class="rev"><div class="top"><b>'+i.n+'</b>'
    +'<span class="chip '+(v.judge||'idle')+' plain">'+(LAB[v.judge]||'')+'</span></div>'
    +'<div class="body"><div class="pair">'
-   +'<div class="mini"><span class="tag">BEFORE</span></div>'
-   +(v.pa?'<div class="mini"><span class="tag af">AFTER</span></div>'
-        :'<div class="mini empty">not done</div>')
+   +'<div class="mini"><span class="tag">'+tr('BEFORE')+'</span></div>'
+   +(v.pa?'<div class="mini"><span class="tag af">'+tr('AFTER')+'</span></div>'
+        :'<div class="mini empty">'+tr('not done')+'</div>')
    +'</div>'
-   +'<div class="read"><b>Read:</b> '+(v.read||'')+'</div>'
+   +'<div class="read"><b>'+tr('Read:')+'</b> '+(v.read||'')+'</div>'
    +'<div class="judge">'
    +['bad','warn','ok','done'].map(function(j){
      return '<button class="'+j+'" data-judge="'+i.k+'|'+j+'" aria-pressed="'+(v.judge===j)+'">'
       +LAB[j]+'</button>';}).join('')
    +'</div>'
    +'<textarea data-text="'+i.k+'">'+(v.text||'')+'</textarea>'
-   +(v.edited?'<div class="edited">edited \u00b7 original kept</div>':'')
+   +(v.edited?'<div class="edited">'+tr('edited · original kept')+'</div>':'')
    +'</div></div>';});
  o+='</div>';
- o+='<div class="sec"><div class="note">Every number comes from your photos. '
-  +'<b>Nothing goes out until you send it.</b></div></div>';
- return o+'</main>'+cta('Send the report','to '+CAR.owner);}
+ o+='<div class="sec"><div class="note">'
+  +tr('Every number comes from your photos. <b>Nothing goes out until you send it.</b>')+'</div></div>';
+ return o+'</main>'+cta(tr('Send the report'),fmt('to {0}',CAR.owner));}
 
 /* ═══ 08 Done ═══ */
 function scDone(){
  var its=inScope().filter(function(i){return S.v[i.k].pb;});
  var ph=inScope().reduce(function(a,i){return a+(S.v[i.k].pb?1:0)+(S.v[i.k].pa?1:0);},0);
- var o=head('Sent','Review')+'<main>';
- o+='<div class="sec"><div class="done-hero"><div class="ico">&#10003;</div><b>Report sent</b>'
-  +'<span>'+its.length+' items \u00b7 '+worked().length+' fixed \u00b7 '+ph+' photos</span></div></div>';
+ var o=head(tr('Sent'),tr('Review'))+'<main>';
+ o+='<div class="sec"><div class="done-hero"><div class="ico">&#10003;</div><b>'+tr('Report sent')+'</b>'
+  +'<span>'+fmt('{0} items · {1} fixed · {2} photos',its.length,worked().length,ph)+'</span></div></div>';
  o+='<div class="sec"><div class="card">';
- [['Show on this screen','hand the phone over'],
-  ['Open in the owner app',CAR.owner+' got a notification']].forEach(function(a){
+ [[tr('Show on this screen'),tr('hand the phone over')],
+  [tr('Open in the owner app'),fmt('{0} got a notification',CAR.owner)]].forEach(function(a){
   o+='<button class="row" data-toast="'+a[0]+'"><span class="tx"><b>'+a[0]+'</b>'
    +'<span>'+a[1]+'</span></span><span class="ch">&rsaquo;</span></button>';});
  o+='</div></div>';
- o+='<div class="sec"><div class="note">The job stays open until the owner opens the report. '
-  +'<b>That moment is the pick-up time.</b></div></div>';
- return o+'</main>'+cta('Next car','back to today');}
+ o+='<div class="sec"><div class="note">'
+  +tr('The job stays open until the owner opens the report. <b>That moment is the pick-up time.</b>')+'</div></div>';
+ return o+'</main>'+cta(tr('Next car'),tr('back to today'));}
 
 var R={jobs:scJobs,scope:scScope,before:scBefore,work:scWork,after:scAfter,
        scan:scScan,review:scReview,done:scDone};
@@ -587,10 +820,10 @@ document.addEventListener('click',function(e){
  if((t=e.target.closest('[data-pkg]'))){S.pkg=t.getAttribute('data-pkg');S.pick=false;
    S.work={};S.scan=null;S.draft=null;
    if(!stItems(S.stage).length){for(var z=1;z<=3;z++){if(stItems(z).length){S.stage=z;break;}}}
-   toast(PKG[S.pkg].keys.length+' items');draw(true);return;}
+   toast(fmt('{0} items',PKG[S.pkg].keys.length));draw(true);return;}
  if((t=e.target.closest('[data-pick]'))){
    if(S.pkg!=='custom'){S.custom=scope().slice();S.pkg='custom';}
-   S.pick=true;toast('Pick them yourself');draw(true);return;}
+   S.pick=true;toast(tr('Pick them yourself'));draw(true);return;}
  if((t=e.target.closest('[data-tick]'))){var tk=t.getAttribute('data-tick');
    if(S.pkg!=='custom'){S.custom=scope().slice();S.pkg='custom';S.pick=true;}
    var ix=S.custom.indexOf(tk); if(ix>=0) S.custom.splice(ix,1); else S.custom.push(tk);
@@ -598,14 +831,14 @@ document.addEventListener('click',function(e){
  if((t=e.target.closest('[data-stage]'))){S.stage=+t.getAttribute('data-stage');S.cur=null;draw(true);return;}
  if((t=e.target.closest('[data-item]'))){S.cur=t.getAttribute('data-item');draw(true);return;}
  if((t=e.target.closest('[data-shot]'))){var sk=t.getAttribute('data-shot');
-   S.v[sk].pb=!S.v[sk].pb;S.scan=null;toast(S.v[sk].pb?'Shot':'Removed');
+   S.v[sk].pb=!S.v[sk].pb;S.scan=null;toast(S.v[sk].pb?tr('Shot'):tr('Removed'));
    if(S.v[sk].pb){var nx=stItems(S.stage).filter(function(i){return !S.v[i.k].pb;})[0];
      if(nx) S.cur=nx.k;}
    draw(true);return;}
  if((t=e.target.closest('[data-work]'))){var wk=t.getAttribute('data-work');
    S.work[wk]=!S.work[wk];if(!S.work[wk]) S.v[wk].pa=false;S.scan=null;S.draft=null;draw(true);return;}
  if((t=e.target.closest('[data-after]'))){var ak=t.getAttribute('data-after');
-   S.v[ak].pa=!S.v[ak].pa;S.scan=null;toast(S.v[ak].pa?'Shot':'Removed');draw(true);return;}
+   S.v[ak].pa=!S.v[ak].pa;S.scan=null;toast(S.v[ak].pa?tr('Shot'):tr('Removed'));draw(true);return;}
  if((t=e.target.closest('[data-judge]'))){var q=t.getAttribute('data-judge').split('|');
    S.v[q[0]].judge=q[1];S.v[q[0]].edited=true;S.draft=null;draw(true);return;}
  if((t=e.target.closest('[data-toast]'))){toast(t.getAttribute('data-toast'));return;}
@@ -628,7 +861,7 @@ document.addEventListener('click',function(e){
            S.v[it.k].read=r.bad;
            S.v[it.k].judge = S.v[it.k].pa ? 'done' : r.judge;
            S.v[it.k].text = S.v[it.k].pa
-             ? ('Replaced today. '+r.bad)
+             ? (tr('Replaced today.')+' '+r.bad)
              : r.bad;}
          S.scan++; draw(true);
          if(S.scan<n.length) setTimeout(tick,700);};

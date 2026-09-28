@@ -255,12 +255,74 @@
 
 <script>
 var HISTORY = [
-  { model: "BMW X5 M sports", date: "Aug 18, 2026", owner: "chabot", service: "Brake Repair and Inspection", status: "Not started", accent: "#ef4444" },
-  { model: "BMW X5 M sports", date: "Sep 04, 2025", owner: "chabot", service: "Fluid Levels Check & Replacement", status: "Repairing", accent: "#4a8dfa" },
-  { model: "BMW X5 M sports", date: "Dec 31, 2024", owner: "chabot", service: "Battery Health Test & Replacement", status: "Completed", accent: "#10b981" },
-  { model: "BMW X5 M sports", date: "Oct 10, 2021", owner: "chabot", service: "Tire Rotation & Wheel Alignment", status: "Completed", accent: "#10b981" },
-  { model: "BMW X5 M sports", date: "May 31, 2020", owner: "chabot", service: "Engine Oil & Filter Change", status: "Completed", accent: "#10b981" }
+  { model: "BMW X5 M sports", date: "2026-08-18", owner: "chabot", service: 0, status: "Not started", accent: "#ef4444" },
+  { model: "BMW X5 M sports", date: "2025-09-04", owner: "chabot", service: 1, status: "Repairing", accent: "#4a8dfa" },
+  { model: "BMW X5 M sports", date: "2024-12-31", owner: "chabot", service: 2, status: "Completed", accent: "#10b981" },
+  { model: "BMW X5 M sports", date: "2021-10-10", owner: "chabot", service: 3, status: "Completed", accent: "#10b981" },
+  { model: "BMW X5 M sports", date: "2020-05-31", owner: "chabot", service: 4, status: "Completed", accent: "#10b981" }
 ];
+
+/* Language comes from the host page (?lang=en|ko|es). */
+var LANG = (new URLSearchParams(location.search).get("lang") || "en").toLowerCase();
+if (LANG !== "ko" && LANG !== "es") LANG = "en";
+var TEXT = {
+  en: {
+    placeholder: "Search plate, VIN, or owner...",
+    hint: "Type anything and press Enter to see it in action",
+    emptyTitle: "Find any vehicle in seconds",
+    emptyBody: "Type a VIN or plate number above to pull up its full service history.",
+    clear: "Clear",
+    complete: "Search complete",
+    results: "{n} results",
+    status: { "Not started": "Not started", "Repairing": "Repairing", "Completed": "Completed" },
+    services: [
+      "Brake Repair and Inspection",
+      "Fluid Levels Check & Replacement",
+      "Battery Health Test & Replacement",
+      "Tire Rotation & Wheel Alignment",
+      "Engine Oil & Filter Change"
+    ]
+  },
+  ko: {
+    placeholder: "번호판, VIN 또는 소유자 검색...",
+    hint: "아무거나 입력하고 Enter를 눌러 확인해 보세요",
+    emptyTitle: "몇 초 만에 모든 차량 찾기",
+    emptyBody: "VIN 또는 번호판을 위에 입력하면 전체 정비 이력이 나타납니다.",
+    clear: "지우기",
+    complete: "검색 완료",
+    results: "{n}건",
+    status: { "Not started": "시작 전", "Repairing": "수리 중", "Completed": "완료" },
+    services: [
+      "제동장치 수리 및 점검",
+      "오일류 점검 및 교체",
+      "배터리 상태 점검 및 교체",
+      "타이어 위치 교환 및 휠 얼라인먼트",
+      "엔진 오일 및 필터 교환"
+    ]
+  },
+  es: {
+    placeholder: "Busca placa, VIN o propietario...",
+    hint: "Escribe lo que quieras y presiona Enter para verlo en acción",
+    emptyTitle: "Encuentra cualquier vehículo en segundos",
+    emptyBody: "Escribe un VIN o número de placa arriba para ver su historial de servicio completo.",
+    clear: "Borrar",
+    complete: "Búsqueda completa",
+    results: "{n} resultados",
+    status: { "Not started": "Sin iniciar", "Repairing": "En reparación", "Completed": "Completado" },
+    services: [
+      "Reparación e inspección de frenos",
+      "Revisión y cambio de fluidos",
+      "Prueba y cambio de batería",
+      "Rotación de llantas y alineación",
+      "Cambio de aceite y filtro de motor"
+    ]
+  }
+};
+var L = TEXT[LANG];
+var DATE_LOCALE = { en: "en-US", ko: "ko-KR", es: "es-US" }[LANG];
+function formatDate(iso) {
+  return new Date(iso + "T12:00:00").toLocaleDateString(DATE_LOCALE, { year: "numeric", month: "short", day: LANG === "en" ? "2-digit" : "numeric" });
+}
 
 var input = document.getElementById("searchInput");
 var bar = document.getElementById("bar");
@@ -269,6 +331,13 @@ var emptyState = document.getElementById("emptyState");
 var hintRow = document.getElementById("hintRow");
 var resultsEl = document.getElementById("results");
 var shown = false;
+
+document.documentElement.lang = LANG;
+input.placeholder = L.placeholder;
+clearBtn.setAttribute("aria-label", L.clear);
+document.querySelector(".hint-text").textContent = L.hint;
+document.querySelector(".empty-title").textContent = L.emptyTitle;
+document.querySelector(".empty-body").textContent = L.emptyBody;
 
 function carSvg() {
   return '<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M4 16l1.2-4.5A2 2 0 0 1 7.1 10h9.8a2 2 0 0 1 1.9 1.5L20 16" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="16" width="18" height="4" rx="1.5" stroke="#94a3b8" stroke-width="1.8"/><circle cx="7" cy="20" r="1.3" fill="#94a3b8"/><circle cx="17" cy="20" r="1.3" fill="#94a3b8"/></svg>';
@@ -289,23 +358,23 @@ function escapeHtml(s) {
 function renderResults(query) {
   var plateLabel = escapeHtml(query);
   resultsEl.innerHTML =
-    '<div class="results-meta">Search complete <b>&middot; ' + HISTORY.length + ' results</b></div>' +
+    '<div class="results-meta">' + L.complete + ' <b>&middot; ' + L.results.replace("{n}", HISTORY.length) + '</b></div>' +
     HISTORY.map(function (h) {
       return (
         '<div class="card" style="--accent:' + h.accent + '">' +
           '<div style="flex:1">' +
             '<div class="card-top">' +
               '<span class="card-plate">' + plateLabel + '</span>' +
-              '<span class="badge">' + h.status + '</span>' +
+              '<span class="badge">' + L.status[h.status] + '</span>' +
             '</div>' +
             '<div class="card-meta">' +
               carSvg() + '<span>' + h.model + '</span>' +
               '<span class="dot"></span>' +
-              calSvg() + '<span>' + h.date + '</span>' +
+              calSvg() + '<span>' + formatDate(h.date) + '</span>' +
               '<span class="dot"></span>' +
               '<span>' + h.owner + '</span>' +
             '</div>' +
-            '<div class="card-service">' + wrenchSvg() + '<span>' + h.service + '</span></div>' +
+            '<div class="card-service">' + wrenchSvg() + '<span>' + L.services[h.service] + '</span></div>' +
           '</div>' +
         '</div>'
       );

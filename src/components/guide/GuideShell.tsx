@@ -2,8 +2,9 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getDictionary } from "@/i18n/server";
 
-export default function GuideShell({
+export default async function GuideShell({
   eyebrow,
   title,
   intro,
@@ -16,6 +17,8 @@ export default function GuideShell({
   replayButton?: ReactNode;
   children: ReactNode;
 }) {
+  const { common } = await getDictionary();
+
   return (
     <>
       <Navbar />
@@ -25,7 +28,7 @@ export default function GuideShell({
             href="/#how-it-works"
             className="text-sm font-medium text-muted-foreground hover:text-foreground"
           >
-            ← Back to Altobay.ai
+            {common.backToHome}
           </Link>
           {replayButton}
         </div>

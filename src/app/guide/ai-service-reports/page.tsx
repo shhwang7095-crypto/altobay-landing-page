@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import GuideShell from "@/components/guide/GuideShell";
 import InteractiveDemoPhone from "@/components/guide/InteractiveDemoPhone";
 import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
+import { getDictionary } from "@/i18n/server";
 
 export const metadata: Metadata = {
   title: "AI-Generated Service Reports | Altobay.ai Guide",
@@ -10,18 +11,21 @@ export const metadata: Metadata = {
     "Try the actual mechanic flow: shoot before/after photos, let AI read them, and send a customer-ready report, right in your browser.",
 };
 
-export default function AiServiceReportsGuide() {
+export default async function AiServiceReportsGuide() {
+  const { common, guide } = await getDictionary();
+  const g = guide.aiReports;
+
   return (
     <GuideShell
-      eyebrow="Feature Guide"
-      title="AI-Generated Service Reports"
-      intro="Watch how it works, then try it yourself below."
+      eyebrow={common.featureGuide}
+      title={g.title}
+      intro={g.intro}
       replayButton={
         <Suspense fallback={null}>
           <GuideVideoReplay
             src="/videos/ai-report-flow-demo.mp4"
             poster="/videos/ai-report-flow-demo-poster.jpg"
-            label="AI-Generated Service Reports walkthrough video"
+            label={g.videoLabel}
           />
         </Suspense>
       }

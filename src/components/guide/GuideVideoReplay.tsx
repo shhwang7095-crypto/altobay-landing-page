@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import VideoLightbox from "@/components/VideoLightbox";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 export default function GuideVideoReplay({
   src,
@@ -13,6 +14,7 @@ export default function GuideVideoReplay({
   poster: string;
   label: string;
 }) {
+  const { t } = useLanguage();
   const searchParams = useSearchParams();
   // Only auto-open when arriving from the homepage's "tutorial video" choice
   // (?video=open) - arriving via "want to see the guide" starts closed, and
@@ -29,7 +31,7 @@ export default function GuideVideoReplay({
         <svg viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
           <path d="M8 5v14l11-7-11-7Z" />
         </svg>
-        Replay altobay video tutorial
+        {t.common.replayVideo}
       </button>
       <VideoLightbox src={src} poster={poster} label={label} open={open} onClose={() => setOpen(false)} />
     </>

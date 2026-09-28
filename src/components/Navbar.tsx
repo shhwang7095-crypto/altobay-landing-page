@@ -4,15 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Logo from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
-
-const NAV_LINKS = [
-  { label: "Service", href: "#service" },
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Company", href: "#company" },
-];
+import { LanguageSwitcher } from "@/i18n/LanguageSwitcher";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 export default function Navbar() {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
+  const navLinks = [
+    { label: t.nav.service, href: "#service" },
+    { label: t.nav.howItWorks, href: "#how-it-works" },
+    { label: t.nav.company, href: "#company" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -30,12 +32,12 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="#top" aria-label="Altobay.ai home">
+        <a href="#top" aria-label={t.nav.homeAria}>
           <Logo />
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -47,13 +49,14 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcher />
           <ThemeToggle />
           <Link
             href="/demo"
             className="inline-flex whitespace-nowrap rounded-full bg-brand-blue px-3 py-1.5 text-xs font-semibold text-white transition-opacity hover:opacity-90 sm:px-4 sm:py-2 sm:text-sm"
           >
-            <span className="sm:hidden">Demo</span>
-            <span className="hidden sm:inline">Request a Demo</span>
+            <span className="sm:hidden">{t.common.demoShort}</span>
+            <span className="hidden sm:inline">{t.common.requestDemo}</span>
           </Link>
         </div>
       </nav>

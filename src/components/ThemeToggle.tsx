@@ -1,15 +1,17 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { resolvedTheme, setTheme } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <button
       type="button"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      aria-label="Toggle color theme"
+      aria-label={t.common.toggleTheme}
       className={`flex h-9 w-9 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-muted ${className ?? ""}`}
     >
       <svg viewBox="0 0 24 24" fill="none" className="hidden h-4 w-4 dark:block">

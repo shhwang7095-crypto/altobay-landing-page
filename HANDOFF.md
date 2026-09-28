@@ -174,6 +174,19 @@ Vercel 프로젝트 → Settings → Environment Variables에 `NOTION_API_KEY`, 
 
 **⏳ 다음 세션에서 확인할 것**: 실제 프로덕션 `/demo` 페이지(`https://altobay-landing-page1.vercel.app/demo`)에서 폼 제출까지 해보고 Notion에 잘 들어가는지 아직 검증 안 됨 (로컬에서는 검증 완료).
 
+## 12. 다국어 (English / 한국어 / Español) — 2026-09-28 추가
+
+우측 상단 🌐 버튼(`src/i18n/LanguageSwitcher.tsx`)으로 전환한다. **주소는 그대로(`/ko` 같은 경로 없음)**, 선택한 언어는 쿠키(`altobay-lang`, 1년)에 저장된다. 기본값은 English.
+
+- **구조**: `src/i18n/` — `config.ts`(언어 목록/쿠키명), `dictionaries/{en,ko,es}.ts`(번역 본문. `en.ts`가 원본이고 타입 `Dictionary`를 정의 → ko/es는 키가 하나라도 빠지면 빌드 에러), `server.ts`(`getDictionary()`/`getLocale()`, 쿠키를 서버에서 읽음), `LanguageProvider.tsx`(클라이언트 컴포넌트용 `useLanguage()`), `RichText.tsx`(`**굵게**` 표기 처리).
+- **서버 컴포넌트**는 `await getDictionary()`, **클라이언트 컴포넌트**는 `useLanguage().t`를 쓴다. 클라이언트로는 필요한 섹션만 내려감(`pickClientDictionary`).
+- 전환 시 `router.refresh()`로 서버 컴포넌트를 다시 그린다 → 새로고침/깜빡임 없음. 쿠키를 서버에서 읽기 때문에 **모든 페이지가 정적이 아니라 동적 렌더링**이다(의도된 트레이드오프: 첫 화면부터 올바른 언어).
+- **새 문구를 추가할 때**: `en.ts`에 먼저 넣고 → `ko.ts`, `es.ts`에도 같은 키로 번역 추가. 컴포넌트에 영어 문구를 직접 쓰지 말 것.
+- **체험 데모 iframe 2개**(`public/interactive/*.html`)는 `?lang=ko|es|en` 쿼리로 언어를 받는다(각 파일 상단의 `DICT`/`TEXT` 참고). 영어 문구 자체가 사전의 키라서 영어 출력은 원본과 동일해야 한다. 문구를 고치면 ko/es 쪽 키도 같이 고칠 것.
+- **번역 안 되는 것(의도)**: 워크스루 영상 3종(화면 자막·나레이션이 영어 — 언어별 재렌더링 필요), 탭 제목/검색 결과 설명(메타)/OG 이미지, 가이드 본문 속 **앱 화면의 영어 UI 라벨**(`**View booking**` 등은 스크린샷과 일치하도록 영어 유지).
+- 메인 프로모 영상 자막은 `public/videos/altobay-promo{,.ko,.es}.vtt`. 데모 신청 폼의 API 오류는 `route.ts`가 `code`(`not_configured`/`invalid`/`missing`/`submit_failed`)를 같이 내려주고 클라이언트가 언어별 문구로 매핑한다. 전송되는 관심 서비스 값은 항상 영어(Notion 옵션명과 일치).
+- ⚠️ 스페인어(미국 시장용 중립 표현, tú 형)는 원어민 검수 전이다.
+
 ## 11. 작업 원칙
 
 - **요청 범위 밖은 건드리지 말 것.** 사용자가 지시하지 않은 색상·모션·레이아웃을 임의로 바꾸지 않는다.

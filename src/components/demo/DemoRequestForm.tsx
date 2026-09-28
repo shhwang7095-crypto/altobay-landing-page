@@ -1,16 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
-const SERVICES = [
-  "Smart Booking",
-  "AI-Generated Service Reports",
-  "Vehicle Cloud Search",
-];
+// These are what get submitted (the Notion option names are English); the label
+// shown to the visitor comes from the dictionary.
+const SERVICE_VALUES = ["Smart Booking", "AI-Generated Service Reports", "Vehicle Cloud Search"];
+
+// The API returns a machine-readable `code` next to its English `error` text so
+// the message can be shown in the visitor's language.
+type ErrorCode = "not_configured" | "invalid" | "missing" | "submit_failed";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
 export default function DemoRequestForm() {
+  const { t } = useLanguage();
+  const f = t.demoForm;
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [services, setServices] = useState<string[]>([]);
@@ -26,7 +31,7 @@ export default function DemoRequestForm() {
 
     if (services.length === 0) {
       setStatus("error");
-      setErrorMessage("Select at least one service you're interested in.");
+      setErrorMessage(f.errSelect);
       return;
     }
 
@@ -45,7 +50,13 @@ export default function DemoRequestForm() {
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || "Something went wrong. Please try again.");
+        const messages: Record<ErrorCode, string> = {
+          not_configured: f.errNotConfigured,
+          invalid: f.errInvalid,
+          missing: f.errMissing,
+          submit_failed: f.errSubmit,
+        };
+        throw new Error(messages[body.code as ErrorCode] ?? f.errGeneric);
       }
 
       setStatus("success");
@@ -53,7 +64,7 @@ export default function DemoRequestForm() {
       setServices([]);
     } catch (err) {
       setStatus("error");
-      setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
+      setErrorMessage(err instanceof Error ? err.message : f.errGeneric);
     }
   }
 
@@ -71,9 +82,9 @@ export default function DemoRequestForm() {
             />
           </svg>
         </div>
-        <h2 className="mt-5 text-xl font-bold">Request received</h2>
+        <h2 className="mt-5 text-xl font-bold">{f.successTitle}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Thanks for your interest in Altobay.ai. We&apos;ll be in touch shortly.
+          {f.successBody}
         </p>
       </div>
     );
@@ -82,21 +93,21 @@ export default function DemoRequestForm() {
   return (
     <form onSubmit={handleSubmit} className="rounded-3xl border border-border bg-card p-8 sm:p-10">
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Field label="Name" name="name" required />
-        <Field label="Company name" name="company" required />
-        <Field label="Position / Role" name="role" />
-        <Field label="Email" name="email" type="email" required placeholder="Enter your work email" />
-        <Field label="Phone" name="phone" type="tel" placeholder="Enter your business address" />
-        <Field label="Region" name="region" placeholder="e.g. Los Angeles, CA" />
+        <Field label={f.name} name="name" required />
+        <Field label={f.company} name="company" required />
+        <Field label={f.role} name="role" />
+        <Field label={f.email} name="email" type="email" required placeholder={f.emailPlaceholder} />
+        <Field label={f.phone} name="phone" type="tel" placeholder={f.phonePlaceholder} />
+        <Field label={f.region} name="region" placeholder={f.regionPlaceholder} />
       </div>
 
       <div className="mt-5">
         <label className="mb-2 block text-sm font-medium text-foreground">
-          Interested service <span className="text-brand-blue">*</span>{" "}
-          <span className="font-normal text-muted-foreground">(select all that apply)</span>
+          {f.interested} <span className="text-brand-blue">*</span>{" "}
+          <span className="font-normal text-muted-foreground">{f.selectAll}</span>
         </label>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {SERVICES.map((service) => (
+          {SERVICE_VALUES.map((service, i) => (
             <label
               key={service}
               className="flex cursor-pointer items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5 text-sm transition-colors has-[:checked]:border-brand-blue has-[:checked]:bg-brand-blue/5"
@@ -107,7 +118,7 @@ export default function DemoRequestForm() {
                 onChange={() => toggleService(service)}
                 className="accent-brand-blue"
               />
-              {service}
+              {t.features.items[i].title}
             </label>
           ))}
         </div>
@@ -115,14 +126,14 @@ export default function DemoRequestForm() {
 
       <div className="mt-5">
         <label className="mb-2 block text-sm font-medium text-foreground" htmlFor="message">
-          Other inquiries
+          {f.other}
         </label>
         <textarea
           id="message"
           name="message"
           rows={4}
           className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-brand-blue"
-          placeholder="Anything else we should know?"
+          placeholder={f.otherPlaceholder}
         />
       </div>
 
@@ -135,7 +146,7 @@ export default function DemoRequestForm() {
         disabled={status === "submitting"}
         className="mt-7 w-full rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
       >
-        {status === "submitting" ? "Sending…" : "Send request"}
+        {status === "submitting" ? f.sending : f.send}
       </button>
     </form>
   );

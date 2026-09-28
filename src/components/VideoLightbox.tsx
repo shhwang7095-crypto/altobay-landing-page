@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 export default function VideoLightbox({
   src,
@@ -15,6 +16,7 @@ export default function VideoLightbox({
   open: boolean;
   onClose: () => void;
 }) {
+  const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export default function VideoLightbox({
       <button
         type="button"
         onClick={onClose}
-        aria-label="Close video"
+        aria-label={t.common.closeVideo}
         className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
       >
         <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">

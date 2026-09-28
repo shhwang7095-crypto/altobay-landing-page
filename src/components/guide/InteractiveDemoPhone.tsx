@@ -2,53 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import PhoneMockup from "@/components/PhoneMockup";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
-const STEPS = [
-  {
-    slug: "jobs",
-    label: "Jobs",
-    description: "See every car in the shop today and open one to start the visit.",
-  },
-  {
-    slug: "scope",
-    label: "Scope",
-    description: "Pick what to check: the reported symptom, a full inspection, or your own list.",
-  },
-  {
-    slug: "before",
-    label: "Before",
-    description: "Shoot a quick photo of each item before you touch it.",
-  },
-  {
-    slug: "work",
-    label: "Work",
-    description: "Tick off what you're fixing today, everything else stays quoted on the report.",
-  },
-  {
-    slug: "after",
-    label: "After",
-    description: "Shoot the same angle again so the AI can compare before and after.",
-  },
-  {
-    slug: "scan",
-    label: "Read",
-    description: "AI reads each photo pair and calls it Fine, Watch, or Needs Work.",
-  },
-  {
-    slug: "review",
-    label: "Review",
-    description: "Check the AI-drafted report and edit anything before it goes out.",
-  },
-  {
-    slug: "done",
-    label: "Done",
-    description: "Send the finished report straight to the customer.",
-  },
-];
+const STEP_SLUGS = ["jobs", "scope", "before", "work", "after", "scan", "review", "done"];
 
 type DemoWindow = Window & { S?: { screen: string } };
 
 export default function InteractiveDemoPhone() {
+  const { locale, t } = useLanguage();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [active, setActive] = useState("jobs");
   const [expanded, setExpanded] = useState<string | null>("jobs");
@@ -78,14 +39,15 @@ export default function InteractiveDemoPhone() {
       <div className="relative w-full sm:w-64 sm:shrink-0">
         <span className="absolute left-4 top-6 bottom-6 w-px bg-border" />
         <ol className="flex flex-col gap-0.5">
-          {STEPS.map((step, i) => {
-            const isActive = active === step.slug;
-            const isOpen = expanded === step.slug;
+          {t.interactive.steps.map((step, i) => {
+            const slug = STEP_SLUGS[i];
+            const isActive = active === slug;
+            const isOpen = expanded === slug;
             return (
-              <li key={step.slug}>
+              <li key={slug}>
                 <button
                   type="button"
-                  onClick={() => selectStep(step.slug)}
+                  onClick={() => selectStep(slug)}
                   aria-expanded={isOpen}
                   className="flex w-full items-center gap-3.5 rounded-lg py-2 pr-3 text-left transition-colors hover:bg-muted"
                 >
@@ -124,8 +86,8 @@ export default function InteractiveDemoPhone() {
       <PhoneMockup size="interactive">
         <iframe
           ref={iframeRef}
-          src="/interactive/ai-service-report-demo.html"
-          title="Altobay.ai service report interactive demo"
+          src={`/interactive/ai-service-report-demo.html?lang=${locale}`}
+          title={t.interactive.iframeTitle}
           className="h-full w-full border-0"
         />
       </PhoneMockup>

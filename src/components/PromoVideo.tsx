@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "@/i18n/LanguageProvider";
 
 // Outward-only "stroke" (text-shadow copies sit behind the glyph fill, so
 // they never eat into it) plus a hard 45deg drop shadow, no blur.
@@ -18,6 +19,7 @@ function captionTextShadow(strokeColor: string, strokeWidth: number, steps = 16)
 const CAPTION_TEXT_SHADOW = captionTextShadow("#000", 2);
 
 export default function PromoVideo() {
+  const { t } = useLanguage();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [captionsOn, setCaptionsOn] = useState(true);
   const [cueText, setCueText] = useState("");
@@ -33,9 +35,10 @@ export default function PromoVideo() {
       const cues = track.activeCues;
       setCueText(cues && cues.length > 0 ? (cues[0] as VTTCue).text : "");
     };
+    onCueChange();
     track.addEventListener("cuechange", onCueChange);
     return () => track.removeEventListener("cuechange", onCueChange);
-  }, []);
+  }, [t.promo.vtt]);
 
   return (
     <div className="relative mx-auto mt-12 max-w-3xl overflow-hidden rounded-3xl border border-border bg-brand-navy shadow-xl">
@@ -49,10 +52,11 @@ export default function PromoVideo() {
       >
         <source src="/videos/altobay-promo.mp4" type="video/mp4" />
         <track
+          key={t.promo.vtt}
           kind="subtitles"
-          src="/videos/altobay-promo.vtt"
-          srcLang="en"
-          label="English"
+          src={t.promo.vtt}
+          srcLang={t.promo.srcLang}
+          label={t.promo.trackLabel}
           default
         />
       </video>
@@ -81,7 +85,7 @@ export default function PromoVideo() {
             : "border-white/30 bg-black/40 text-white/80 hover:bg-black/60"
         }`}
       >
-        CC {captionsOn ? "On" : "Off"}
+        {captionsOn ? t.promo.ccOn : t.promo.ccOff}
       </button>
     </div>
   );

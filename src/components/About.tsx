@@ -1,15 +1,8 @@
 import { LogoMark } from "./Logo";
-
-const FACTS = [
-  { value: "2026", label: "Founded" },
-  { value: "Menlo Park, CA", label: "US market entry" },
-  { value: "California", label: "Pilot market" },
-];
+import { getDictionary } from "@/i18n/server";
 
 const PILLARS = [
   {
-    label: "What we replace",
-    body: "Scheduling, reporting, and vehicle data, unified in one AI platform, replacing the scattered calls, texts, and paper records that slow independent repair shops down.",
     tint: "bg-brand-blue/10 text-brand-blue",
     hoverBg: "hover:bg-brand-blue",
     icon: (
@@ -33,8 +26,6 @@ const PILLARS = [
     ),
   },
   {
-    label: "Why shops trust us",
-    body: "Piloting with independent repair shops across California, built by a team with backgrounds spanning Big Four accounting, corporate strategy, and enterprise finance.",
     tint: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
     hoverBg: "hover:bg-amber-500",
     icon: (
@@ -57,25 +48,21 @@ const PILLARS = [
   },
 ];
 
-const STATS = [
-  { value: "5+", label: "Pilot repair shops in California" },
-  { value: "6", label: "Startup program selections" },
-  { value: "MVP", label: "In active development" },
-];
+export default async function About() {
+  const { about } = await getDictionary();
 
-export default function About() {
   return (
     <section id="company" className="mx-auto max-w-6xl px-6 py-24">
       <div className="max-w-3xl">
         <span className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-          Company
+          {about.eyebrow}
         </span>
         <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-          About Altobay.ai
+          {about.title}
         </h2>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          {FACTS.map((fact) => (
+          {about.facts.map((fact) => (
             <span
               key={fact.label}
               className="inline-flex items-baseline gap-1.5 rounded-full border border-border bg-muted px-3.5 py-1.5"
@@ -93,22 +80,21 @@ export default function About() {
 
         <div className="relative max-w-3xl">
           <span className="text-xs font-semibold uppercase tracking-widest text-brand-blue">
-            Our core principle
+            {about.principleEyebrow}
           </span>
           <p className="mt-5 text-2xl font-bold leading-snug tracking-tight sm:text-[2rem]">
-            Final diagnosis and repair decisions always stay with the shop.
+            {about.principleTitle}
           </p>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Altobay&apos;s AI focuses on automating intake and improving the quality of customer
-            explanations, never replacing a mechanic&apos;s judgment.
+            {about.principleBody}
           </p>
         </div>
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-        {PILLARS.map((pillar) => (
+        {PILLARS.map((pillar, i) => (
           <div
-            key={pillar.label}
+            key={about.pillars[i].label}
             className={`group relative overflow-hidden rounded-3xl border border-border bg-card p-8 transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl ${pillar.hoverBg}`}
           >
             <svg
@@ -127,17 +113,17 @@ export default function About() {
               </svg>
             </div>
             <h3 className="relative mt-5 text-lg font-bold transition-colors duration-300 group-hover:text-white">
-              {pillar.label}
+              {about.pillars[i].label}
             </h3>
             <p className="relative mt-2 text-sm leading-relaxed text-muted-foreground transition-colors duration-300 group-hover:text-white/85">
-              {pillar.body}
+              {about.pillars[i].body}
             </p>
           </div>
         ))}
       </div>
 
       <div className="mt-6 grid grid-cols-1 divide-y divide-border overflow-hidden rounded-3xl border border-border bg-card sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-        {STATS.map((stat) => (
+        {about.stats.map((stat) => (
           <div key={stat.label} className="px-8 py-9 text-center">
             <p className="text-4xl font-extrabold tracking-tight text-brand-blue">
               {stat.value}
