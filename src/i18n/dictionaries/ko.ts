@@ -21,12 +21,12 @@ export const ko: Dictionary = {
     company: "회사 소개",
   },
   hero: {
-    badge: "미국 자동차 정비소를 위해 만들었습니다",
+    badge: "아직 \"진짜\" 도구를 잡지 못하는",
     titleA: "",
     titleB: "정비소",
     titleC: "에 AI를 더하다",
     tagline: "정비소 운영, 이제 더 똑똑하게.",
-    body: "Altobay.ai는 정비소·서비스센터와 고객을 위한 AI 플랫폼으로, 정비사가 예약을 관리하고, AI 정비 보고서를 작성하고, 차량 이력을 조회하는 모든 일을 하나의 앱에서 할 수 있도록 돕습니다.",
+    body: "Altobay.ai는 정비소·서비스센터와 고객을 위한 AI 플랫폼으로, 정비사가 예약을 관리하고, AI 정비 보고서를 작성하고, 차량 이력을 조회하는 모든 일을 하나의 앱에서 할 수 있도록 만들어 줍니다.",
     seeHow: "이용 방법 보기",
     comingSoonOn: "출시 예정",
     visitAria: "Altobay.ai 웹 앱 방문하기",
@@ -34,14 +34,14 @@ export const ko: Dictionary = {
   },
   features: {
     eyebrow: "앱 서비스",
-    title: "정비소에 필요한 모든 것, 앱 하나로",
+    title: "정비소에 필요한 모든 것을, 어플 하나로",
     subtitle:
       "일정 관리, 보고서, 차량 데이터를 미국 독립 정비소를 위해 만든 하나의 AI 플랫폼으로 통합했습니다.",
     items: [
       {
         title: "스마트 예약",
         description:
-          "모든 예약, 사진 업로드, 증상 접수를 하나의 화면에 모아, 전화, 문자, 여러 앱을 오가며 정신없을 일 없이 한 번에 관리합니다.",
+          "모든 예약, 사진 업로드, 증상 접수를 하나의 화면에 모아, 전화, 문자, 여러 앱을 오가며 허덕일 일 없이 한 번에 관리합니다.",
       },
       {
         title: "AI 자동 생성 정비 보고서",
@@ -49,9 +49,9 @@ export const ko: Dictionary = {
           "정비사가 간단히 메모만 남기면 Altobay의 AI가 작업 내용과 비용을 깔끔하고 전문적인 설명으로 정리해 고객의 신뢰를 높이고, 고객 재문의 전화를 줄여 줍니다.",
       },
       {
-        title: "차량 클라우드 검색",
+        title: "정비 이력 클라우드",
         description:
-          "모든 차량의 정비 이력이 구조화된 데이터로 기록되어, 종이 서류 뒤질 필요 없이 정비소에서 즉시 검색하고 분석할 수 있습니다.",
+          "모든 차량의 정비 이력이 구조화된 데이터로 기록되어, 더 이상 종이 서류를 만들 필요도 찾을 필요도 없게 만들어 줍니다.",
       },
     ],
   },
@@ -74,8 +74,8 @@ export const ko: Dictionary = {
         alt: "Altobay.ai 앱의 정비 보고서 편집 화면",
       },
       "vehicle-cloud-search": {
-        label: "차량 클라우드 검색",
-        alt: "Altobay.ai 앱의 차량 클라우드 검색 결과 목록",
+        label: "정비 이력 클라우드",
+        alt: "Altobay.ai 앱의 정비 이력 클라우드 검색 결과 목록",
       },
     },
   },
@@ -90,15 +90,15 @@ export const ko: Dictionary = {
     principleEyebrow: "핵심 원칙",
     principleTitle: "최종 진단과 수리 결정은 언제나 정비소의 몫입니다.",
     principleBody:
-      "Altobay의 AI는 접수 자동화와 고객 설명의 품질 향상에 집중하며, 정비사의 판단을 대체하지 않습니다.",
+      "Altobay.ai는 정비사의 판단을 대체하지 않고, 접수의 편의성과 고객 관리의 품질 향상에 집중합니다.",
     pillars: [
       {
-        label: "우리가 대체하는 것",
-        body: "일정, 보고서, 차량 데이터를 하나의 AI 플랫폼으로 통합해, 독립 정비소의 발목을 잡던 흩어진 전화·문자·종이 기록을 대체합니다.",
+        label: "Altobay의 기능",
+        body: "일정, 보고서, 차량 데이터를 하나의 AI 플랫폼으로 통합해, 독립 정비소의 병목이었던 파편화된 전화·문자·종이 기록을 대체합니다.",
       },
       {
-        label: "정비소가 신뢰하는 이유",
-        body: "캘리포니아 전역의 독립 정비소와 파일럿을 진행 중이며, 빅4 회계법인, 기업 전략, 기업 재무 분야를 아우르는 경력을 가진 팀이 만들었습니다.",
+        label: "정비소가 Altobay를 신뢰할 수 있는 이유",
+        body: "캘리포니아의 독립 정비소들과 파일럿을 진행 중이며, Big 4 회계법인 경력, 기업 전략, 기업 재무 분야를 아우르는 경력을 가진 팀이 서비스를 주도합니다.",
       },
     ],
     stats: [
@@ -108,13 +108,13 @@ export const ko: Dictionary = {
     ],
   },
   cta: {
-    title: "이제 우리 정비소에도 AI를 들여볼까요?",
+    title: "당신의 정비소에 AI를 적용할 시간입니다.",
     body: "데모를 신청하거나 앱을 다운로드하세요",
   },
   survey: {
-    eyebrow: "← 더 나은 서비스를 함께 만들어 주세요",
-    title: "2분만 시간 내주시겠어요?",
-    body: "코드를 스캔해 보유하신 차량에 대해 알려주세요. 다음 기능을 만드는 데 큰 힘이 됩니다.",
+    eyebrow: "← 더 나은 서비스를 위해 설문조사에 참여하세요!",
+    title: "2분만 시간을 내주시겠어요?",
+    body: "코드를 스캔하여 설문조사에 참여해 주세요! 서비스를 만들어 가는 데 큰 힘이 됩니다.",
     qrAlt: "Altobay.ai 정비소 설문으로 연결되는 QR 코드",
   },
   footer: {
@@ -164,11 +164,11 @@ export const ko: Dictionary = {
     smartBooking: {
       title: "스마트 예약",
       intro:
-        "하나의 화면에서 모든 예약과 서비스 요청을 관리하세요. 전화, 문자, 종이 메모를 오가지 않아도 됩니다.",
+        "하나의 화면에서 모든 예약과 서비스 요청을 관리하세요!",
       videoLabel: "스마트 예약 워크스루 영상",
       steps: [
         {
-          title: "예약이 들어오면 알림을 받습니다",
+          title: "알림으로 정비 예약을 확인하세요",
           shotLabel: "알림 상세 화면",
           alt: "날짜, 고객, 차량, 서비스가 표시된 새 예약 요청 알림 상세 화면",
           paragraphs: [
@@ -181,17 +181,16 @@ export const ko: Dictionary = {
           shotLabel: "예약 및 서비스 현황 캘린더",
           alt: "확정된 예약이 있는 날짜가 선택된 월간 예약 캘린더 화면",
           paragraphs: [
-            "**Booking & service**를 열고 **Monthly**와 **Daily** 보기를 전환하세요. 예약이 있는 날은 표시되어 바쁜 날을 바로 알 수 있습니다.",
-            "날짜를 탭하면 그날의 예약을 확인할 수 있습니다. 상태, 시간, 고객, 차량, 요청 서비스가 한 카드에 모두 담겨 있습니다.",
+            "**Booking & service** 대시보드에서 월별, 일별 정비 현황을 확인하실 수 있습니다.",
           ],
         },
         {
-          title: "요청부터 인도까지 상태를 추적합니다",
+          title: "예약부터 차량 인도까지 원 프로세스로 관리하세요",
           shotLabel: "예약 및 서비스 현황 대시보드",
           alt: "요청됨, 확정됨, 정비 완료, 차량 인도, 완료 처리, 취소 등 상태별 예약 건수를 보여주는 대시보드",
           paragraphs: [
-            "홈 대시보드는 예약을 상태별로 나누어 보여줍니다: **Requested**, **Confirmed**, **Service completed**, **Vehicle delivered** 등.",
-            "**Today**, **This week**, **This month**를 전환하며 정비소 현황을 한눈에 확인하세요.",
+            "**Requested**, **Confirmed**, **Service completed**, **Vehicle delivered** 등.",
+            "**Today**, **This week**, **This month** 버튼을 통해 예약의 상태를 한눈에 확인하고 쉽게 관리할 수 있습니다.",
           ],
         },
       ],
@@ -202,10 +201,10 @@ export const ko: Dictionary = {
       videoLabel: "AI 자동 생성 정비 보고서 워크스루 영상",
     },
     vehicleSearch: {
-      title: "차량 클라우드 검색",
-      intro: "아래 검색창에 아무거나 입력하고 Enter를 눌러 직접 확인해 보세요.",
-      videoLabel: "차량 클라우드 검색 워크스루 영상",
-      iframeTitle: "Altobay.ai 차량 클라우드 검색 체험 데모",
+      title: "정비 이력 클라우드",
+      intro: "검색창에 아무 차량 번호나 입력해 보세요!",
+      videoLabel: "정비 이력 클라우드 워크스루 영상",
+      iframeTitle: "Altobay.ai 정비 이력 클라우드 체험 데모",
     },
   },
   interactive: {
@@ -214,17 +213,17 @@ export const ko: Dictionary = {
       { label: "작업", description: "오늘 정비소에 들어온 모든 차량을 확인하고, 하나를 열어 정비를 시작합니다." },
       {
         label: "범위",
-        description: "점검할 항목을 고릅니다: 접수된 증상, 전체 점검, 또는 직접 만든 목록.",
+        description: "접수된 증상, 전체 점검 혹은 직접 타이핑하여 점검할 항목을 선택합니다.",
       },
-      { label: "작업 전", description: "손대기 전에 각 항목을 빠르게 사진으로 남깁니다." },
+      { label: "작업 전", description: "정비를 시작하기 전, 정비소요들을 사진으로 찍어 업로드합니다." },
       {
         label: "수리",
-        description: "오늘 수리하는 항목을 체크합니다. 나머지는 견적으로 보고서에 남습니다.",
+        description: "정비하는 항목들을 체크합니다. *모든 항목들은 보고서에 기록됩니다.",
       },
-      { label: "작업 후", description: "같은 각도로 다시 촬영해 AI가 작업 전후를 비교할 수 있게 합니다." },
-      { label: "판독", description: "AI가 각 사진 쌍을 읽고 양호, 주의, 정비 필요로 판정합니다." },
+      { label: "작업 후", description: "고객들이 쉽게 수리 전/후를 파악할 수 있도록, 정비 전 사진과 동일한 구도로 정비 내역을 촬영하여 업로드합니다." },
+      { label: "AI 검수", description: "AI가 전/후 사진을 분석하여 양호, 주의, 정비 필요 항목들을 제시합니다." },
       { label: "검토", description: "AI가 작성한 보고서를 확인하고, 발송 전에 필요한 부분을 수정합니다." },
-      { label: "완료", description: "완성된 보고서를 고객에게 바로 보냅니다." },
+      { label: "완료", description: "완성된 보고서를 고객에게 발송합니다." },
     ],
   },
 };
