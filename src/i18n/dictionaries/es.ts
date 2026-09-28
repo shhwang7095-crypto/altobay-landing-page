@@ -20,10 +20,10 @@ export const es: Dictionary = {
   },
   hero: {
     badge: "Hecho para talleres mecánicos de EE. UU.",
-    titleA: "IA en tu ",
+    titleA: "La IA llega a tu ",
     titleB: "taller",
     titleC: "",
-    tagline: "Dirige tu taller de forma más inteligente.",
+    tagline: "Administra tu taller de forma más inteligente.",
     body: "Altobay.ai es una plataforma de IA para talleres, centros de servicio y sus clientes, que ayuda a los mecánicos a gestionar reservas, generar informes de servicio con IA y consultar el historial de los vehículos, todo desde una sola app.",
     seeHow: "Ver cómo funciona",
     comingSoonOn: "Próximamente en",
@@ -39,17 +39,17 @@ export const es: Dictionary = {
       {
         title: "Reservas inteligentes",
         description:
-          "Reúne cada reserva, foto y reporte de síntomas en una sola pantalla, sin más malabares con llamadas, mensajes y herramientas sueltas.",
+          "Reúne cada reserva, foto y reporte de síntomas en una sola pantalla, sin hacer malabares entre llamadas, mensajes y apps sueltas.",
       },
       {
         title: "Informes de servicio generados por IA",
         description:
-          "El mecánico anota una nota rápida y la IA de Altobay la convierte en una explicación clara y profesional del trabajo y su costo, generando confianza en el cliente y reduciendo las llamadas repetidas.",
+          "El mecánico anota algo rápido y la IA de Altobay lo convierte en una explicación clara y profesional del trabajo y su costo. Eso genera confianza en el cliente y reduce las llamadas de seguimiento.",
       },
       {
         title: "Búsqueda de vehículos en la nube",
         description:
-          "El historial de reparaciones de cada vehículo se guarda como datos estructurados, para que tu taller lo busque y analice al instante en lugar de revisar archivos en papel.",
+          "El historial de reparaciones de cada vehículo se guarda como datos estructurados, para que tu taller lo consulte y analice al instante en vez de buscar entre montones de papeles.",
       },
     ],
   },
@@ -86,7 +86,7 @@ export const es: Dictionary = {
       { value: "California", label: "Mercado piloto" },
     ],
     principleEyebrow: "Nuestro principio fundamental",
-    principleTitle: "El diagnóstico final y las decisiones de reparación siempre quedan en manos del taller.",
+    principleTitle: "La decisión final siempre queda en manos del taller.",
     principleBody:
       "La IA de Altobay se enfoca en automatizar la recepción y mejorar la calidad de las explicaciones al cliente, sin reemplazar nunca el criterio del mecánico.",
     pillars: [
@@ -96,12 +96,12 @@ export const es: Dictionary = {
       },
       {
         label: "Por qué los talleres confían en nosotros",
-        body: "Realizamos pilotos con talleres independientes en toda California, con un equipo cuya experiencia abarca contabilidad de las Big Four, estrategia corporativa y finanzas empresariales.",
+        body: "Realizamos pilotos con talleres independientes en toda California, con un equipo cuya trayectoria abarca firmas contables Big Four, estrategia corporativa y finanzas empresariales.",
       },
     ],
     stats: [
       { value: "5+", label: "Talleres piloto en California" },
-      { value: "6", label: "Programas de startups que nos seleccionaron" },
+      { value: "6", label: "Seleccionados en programas para startups" },
       { value: "MVP", label: "En desarrollo activo" },
     ],
   },
@@ -110,9 +110,9 @@ export const es: Dictionary = {
     body: "Solicita una demo o descarga la app",
   },
   survey: {
-    eyebrow: "← Haz clic para ayudarnos a construirlo bien",
+    eyebrow: "← Ayúdanos a hacerlo bien",
     title: "¿Tienes 2 minutos para una encuesta rápida?",
-    body: "Escanea el código y cuéntanos sobre tu vehículo; eso define lo que construiremos a continuación.",
+    body: "Escanea el código y cuéntanos sobre tu vehículo; nos ayuda a decidir qué construir después.",
     qrAlt: "Código QR que enlaza a la encuesta para talleres de Altobay.ai",
   },
   footer: {
