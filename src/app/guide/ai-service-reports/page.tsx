@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import GuideShell from "@/components/guide/GuideShell";
 import InteractiveDemoPhone from "@/components/guide/InteractiveDemoPhone";
 import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
@@ -11,7 +10,8 @@ export const metadata: Metadata = {
     "Try the actual mechanic flow: shoot before/after photos, let AI read them, and send a customer-ready report, right in your browser.",
 };
 
-export default async function AiServiceReportsGuide() {
+export default async function AiServiceReportsGuide({ searchParams }: PageProps<"/guide/ai-service-reports">) {
+  const autoOpenVideo = (await searchParams).video === "open";
   const { common, guide } = await getDictionary();
   const g = guide.aiReports;
 
@@ -21,13 +21,13 @@ export default async function AiServiceReportsGuide() {
       title={g.title}
       intro={g.intro}
       replayButton={
-        <Suspense fallback={null}>
-          <GuideVideoReplay
-            src="/videos/ai-report-flow-demo.mp4"
-            poster="/videos/ai-report-flow-demo-poster.jpg"
-            label={g.videoLabel}
-          />
-        </Suspense>
+        <GuideVideoReplay
+          src="/videos/ai-report-flow-demo.mp4"
+          poster="/videos/ai-report-flow-demo-poster.jpg"
+          label={g.videoLabel}
+          subtitleBase="/videos/subtitles/ai-report-flow"
+          autoOpen={autoOpenVideo}
+        />
       }
     >
       <div>

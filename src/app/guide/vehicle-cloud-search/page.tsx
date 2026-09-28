@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import GuideShell from "@/components/guide/GuideShell";
 import PhoneMockup from "@/components/PhoneMockup";
 import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
@@ -10,7 +9,8 @@ export const metadata: Metadata = {
   description: "Step-by-step guide for the Altobay.ai Vehicle Cloud Search feature.",
 };
 
-export default async function VehicleCloudSearchGuide() {
+export default async function VehicleCloudSearchGuide({ searchParams }: PageProps<"/guide/vehicle-cloud-search">) {
+  const autoOpenVideo = (await searchParams).video === "open";
   const locale = await getLocale();
   const { common, guide } = await getDictionary();
   const g = guide.vehicleSearch;
@@ -21,13 +21,13 @@ export default async function VehicleCloudSearchGuide() {
       title={g.title}
       intro={g.intro}
       replayButton={
-        <Suspense fallback={null}>
-          <GuideVideoReplay
-            src="/videos/vehicle-cloud-search-demo_narrated.mp4"
-            poster="/videos/vehicle-cloud-search-demo-poster.jpg"
-            label={g.videoLabel}
-          />
-        </Suspense>
+        <GuideVideoReplay
+          src="/videos/vehicle-cloud-search-demo_narrated.mp4"
+          poster="/videos/vehicle-cloud-search-demo-poster.jpg"
+          label={g.videoLabel}
+          subtitleBase="/videos/subtitles/vehicle-cloud-search"
+          autoOpen={autoOpenVideo}
+        />
       }
     >
       <div className="flex justify-center">

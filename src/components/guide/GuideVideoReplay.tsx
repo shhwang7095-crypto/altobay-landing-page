@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSearchParams } from "next/navigation";
 import VideoLightbox from "@/components/VideoLightbox";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
@@ -9,17 +8,18 @@ export default function GuideVideoReplay({
   src,
   poster,
   label,
+  subtitleBase,
+  autoOpen = false,
 }: {
   src: string;
   poster: string;
   label: string;
+  subtitleBase?: string;
+  /** Open the lightbox on load (set when arriving via the homepage "tutorial video" choice). */
+  autoOpen?: boolean;
 }) {
-  const { t } = useLanguage();
-  const searchParams = useSearchParams();
-  // Only auto-open when arriving from the homepage's "tutorial video" choice
-  // (?video=open) - arriving via "want to see the guide" starts closed, and
-  // the button below can always open it manually.
-  const [open, setOpen] = useState(() => searchParams.get("video") === "open");
+  const { locale, t } = useLanguage();
+  const [open, setOpen] = useState(autoOpen);
 
   return (
     <>
@@ -33,7 +33,15 @@ export default function GuideVideoReplay({
         </svg>
         {t.common.replayVideo}
       </button>
-      <VideoLightbox src={src} poster={poster} label={label} open={open} onClose={() => setOpen(false)} />
+      <VideoLightbox
+        key={locale}
+        src={src}
+        poster={poster}
+        label={label}
+        subtitleBase={subtitleBase}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }

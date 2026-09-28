@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import GuideShell from "@/components/guide/GuideShell";
 import GuideStep from "@/components/guide/GuideStep";
 import GuideVideoReplay from "@/components/guide/GuideVideoReplay";
@@ -18,7 +17,8 @@ const STEP_SCREENSHOTS = [
   "/screenshots/dashboard-hero.png",
 ];
 
-export default async function SmartBookingGuide() {
+export default async function SmartBookingGuide({ searchParams }: PageProps<"/guide/smart-booking">) {
+  const autoOpenVideo = (await searchParams).video === "open";
   const { common, guide } = await getDictionary();
   const g = guide.smartBooking;
 
@@ -28,13 +28,13 @@ export default async function SmartBookingGuide() {
       title={g.title}
       intro={g.intro}
       replayButton={
-        <Suspense fallback={null}>
-          <GuideVideoReplay
-            src="/videos/smart-booking-demo.mp4"
-            poster="/videos/smart-booking-demo-poster.jpg"
-            label={g.videoLabel}
-          />
-        </Suspense>
+        <GuideVideoReplay
+          src="/videos/smart-booking-demo.mp4"
+          poster="/videos/smart-booking-demo-poster.jpg"
+          label={g.videoLabel}
+          subtitleBase="/videos/subtitles/smart-booking"
+          autoOpen={autoOpenVideo}
+        />
       }
     >
       {g.steps.map((step, i) => (

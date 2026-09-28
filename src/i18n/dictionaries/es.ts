@@ -8,6 +8,8 @@ export const es: Dictionary = {
     backToHome: "← Volver a Altobay.ai",
     replayVideo: "Ver de nuevo el video tutorial de Altobay",
     closeVideo: "Cerrar video",
+    subtitles: "Subtítulos",
+    subtitlesOff: "No",
     toggleTheme: "Cambiar tema de color",
     language: "Idioma",
     featureGuide: "Guía de función",

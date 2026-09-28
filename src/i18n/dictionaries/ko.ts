@@ -8,6 +8,8 @@ export const ko: Dictionary = {
     backToHome: "← Altobay.ai로 돌아가기",
     replayVideo: "Altobay 영상 튜토리얼 다시 보기",
     closeVideo: "영상 닫기",
+    subtitles: "자막",
+    subtitlesOff: "끔",
     toggleTheme: "색상 테마 전환",
     language: "언어",
     featureGuide: "기능 가이드",

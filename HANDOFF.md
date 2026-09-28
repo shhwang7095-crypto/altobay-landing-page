@@ -187,6 +187,15 @@ Vercel 프로젝트 → Settings → Environment Variables에 `NOTION_API_KEY`, 
 - 메인 프로모 영상 자막은 `public/videos/altobay-promo{,.ko,.es}.vtt`. 데모 신청 폼의 API 오류는 `route.ts`가 `code`(`not_configured`/`invalid`/`missing`/`submit_failed`)를 같이 내려주고 클라이언트가 언어별 문구로 매핑한다. 전송되는 관심 서비스 값은 항상 영어(Notion 옵션명과 일치).
 - ⚠️ 스페인어(미국 시장용 중립 표현, tú 형)는 원어민 검수 전이다.
 
+### 가이드 영상 자막 (EN / KO / ES) — 2026-09-28 추가
+
+가이드 상세페이지의 영상 3종(Smart Booking / AI Report / Vehicle Cloud Search) 라이트박스에 자막이 있다. 좌측 상단 `CC · EN · KO · ES · 끔` 선택기로 바꾸고, 기본값은 사이트 언어. 화면에 박힌 영어 캡션과 안 겹치게 폰 화면 하단(영상 높이의 80% 지점 위)에 그린다.
+
+- 자막 파일: `public/videos/subtitles/<smart-booking|ai-report-flow|vehicle-cloud-search>.<en|ko|es>.vtt` (9개). 나레이션을 음성 인식(faster-whisper)으로 받아 **타이밍**을 잡고, 영어 문구는 원본 대본으로 교정, ko/es는 번역한 것이다. 문구를 고치려면 vtt를 직접 수정하면 된다(큐 단위, 시간은 그대로 두고 텍스트만).
+- 구현: `VideoLightbox.tsx`(선택기 + 자막 오버레이). 현재 재생 시각으로 큐를 직접 계산한다(`cuechange` 이벤트는 탐색 직후 누락될 때가 있어서). 브라우저 전체화면에서는 우리 오버레이가 안 보이므로 그동안만 브라우저 기본 자막으로 넘긴다.
+- 영상은 모두 9:16(1080×1920)이라는 전제로 크기를 잡았다. 다른 비율 영상을 추가하면 `VideoLightbox`의 `aspect-[9/16]`을 손볼 것.
+- ⚠️ 가이드 페이지의 `?video=open`(홈에서 "튜토리얼 영상 보기"로 진입) 자동 열림은 이제 **서버에서 `searchParams`를 읽어 prop으로 넘긴다.** 예전엔 클라이언트 `useSearchParams` + `<Suspense>`였는데, AI Report 페이지에서 그 영역이 하이드레이션되지 않아 라이트박스 버튼이 안 눌리는 문제가 있었다. 다시 `useSearchParams`/Suspense로 되돌리지 말 것.
+
 ## 11. 작업 원칙
 
 - **요청 범위 밖은 건드리지 말 것.** 사용자가 지시하지 않은 색상·모션·레이아웃을 임의로 바꾸지 않는다.

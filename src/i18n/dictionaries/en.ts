@@ -6,6 +6,8 @@ export const en = {
     backToHome: "← Back to Altobay.ai",
     replayVideo: "Replay altobay video tutorial",
     closeVideo: "Close video",
+    subtitles: "Subtitles",
+    subtitlesOff: "Off",
     toggleTheme: "Toggle color theme",
     language: "Language",
     featureGuide: "Feature Guide",

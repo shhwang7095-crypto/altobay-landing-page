@@ -1,0 +1,121 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.050
+A real booking in Altobay: brake repair on a 2021 Kia.
+
+00:00:05.640 --> 00:00:09.238
+The mechanic picks Wheel and Tire, takes three photos,
+
+00:00:09.238 --> 00:00:10.970
+and taps Create AI report.
+
+00:00:11.740 --> 00:00:13.790
+No judgments, just photos.
+
+00:00:16.240 --> 00:00:18.190
+The photos go to the vision model.
+
+00:00:18.900 --> 00:00:20.854
+It writes down what it can see:
+
+00:00:20.854 --> 00:00:24.510
+corrosion on the rotor, dust and oxidation on the caliper,
+
+00:00:24.560 --> 00:00:27.270
+rust on the studs, a shock that's intact.
+
+00:00:27.740 --> 00:00:29.650
+About thirty seconds.
+
+00:00:32.320 --> 00:00:34.270
+Each item is read on its own.
+
+00:00:35.040 --> 00:00:37.247
+Brake pads have a before-and-after pair,
+
+00:00:37.247 --> 00:00:38.350
+so they're compared.
+
+00:00:39.040 --> 00:00:42.630
+The battery has no photo, so that call stays with the mechanic.
+
+00:00:43.340 --> 00:00:45.150
+The report drafts itself.
+
+00:00:47.420 --> 00:00:49.490
+Now the mechanic checks it over.
+
+00:00:50.180 --> 00:00:53.086
+The customer note is rewritten in their own words,
+
+00:00:53.086 --> 00:00:55.410
+each call is confirmed: fixed, or watch,
+
+00:00:55.460 --> 00:00:57.290
+and the report is sent.
+
+00:00:58.060 --> 00:01:00.470
+The mechanic decides, not the AI.
+
+00:01:05.080 --> 00:01:07.936
+On the customer's phone: a notification,
+
+00:01:07.936 --> 00:01:11.150
+the booking, the report, and all four photos.
+
+00:01:11.980 --> 00:01:14.090
+One tap opens the full report.
+
+00:01:18.360 --> 00:01:19.830
+The full report.
+
+00:01:20.620 --> 00:01:22.747
+What was serviced today, what to watch,
+
+00:01:22.747 --> 00:01:24.110
+and what wasn't assessed.
+
+00:01:25.020 --> 00:01:27.044
+Tap an item and it opens up:
+
+00:01:27.044 --> 00:01:30.370
+every photo, before and after, with a caption.
+
+00:01:31.220 --> 00:01:33.370
+What the part is, in plain words.
+
+00:01:34.160 --> 00:01:35.670
+What the mechanic said.
+
+00:01:36.400 --> 00:01:37.838
+And what happens next:
+
+00:01:37.838 --> 00:01:40.650
+the part, the cost, and how it was checked.
+
+00:01:41.560 --> 00:01:44.450
+On the car, every area we checked is marked.
+
+00:01:46.140 --> 00:01:48.481
+Costs list parts and labor separately,
+
+00:01:48.481 --> 00:01:49.898
+with tax on parts only:
+
+00:01:49.898 --> 00:01:51.870
+that's what California requires.
+
+00:01:52.360 --> 00:01:55.490
+The battery test is quoted, not pushed.
+
+00:01:57.400 --> 00:01:59.664
+And the warranty terms are spelled out,
+
+00:01:59.664 --> 00:02:01.290
+so nothing is left to guess.
+
+00:02:03.600 --> 00:02:05.910
+One real booking, start to finish.
+
+00:02:06.780 --> 00:02:08.450
+This is Altobay.
