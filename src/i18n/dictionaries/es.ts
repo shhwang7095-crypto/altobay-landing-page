@@ -25,7 +25,7 @@ export const es: Dictionary = {
     titleA: "La IA llega a tu ",
     titleB: "taller",
     titleC: "",
-    tagline: "Administra tu taller de forma más inteligente.",
+    tagline: "Gestiona tu taller de forma más inteligente.",
     body: "Altobay.ai es una plataforma de IA para talleres, centros de servicio y sus clientes, que ayuda a los mecánicos a gestionar reservas, generar informes de servicio con IA y consultar el historial de los vehículos, todo desde una sola app.",
     seeHow: "Ver cómo funciona",
     comingSoonOn: "Próximamente en",
@@ -36,12 +36,12 @@ export const es: Dictionary = {
     eyebrow: "Servicio de la app",
     title: "Todo lo que tu taller necesita, en una sola app",
     subtitle:
-      "Agenda, informes y datos de vehículos, unificados en una plataforma de IA creada para talleres independientes de EE. UU.",
+      "Reservas, informes y datos de vehículos, unificados en una plataforma de IA creada para talleres independientes de EE. UU.",
     items: [
       {
         title: "Reservas inteligentes",
         description:
-          "Reúne cada reserva, foto y reporte de síntomas en una sola pantalla, sin hacer malabares entre llamadas, mensajes y apps sueltas.",
+          "Reúne cada reserva, foto y descripción del problema en una sola pantalla, sin hacer malabares entre llamadas, mensajes y apps sueltas.",
       },
       {
         title: "Informes de servicio generados por IA",
@@ -49,7 +49,7 @@ export const es: Dictionary = {
           "El mecánico anota algo rápido y la IA de Altobay lo convierte en una explicación clara y profesional del trabajo y su costo. Eso genera confianza en el cliente y reduce las llamadas de seguimiento.",
       },
       {
-        title: "Búsqueda de vehículos en la nube",
+        title: "Historial de reparaciones en la nube",
         description:
           "El historial de reparaciones de cada vehículo se guarda como datos estructurados, para que tu taller lo consulte y analice al instante en vez de buscar entre montones de papeles.",
       },
@@ -74,8 +74,8 @@ export const es: Dictionary = {
         alt: "Pantalla de edición de informe de servicio en la app de Altobay.ai",
       },
       "vehicle-cloud-search": {
-        label: "Búsqueda de vehículos en la nube",
-        alt: "Lista de resultados de Búsqueda de vehículos en la nube en la app de Altobay.ai",
+        label: "Historial de reparaciones en la nube",
+        alt: "Lista de resultados de Historial de reparaciones en la nube en la app de Altobay.ai",
       },
     },
   },
@@ -94,16 +94,16 @@ export const es: Dictionary = {
     pillars: [
       {
         label: "Lo que reemplazamos",
-        body: "Agenda, informes y datos de vehículos, unificados en una plataforma de IA, para reemplazar las llamadas, mensajes y registros en papel dispersos que frenan a los talleres independientes.",
+        body: "Reservas, informes y datos de vehículos, unificados en una plataforma de IA para reemplazar las llamadas, mensajes y registros en papel dispersos que frenan a los talleres independientes.",
       },
       {
         label: "Por qué los talleres confían en nosotros",
-        body: "Realizamos pilotos con talleres independientes en toda California, con un equipo cuya trayectoria abarca firmas contables Big Four, estrategia corporativa y finanzas empresariales.",
+        body: "Realizamos pilotos con talleres independientes en toda California, con un equipo cuya trayectoria abarca las cuatro grandes firmas de auditoría, estrategia corporativa y finanzas empresariales.",
       },
     ],
     stats: [
       { value: "5+", label: "Talleres piloto en California" },
-      { value: "6", label: "Seleccionados en programas para startups" },
+      { value: "6", label: "Seleccionados para programas de startups" },
       { value: "MVP", label: "En desarrollo activo" },
     ],
   },
@@ -202,10 +202,10 @@ export const es: Dictionary = {
       videoLabel: "Video guiado de Informes de servicio generados por IA",
     },
     vehicleSearch: {
-      title: "Búsqueda de vehículos en la nube",
+      title: "Historial de reparaciones en la nube",
       intro: "Escribe cualquier cosa en la barra de búsqueda de abajo y presiona Enter para verlo en acción.",
-      videoLabel: "Video guiado de Búsqueda de vehículos en la nube",
-      iframeTitle: "Demo interactiva de Búsqueda de vehículos en la nube de Altobay.ai",
+      videoLabel: "Video guiado de Historial de reparaciones en la nube",
+      iframeTitle: "Demo interactiva de Historial de reparaciones en la nube de Altobay.ai",
     },
   },
   interactive: {
