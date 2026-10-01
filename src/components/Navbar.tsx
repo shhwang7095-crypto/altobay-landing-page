@@ -33,21 +33,21 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="#top" aria-label={t.nav.homeAria}>
+        <Link href="/#top" aria-label={t.nav.homeAria}>
           <Logo />
-        </a>
+        </Link>
 
         <div className="hidden items-center gap-8 md:flex">
-          <a
-            href="#service"
+          <Link
+            href="/#service"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             {t.nav.service}
-          </a>
+          </Link>
 
           <div className="group relative">
-            <a
-              href="#how-it-works"
+            <Link
+              href="/#how-it-works"
               className="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {t.nav.howItWorks}
@@ -59,7 +59,7 @@ export default function Navbar() {
               >
                 <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </a>
+            </Link>
 
             <div className="invisible absolute left-1/2 top-full w-64 -translate-x-1/2 pt-3 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
               <div className="overflow-hidden rounded-2xl border border-border bg-card p-1.5 shadow-xl">
@@ -76,12 +76,12 @@ export default function Navbar() {
             </div>
           </div>
 
-          <a
-            href="#company"
+          <Link
+            href="/#company"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             {t.nav.company}
-          </a>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
