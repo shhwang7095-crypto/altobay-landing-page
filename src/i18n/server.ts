@@ -24,5 +24,6 @@ export function pickClientDictionary(d: Dictionary): ClientDictionary {
     demoForm: d.demoForm,
     features: d.features,
     interactive: d.interactive,
+    showcase: d.showcase,
   };
 }

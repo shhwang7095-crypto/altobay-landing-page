@@ -16,7 +16,7 @@ export const es: Dictionary = {
   },
   nav: {
     homeAria: "Inicio de Altobay.ai",
-    service: "Servicio",
+    service: "Resumen",
     howItWorks: "Cómo funciona",
     company: "Empresa",
   },
@@ -87,10 +87,9 @@ export const es: Dictionary = {
       { value: "Menlo Park, CA", label: "Entrada al mercado de EE. UU." },
       { value: "California", label: "Mercado piloto" },
     ],
-    principleEyebrow: "Nuestro principio fundamental",
-    principleTitle: "La decisión final siempre queda en manos del taller.",
+    principleTitle: "Altobay.ai está reescribiendo las reglas de la reparación automotriz.",
     principleBody:
-      "La IA de Altobay se enfoca en automatizar la recepción y mejorar la calidad de las explicaciones al cliente, sin reemplazar nunca el criterio del mecánico.",
+      "Actualmente, los talleres de reparación de autos en EE. UU. enfrentan procesos de CRM ineficientes, mientras los clientes señalan con frecuencia una falta de confianza. Altobay.ai es una solución de IA que ayuda a los talleres a captar ingresos que antes perdían y a cerrar esa brecha de confianza con sus clientes.",
     pillars: [
       {
         label: "Lo que reemplazamos",

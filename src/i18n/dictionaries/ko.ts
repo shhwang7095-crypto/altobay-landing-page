@@ -16,7 +16,7 @@ export const ko: Dictionary = {
   },
   nav: {
     homeAria: "Altobay.ai 홈",
-    service: "서비스",
+    service: "개요",
     howItWorks: "이용 방법",
     company: "회사 소개",
   },
@@ -87,10 +87,9 @@ export const ko: Dictionary = {
       { value: "멘로 파크, CA", label: "미국 시장 진출" },
       { value: "캘리포니아", label: "파일럿 시장" },
     ],
-    principleEyebrow: "핵심 원칙",
-    principleTitle: "최종 진단과 수리 결정은 언제나 정비소의 몫입니다.",
+    principleTitle: "Altobay.ai가 자동차 정비의 규칙을 새로 씁니다.",
     principleBody:
-      "Altobay.ai는 정비사의 판단을 대체하지 않고, 접수의 편의성과 고객 관리의 품질 향상에 집중합니다.",
+      "현재 미국의 자동차 정비소들은 비효율적인 CRM 프로세스로 어려움을 겪고 있고, 고객들은 신뢰 부족을 자주 지적합니다. Altobay.ai는 정비소가 놓치고 있던 매출 기회를 잡고, 고객과의 신뢰 격차를 좁히도록 돕는 AI 솔루션입니다.",
     pillars: [
       {
         label: "Altobay의 기능",

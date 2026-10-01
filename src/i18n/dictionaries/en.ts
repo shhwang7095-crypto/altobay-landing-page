@@ -14,7 +14,7 @@ export const en = {
   },
   nav: {
     homeAria: "Altobay.ai home",
-    service: "Service",
+    service: "Overview",
     howItWorks: "How it works",
     company: "Company",
   },
@@ -85,10 +85,9 @@ export const en = {
       { value: "Menlo Park, CA", label: "US market entry" },
       { value: "California", label: "Pilot market" },
     ],
-    principleEyebrow: "Our core principle",
-    principleTitle: "Final diagnosis and repair decisions always stay with the shop.",
+    principleTitle: "Altobay is rewriting the rules of auto repair.",
     principleBody:
-      "Altobay's AI focuses on automating intake and improving the quality of customer explanations, never replacing a mechanic's judgment.",
+      "Currently, auto repair shops in the U.S. are struggling with inefficient CRM processes, while consumers frequently point out a lack of trust. Altobay is an AI solution that helps repair shops capture missed revenue opportunities while bridging the trust gap with customers.",
     pillars: [
       {
         label: "What we replace",

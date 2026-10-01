@@ -8,7 +8,7 @@ import type { Dictionary } from "./dictionaries/en";
 // dictionary straight from getDictionary(), so it never ships to the browser.
 export type ClientDictionary = Pick<
   Dictionary,
-  "common" | "nav" | "promo" | "demoForm" | "features" | "interactive"
+  "common" | "nav" | "promo" | "demoForm" | "features" | "interactive" | "showcase"
 >;
 
 type LanguageContextValue = { locale: Locale; t: ClientDictionary };
