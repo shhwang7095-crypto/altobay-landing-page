@@ -79,7 +79,7 @@ export default async function About() {
         <LogoMark className="pointer-events-none absolute -right-12 -top-12 h-64 w-64 opacity-[0.06]" />
 
         <div className="relative max-w-3xl">
-          <p className="text-2xl font-bold leading-snug tracking-tight sm:text-[2rem]">
+          <p className="break-keep text-2xl font-bold leading-snug tracking-tight sm:text-[2rem]">
             {about.principleTitle}
           </p>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg">
