@@ -2,9 +2,9 @@ import type { Dictionary } from "./en";
 
 export const ko: Dictionary = {
   common: {
-    requestDemo: "데모 신청",
+    requestDemo: "Demo",
     demoShort: "데모",
-    visitSite: "클릭하여 사이트 방문",
+    visitSite: "사이트 방문",
     backToHome: "← Altobay.ai로 돌아가기",
     replayVideo: "Altobay 영상 튜토리얼 다시 보기",
     closeVideo: "영상 닫기",
@@ -21,13 +21,13 @@ export const ko: Dictionary = {
     company: "회사 소개",
   },
   hero: {
-    badge: "아직 \"진짜\" 도구를 잡지 못하는",
+    badge: "Altobay",
     titleA: "",
     titleB: "정비소",
     titleC: "에 AI를 더하다",
     tagline: "정비소 운영, 이제 더 똑똑하게.",
     body: "Altobay.ai는 정비소·서비스센터와 고객을 위한 AI 플랫폼으로, 정비사가 예약을 관리하고, AI 정비 보고서를 작성하고, 차량 이력을 조회하는 모든 일을 하나의 앱에서 할 수 있도록 만들어 줍니다.",
-    seeHow: "이용 방법 보기",
+    seeHow: "자세히 보기",
     comingSoonOn: "출시 예정",
     visitAria: "Altobay.ai 웹 앱 방문하기",
     mockAlt: "Altobay.ai 예약 및 서비스 현황 대시보드",
@@ -36,7 +36,7 @@ export const ko: Dictionary = {
     eyebrow: "앱 서비스",
     title: "정비소에 필요한 모든 것을, 어플 하나로",
     subtitle:
-      "일정 관리, 보고서, 차량 데이터를 미국 독립 정비소를 위해 만든 하나의 AI 플랫폼으로 통합했습니다.",
+      "일정 관리, 보고서, 차량 데이터 관리를 하나의 AI 플랫폼으로 통합했습니다.",
     items: [
       {
         title: "스마트 예약",
@@ -87,9 +87,9 @@ export const ko: Dictionary = {
       { value: "멘로 파크, CA", label: "미국 시장 진출" },
       { value: "캘리포니아", label: "파일럿 시장" },
     ],
-    principleTitle: "Altobay.ai가 자동차 정비의 규칙을 새로 씁니다.",
+    principleTitle: "정비 프로세스의 패러다임을 변화시킬 AI, Altobay.ai",
     principleBody:
-      "현재 미국의 자동차 정비소들은 비효율적인 CRM 프로세스로 어려움을 겪고 있고, 고객들은 신뢰 부족을 자주 지적합니다. Altobay.ai는 정비소가 놓치고 있던 매출 기회를 잡고, 고객과의 신뢰 격차를 좁히도록 돕는 AI 솔루션입니다.",
+      "현재 미국의 자동차 정비소들은 아날로그한 CRM 프로세스와 고객과의 소통불화로 인해 병목을 겪고 있습니다. Altobay.ai는 정비소가 마주한 병목을 해결하여 고객의 신뢰를 높이고, 놓치고 있던 매출 기회를 잡아 줄 것입니다.",
     pillars: [
       {
         label: "Altobay의 기능",
