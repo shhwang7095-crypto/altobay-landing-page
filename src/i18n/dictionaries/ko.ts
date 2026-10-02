@@ -87,7 +87,7 @@ export const ko: Dictionary = {
       { value: "멘로 파크, CA", label: "미국 시장 진출" },
       { value: "캘리포니아", label: "파일럿 시장" },
     ],
-    principleTitle: "정비 프로세스의 패러다임을 변화시킬 AI, Altobay.ai",
+    principleTitle: "미국 정비산업을 위한 AI 기반 정비 운영 플랫폼. Altobay.ai",
     principleBody:
       "현재 미국의 자동차 정비소들은 아날로그한 CRM 프로세스와 고객과의 소통불화로 인해 병목을 겪고 있습니다. Altobay.ai는 정비소가 마주한 병목을 해결하여 고객의 신뢰를 높이고, 놓치고 있던 매출 기회를 잡아 줄 것입니다.",
     pillars: [
